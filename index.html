@@ -13,23 +13,38 @@
       height: 100%;
     }
 
-    body {
-      background-color: #142233;
-      background-image: linear-gradient(rgba(20, 34, 51, 0.9), rgba(20, 34, 51, 0.9)), url('https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1950&q=80');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: scroll;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-      z-index: 1;
-    }
-
+      <script>
+        const bgImages = {
+          "client1.claritybots.ai": "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1950&q=80",
+          "client2.claritybots.ai": "https://images.unsplash.com/photo-1517816428104-797678c7cfb6?auto=format&fit=crop&w=1950&q=80",
+          "claritybots.ai": "https://images.unsplash.com/photo-1496309732348-3627f3f040ee?auto=format&fit=crop&w=1950&q=80"
+        };
+      
+        const host = window.location.hostname;
+        const imgUrl = bgImages[host] || bgImages["claritybots.ai"];
+        const gradient = "linear-gradient(rgba(20, 34, 51, 0.9), rgba(20, 34, 51, 0.9))";
+      
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.style.backgroundImage = `${gradient}, url('${imgUrl}')`;
+        });
+      </script>
+    
+       body {
+        background-color: #142233;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        z-index: 1;
+      }
+      
     .watermark {
       position: absolute;
       bottom: 10px;
