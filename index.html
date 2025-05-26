@@ -29,11 +29,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center; 
+        justify-content: center;
         position: relative;
         z-index: 1;
       }
-
       body::before {
         content: "";
         position: absolute;
@@ -41,13 +40,13 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(20, 34, 51, 0.5);
-        z-index: 0;
+        background: rgb(10 2 0 / 37%);
+        z-index: -1;
       }
       .watermark {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
+        bottom: 20px;
+        right: 20px;
         opacity: 0.9;
         max-width: 150px;
         z-index: 2;
@@ -63,6 +62,14 @@
         text-shadow: 2px 2px 4px #000000;
         z-index: 2;
         position: relative;
+      }
+      h2 {
+        font-size: 2.25rem;
+        margin: 0 0 10px;
+        color: #d5d5d5;
+        text-align: center;
+        animation: fadeInDown 1.5s ease-out;
+        text-shadow: 2px 2px 4px #000000;
       }
 
       .button-container {
@@ -98,7 +105,7 @@
         transform: scale(1.05);
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 560px) {
         h1 {
           font-size: 2rem;
         }
@@ -134,62 +141,72 @@
       }
     </style>
   </head>
-  <body> 
-      <h1>Welcome to ClarityBots®</h1>
-      <div class="button-container">
-        <a
-          class="button"
-          href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks"
-          target="_blank"
-          title="Build strong, SMART Rocks with step-by-step guidance"
-        >
-          <i class="fas fa-mountain"></i> Rocks
-        </a>
-        <a
-          class="button"
-          href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard"
-          target="_blank"
-          title="Design a measurable scorecard for team alignment"
-        >
-          <i class="fas fa-chart-line"></i> Scorecard
-        </a>
-        <a
-          class="button"
-          href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier"
-          target="_blank"
-          title="Clarify and align your organization's core values"
-        >
-          <i class="fas fa-heart"></i> Core Values
-        </a>
-        <a
-          class="button"
-          href="https://chatgpt.com/g/g-6831a0f315b08191a0b66bc15c52faee-claritybots-trial-and-error"
-          target="_blank"
-          title="Experiment, learn, and refine through guided trial and error"
-        >
-          <i class="fas fa-flask"></i> Trial and Error
-        </a>
-        <a
-          class="button"
-          href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman"
-          target="_blank"
-          title="Explore core concepts from Traction by Gino Wickman"
-        >
-          <i class="fas fa-book-open"></i> 'Traction' by Gino Wickman
-        </a>
-      </div> 
-    <img
-      src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png"
-      alt="Watermark Logo"
-      class="watermark"
-    />
+  <body>
+    <h2></h2>
+    <h1>Welcome to ClarityBots®</h1>
+    <div class="button-container">
+      <a
+        class="button"
+        href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks"
+        target="_blank"
+        title="Build strong, SMART Rocks with step-by-step guidance"
+      >
+        <i class="fas fa-mountain"></i> Rocks
+      </a>
+      <a
+        class="button"
+        href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard"
+        target="_blank"
+        title="Design a measurable scorecard for team alignment"
+      >
+        <i class="fas fa-chart-line"></i> Scorecard
+      </a>
+      <a
+        class="button"
+        href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier"
+        target="_blank"
+        title="Clarify and align your organization's core values"
+      >
+        <i class="fas fa-heart"></i> Core Values
+      </a>
+      <a
+        class="button"
+        href="https://chatgpt.com/g/g-6831a0f315b08191a0b66bc15c52faee-claritybots-trial-and-error"
+        target="_blank"
+        title="Experiment, learn, and refine through guided trial and error"
+      >
+        <i class="fas fa-flask"></i> Trial and Error
+      </a>
+      <a
+        class="button"
+        href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman"
+        target="_blank"
+        title="Explore core concepts from Traction by Gino Wickman"
+      >
+        <i class="fas fa-book-open"></i> 'Traction' by Gino Wickman
+      </a>
+    </div>
+    <img src="images/logo-default.svg" alt="Watermark Logo" class="watermark" />
 
     <script>
+      const subdomainHeadings = {
+        skyline: "Skyline Electric",
+        vlcm: "VLCM",
+        remedyww: "Remedy World Wide",
+        default: "Business Intuition",
+      };
       const subdomainBackgrounds = {
         skyline: "images/skyline_image.avif",
-        vlcm: "images/vlcm_image.webp",  
+        vlcm: "images/vlcm_image.webp",
         remedyww: "images/city.jpeg",
         default: "images/default.webp",
+      };
+
+      const subdomainLogos = {
+        skyline: "images/skyline_logo.png",
+        vlcm: "images/vlcm_logo.svg",
+        remedyww: "images/logo-default.svg",
+        default: "images/logo-default.svg",
       };
 
       function getCurrentSubdomain() {
@@ -201,18 +218,31 @@
         return null;
       }
 
-      function setBackgroundImage() { 
+      function setBackgroundImage() {
         const subdomain = getCurrentSubdomain();
         let backgroundImage;
 
         if (subdomain && subdomainBackgrounds[subdomain]) {
           backgroundImage = subdomainBackgrounds[subdomain];
+          logoImage = subdomainLogos[subdomain];
+          headingText = subdomainHeadings[subdomain];
         } else {
           backgroundImage = subdomainBackgrounds["default"];
+          logoImage = subdomainLogos["default"];
+          headingText = subdomainHeadings["default"];
         }
         document.body.style.backgroundImage = `url('${backgroundImage}')`;
 
-        console.log("Current subdomain:", subdomain); 
+        const watermarkElement = document.querySelector(".watermark");
+        if (watermarkElement) {
+          watermarkElement.src = logoImage;
+        }
+        const headingElement = document.querySelector("h2");
+        if (headingElement) {
+          headingElement.textContent = `${headingText}`;
+        }
+
+        console.log("Current subdomain:", subdomain);
       }
 
       document.addEventListener("DOMContentLoaded", setBackgroundImage);
