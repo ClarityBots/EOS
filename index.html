@@ -1,140 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ClarityBots</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-wYO1R3ptFzWcYQ8nYQNOi7HcRZcOEvTYFyC8zzONFvN2Edc9sDHxdLaL5OpbwlSvzjT2N8j7PSZcMhcU+Me2KQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      height: 100%;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClarityBots</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-wYO1R3ptFzWcYQ8nYQNOi7HcRZcOEvTYFyC8zzONFvN2Edc9sDHxdLaL5OpbwlSvzjT2N8j7PSZcMhcU+Me2KQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        height: 100%;
+      }
+      body {
+        background-color: #142233;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        position: relative;
+        z-index: 1;
+      }
 
-         body {
-      background-color: #142233;
-      background-image: linear-gradient(rgba(20, 34, 51, 0.9), rgba(20, 34, 51, 0.9)), url('https://unsplash.com/photos/silhouette-of-electric-post-during-sunset-qpAOxji4dAo');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: scroll;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-      z-index: 1;
-    }
-      
-    .watermark {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      opacity: 0.90;
-      max-width: 150px;
-      z-index: 2;
-      filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
-    }
-    
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #FF7900;
-      text-align: center;
-      animation: fadeInDown 1s ease-out;
-      text-shadow: 2px 2px 4px #000000;
-      z-index: 2;
-    }
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(20, 34, 51, 0.5);
+        z-index: 0;
+      }
+      .watermark {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        opacity: 0.9;
+        max-width: 150px;
+        z-index: 2;
+        filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+      }
 
-    .button-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: 100%;
-      max-width: 400px;
-      animation: fadeInUp 1.5s ease-out;
-      z-index: 2;
-    }
-
-    a.button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 1rem;
-      background-color: #F04E23;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      transform: scale(1);
-      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-      font-weight: bold;
-    }
-
-    a.button:hover {
-      background-color: #FF7900;
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 480px) {
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        margin: 0 0 1rem;
+        color: #ff7900;
+        text-align: center;
+        animation: fadeInDown 1s ease-out;
+        text-shadow: 2px 2px 4px #000000;
+        z-index: 2;
+        position: relative;
+      }
+
+      .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 400px;
+        animation: fadeInUp 1.5s ease-out;
+        z-index: 2;
+        position: relative;
       }
 
       a.button {
-        font-size: 1rem;
-        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background-color: #f04e23;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        transform: scale(1);
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+        font-weight: bold;
       }
-    }
 
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
+      a.button:hover {
+        background-color: #ff7900;
+        transform: scale(1.05);
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 2rem;
+        }
+        body {
+          padding-inline: 1rem;
+        }
+        a.button {
+          font-size: 1rem;
+          padding: 0.75rem;
+        }
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-    }
-  </style>
-</head>
-<body>
-  <h1>Welcome to ClarityBots®</h1>
-  <div class="button-container">
-    <a class="button" href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" target="_blank" title="Build strong, SMART Rocks with step-by-step guidance">
-      <i class="fas fa-mountain"></i> Rocks
-    </a>
-    <a class="button" href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" target="_blank" title="Design a measurable scorecard for team alignment">
-      <i class="fas fa-chart-line"></i> Scorecard
-    </a>
-    <a class="button" href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" target="_blank" title="Clarify and align your organization’s core values">
-      <i class="fas fa-heart"></i> Core Values
-    </a>
-    <a class="button" href="https://chatgpt.com/g/g-6831a0f315b08191a0b66bc15c52faee-claritybots-trial-and-error" target="_blank" title="Experiment, learn, and refine through guided trial and error">
-      <i class="fas fa-flask"></i> Trial and Error
-    </a>
-    <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" title="Explore core concepts from Traction by Gino Wickman">
-      <i class="fas fa-book-open"></i> 'Traction' by Gino Wickman
-    </a>
-  </div>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" alt="Watermark Logo" class="watermark">
-</body>
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body> 
+      <h1>Welcome to ClarityBots®</h1>
+      <div class="button-container">
+        <a
+          class="button"
+          href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks"
+          target="_blank"
+          title="Build strong, SMART Rocks with step-by-step guidance"
+        >
+          <i class="fas fa-mountain"></i> Rocks
+        </a>
+        <a
+          class="button"
+          href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard"
+          target="_blank"
+          title="Design a measurable scorecard for team alignment"
+        >
+          <i class="fas fa-chart-line"></i> Scorecard
+        </a>
+        <a
+          class="button"
+          href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier"
+          target="_blank"
+          title="Clarify and align your organization's core values"
+        >
+          <i class="fas fa-heart"></i> Core Values
+        </a>
+        <a
+          class="button"
+          href="https://chatgpt.com/g/g-6831a0f315b08191a0b66bc15c52faee-claritybots-trial-and-error"
+          target="_blank"
+          title="Experiment, learn, and refine through guided trial and error"
+        >
+          <i class="fas fa-flask"></i> Trial and Error
+        </a>
+        <a
+          class="button"
+          href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman"
+          target="_blank"
+          title="Explore core concepts from Traction by Gino Wickman"
+        >
+          <i class="fas fa-book-open"></i> 'Traction' by Gino Wickman
+        </a>
+      </div> 
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png"
+      alt="Watermark Logo"
+      class="watermark"
+    />
+
+    <script>
+      const subdomainBackgrounds = {
+        skyline:
+          "images/powerline.avif",
+        vlcm: "images/bridge.jpeg",  
+        remedyww:
+          "images/city.jpeg",
+        default: "images/default.webp",
+      };
+
+      function getCurrentSubdomain() {
+        const hostname = window.location.hostname;
+        const parts = hostname.split(".");
+        if (parts.length > 2 && parts[0] !== "www") {
+          return parts[0];
+        }
+        return null;
+      }
+
+      function setBackgroundImage() { 
+        const subdomain = getCurrentSubdomain();
+        let backgroundImage;
+
+        if (subdomain && subdomainBackgrounds[subdomain]) {
+          backgroundImage = subdomainBackgrounds[subdomain];
+        } else {
+          backgroundImage = subdomainBackgrounds["default"];
+        }
+        document.body.style.backgroundImage = `url('${backgroundImage}')`;
+
+        console.log("Current subdomain:", subdomain); 
+      }
+
+      document.addEventListener("DOMContentLoaded", setBackgroundImage);
+    </script>
+  </body>
 </html>
