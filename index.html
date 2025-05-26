@@ -41,7 +41,7 @@
         right: 0;
         bottom: 0;
         background: rgb(10 2 0 / 37%);
-        z-index: 0;
+        z-index: -1;
       }
       .watermark {
         position: absolute;
@@ -62,6 +62,15 @@
         text-shadow: 2px 2px 4px #000000;
         z-index: 2;
         position: relative;
+      }
+      h2 {
+        font-size: 1.75rem;
+        margin: 0 0 10px;
+        color: #d5d5d5;
+        text-align: center;
+
+        animation: fadeInDown 1s ease-out;
+        text-shadow: 2px 2px 4px #000000;
       }
 
       .button-container {
@@ -97,7 +106,7 @@
         transform: scale(1.05);
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 560px) {
         h1 {
           font-size: 2rem;
         }
@@ -134,6 +143,7 @@
     </style>
   </head>
   <body>
+    <h2></h2>
     <h1>Welcome to ClarityBots®</h1>
     <div class="button-container">
       <a
@@ -180,6 +190,12 @@
     <img src="images/logo-default.svg" alt="Watermark Logo" class="watermark" />
 
     <script>
+      const subdomainHeadings = {
+        skyline: "Skyline Electric",
+        vlcm: "VLCM",
+        remedyww: "Remedy World Wide",
+        default: "Business Intuition",
+      };
       const subdomainBackgrounds = {
         skyline: "images/skyline_image.avif",
         vlcm: "images/vlcm_image.webp",
@@ -210,16 +226,21 @@
         if (subdomain && subdomainBackgrounds[subdomain]) {
           backgroundImage = subdomainBackgrounds[subdomain];
           logoImage = subdomainLogos[subdomain];
+          headingText = subdomainHeadings[subdomain];
         } else {
           backgroundImage = subdomainBackgrounds["default"];
           logoImage = subdomainLogos["default"];
+          headingText = subdomainHeadings["default"];
         }
         document.body.style.backgroundImage = `url('${backgroundImage}')`;
 
         const watermarkElement = document.querySelector(".watermark");
-        debugger;
         if (watermarkElement) {
           watermarkElement.src = logoImage;
+        }
+        const headingElement = document.querySelector("h2");
+        if (headingElement) {
+          headingElement.textContent = `${headingText}`;
         }
 
         console.log("Current subdomain:", subdomain);
