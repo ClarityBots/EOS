@@ -126,6 +126,8 @@
 
       h2 {
         font-size: 2rem;
+        color: var(--light-gray);
+        margin-bottom: 1.5rem;
       }
 
       .button {
@@ -202,13 +204,15 @@
         }
       };
 
-      const data = clients[subdomain] || clients.default;
+      const data = clients[subdomain] || clients["business_intuition"];
 
       document.body.style.backgroundImage = `url('${data.background}')`;
 
       const headingEl = document.querySelector("h2");
-      if (headingEl) headingEl.textContent = data.heading;
-
+      if (headingEl) {
+        headingEl.textContent = data.heading;
+        headingEl.classList.add("animate-fadeInDown");
+      }
       const logoEl = document.querySelector(".watermark");
       if (logoEl) logoEl.src = data.logo;
 
