@@ -192,14 +192,14 @@
           background: "images/remedyww_image.jpg",
           logo: "images/remedyww_logo.png"
         },
-        default: {
+        business_intuition: {
           heading: "Business Intuition's",
           background: "images/business_intuition_image.jpg",
           logo: "images/business_intuition_logo.svg"
         }
       };
 
-      const data = clients[subdomain] || clients.business_intuition;
+      const data = clients[subdomain] || clients.default;
 
       document.body.style.backgroundImage = `url('${data.background}')`;
 
