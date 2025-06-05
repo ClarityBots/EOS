@@ -136,6 +136,8 @@ h3 {
   font-size: 0.875rem;
   text-align: center;
   z-index: var(--layer-content);
+  font-weight: 300; /* Lighter font weight */
+  opacity: 0.8;      /* Optional: softens the visual impact */
 }
 
 @media (max-width: 560px) {
