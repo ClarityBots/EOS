@@ -26,15 +26,11 @@ h1, h3 {
 }
 
 .button {
-  background-color: var(--brand-color, #FF7900);
+  background-color: var(--brand-color);
   color: white;
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
-  font-size: 16px;
-  display: inline-block;
-  text-align: center;
-  transition: all 0.2s ease-in-out;
 }
 
 .button:hover {
