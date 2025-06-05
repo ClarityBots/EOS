@@ -26,6 +26,7 @@ h1, h3 {
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
+<<<<<<< HEAD
   font-size: 16px;
   display: inline-block;
   text-align: center;
@@ -41,4 +42,6 @@ h1, h3 {
   margin: 0 auto;
   max-width: 150px;
   padding: 20px;
+=======
+>>>>>>> ed816e3d561a2670c7b0ea54aac3e7b6ef80d5ee
 }
