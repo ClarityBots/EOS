@@ -19,7 +19,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   line-height: 1.5;
 }
 
@@ -93,7 +93,7 @@ h3 {
   gap: 0.75rem;
   padding: 1rem;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 600;
   text-decoration: none;
   color: #fff;
   background-color: var(--red-orange);
