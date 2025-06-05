@@ -51,12 +51,12 @@ h1, h2, h3 {
 
 h1 {
   font-size: 2.5rem;
-  color: var(--orange);
+  color: var(--lightest-gray);
 }
 
 h2 {
   font-size: 2.25rem;
-  color: var(--lightest-gray);
+  color: var(--orange);
 }
 
 h3 {
@@ -117,16 +117,18 @@ h3 {
 @media (max-width: 560px) {
   h1 {
     font-size: 2rem;
+    color: var(--lightest-gray); /* Maintain contrast on small screens */
   }
 
   h2 {
     font-size: 1.75rem;
-    color: var(--lightest-gray); /* Maintain contrast on small screens */
+    color: var(--orange);
     margin-bottom: 1.5rem;
   }
 
   h3 {
     font-size: 1.5rem;
+    color: var(--orange);
   }
 
   .button {
