@@ -1,13 +1,3 @@
-<!--
-  Open the HTML editor by right clicking the index.html file in the project EOS directory
-  Open the command line prompt working in kylefowles@Kyles-MacBookPro EOS
-  Remember these:
-    git pull
-    git add .
-    git commit -m "explanation text"
-    git push
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +9,7 @@
   <link rel="icon" href="images/favicon.ico" />
   
   <!-- Preload image -->
-  <link rel="preload" as="image" href="images/business_intuition_image.jpg">
+  <!-- Preload image will be injected dynamically by script if needed -->
   
   <!-- Custom stylesheet -->
   <link rel="stylesheet" href="styles.css" />
@@ -32,8 +22,7 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
-
- </head>
+</head>
 <body>
   <h2></h2>
   <h1>ClarityBots®</h1>
@@ -130,14 +119,16 @@
       };
     }
 
+    // ✅ Apply dynamic brand color
+    document.documentElement.style.setProperty('--brand-color', data.brandColor);
+
     console.log("Subdomain loaded:", subdomain);
   </script>
 
   <noscript>
     <div style="background-color: #f04e23; color: white; padding: 1rem; text-align: center;">
-    JavaScript is required to use this site. Please enable JavaScript in your browser settings.
+      JavaScript is required to use this site. Please enable JavaScript in your browser settings.
     </div>
   </noscript>
-
 </body>
 </html>
