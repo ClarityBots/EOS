@@ -32,7 +32,7 @@ export const clients = {
   },
   winward: {
     heading: "Winward Electric's",
-    background: "images/winward_image.webp",
+    background: "images/winward_image.jpg",
     logo: "images/winward_logo.png",
   },
 };
