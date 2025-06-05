@@ -90,61 +90,27 @@
     loading="lazy"
   />
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const subdomain = window.location.hostname.split(".")[0];
-      const clients = {
-        skyline: {
-          heading: "Skyline Electric's",
-          background: "images/skyline_image.png",
-          logo: "images/skyline_logo.png"
-        },
-        vlcm: {
-          heading: "VLCM's",
-          background: "images/vlcm_image.jpg",
-          logo: "images/vlcm_logo.svg"
-        },
-        remedyww: {
-          heading: "Remedy World Wide's",
-          background: "images/remedyww_image.jpg",
-          logo: "images/remedyww_logo.png"
-        },
-        business_intuition: {
-          heading: "Business Intuition's",
-          background: "images/business_intuition_image.jpg",
-          logo: "images/business_intuition_logo.svg"
-        },
-        winward: {
-          heading: "Winward Electric's",
-          background: "images/winward_image.jpg",
-          logo: "images/winward_logo.png"
-        },
-        alder: {
-          heading: "Alder Construction's",
-          background: "images/alder_image.jpg",
-          logo: "images/alder_logo.png"
-        },
-        cope: {
-          heading: "COP Construction's",
-          background: "images/cop_image.jpg",
-          logo: "images/cop_logo.png"
-        },
-      };
-      
-      const data = clients[subdomain] || clients["business_intuition"];
+  <script type="module">
+    import { clients } from './clientConfig.js';
 
-      document.body.style.backgroundImage = `url('${data.background}')`;
+    const subdomain = window.location.hostname.split(".")[0];
+    const data = clients[subdomain] || clients["business_intuition"];
 
-      const headingEl = document.querySelector("h2");
-      if (headingEl) {
-        headingEl.textContent = data.heading;
-        headingEl.classList.add("animate-fadeInDown");
-      }
-      const logoEl = document.querySelector(".watermark");
-      if (logoEl) logoEl.src = data.logo;
+    document.body.style.backgroundImage = `url('${data.background}')`;
 
-      console.log("Subdomain loaded:", subdomain);
-    });
+    const headingEl = document.querySelector("h2");
+    if (headingEl) {
+      headingEl.textContent = data.heading;
+      headingEl.classList.add("animate-fadeInDown");
+    }
+
+    const logoEl = document.querySelector(".watermark");
+    if (logoEl) {
+      logoEl.src = data.logo;
+      logoEl.alt = `${data.heading} logo`;
+    }
+
+    console.log("Subdomain loaded:", subdomain);
   </script>
 
   <noscript>
