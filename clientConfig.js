@@ -69,7 +69,7 @@ export const clients = {
   default: {
     heading: "ClarityBots",
     background: "images/default_background.jpg",
-    logo: "images/logo-default.svg",
+    logo: "images/default_logo.png",
     altText: "ClarityBots Default Logo",
     preloadImage: false,
     basePath: "images/",
