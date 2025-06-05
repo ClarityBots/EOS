@@ -32,7 +32,8 @@ h1, h3 {
 }
 
 .button:hover {
-  background-color: darken(var(--brand-color), 10%);
+  filter: brightness(90%);
+  cursor: pointer;
 }
 
 .watermark {
