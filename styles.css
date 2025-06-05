@@ -51,17 +51,20 @@ h1, h2, h3 {
   position: relative;
   z-index: var(--layer-content);
   text-shadow: 2px 2px 4px #000;
+  animation: fadeInDown 1s ease-out forwards;
 }
 
 h1 {
   font-size: 2.5rem;
   color: var(--lightest-gray);
+  animation-delay: 0.2s;
 }
 
 h2 {
   font-size: 2.25rem;
   color: var(--orange);
   margin: 0.5rem 0 0.25rem 0;
+  animation-delay: 0.4s;
 }
 
 h3 {
@@ -69,10 +72,11 @@ h3 {
   color: var(--orange);
   font-style: italic;
   margin-top: 0;
+  animation-delay: 0.6s;
 }
 
-.animate-fadeInDown {
-  animation: fadeInDown 1s ease-out forwards;
+h1, h2, h3 {
+  animation-fill-mode: both;
 }
 
 /* Buttons */
