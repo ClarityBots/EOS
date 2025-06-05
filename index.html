@@ -1,118 +1,79 @@
-<!--
-  Open the HTML editor by right clicking the index.html file in the project EOS directory
-  Open the command line prompt working in kylefowles@Kyles-MacBookPro EOS
-  Remember these:
-    git pull
-    git add .
-    git commit -m "explanation text"
-    git push
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ClarityBots® – Where AI Meets EOS™. Build SMART Rocks, clarify vision, and lead with traction." />
   <title>ClarityBots</title>
-  
+
   <!-- Favicon -->
-  <link rel="icon" href="images/favicon.ico" />
-  
-  <!-- Preload image -->
-  <link rel="preload" as="image" href="images/business_intuition_image.jpg" />
-  
-  <!-- Custom stylesheet -->
+  <link rel="icon" href="images/favicon.ico" sizes="any" />
+  <link rel="preload" as="image" href="images/business_intuition_image.jpg" type="image/jpeg" />
+
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="styles.css" />
 
   <!-- Font Awesome -->
   <link
-    rel="stylesheet" 
+    rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     integrity="sha512-wYO1R3ptFzWcYQ8nYQNOi7HcRZcOEvTYFyC8zzONFvN2Edc9sDHxdLaL5OpbwlSvzjT2N8j7PSZcMhcU+Me2KQ=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
 </head>
+
 <body>
-  <h2></h2>
-  <h1>ClarityBots®</h1>
-  <h3>Where AI Meets EOS™</h3>
+  <header>
+    <h2 id="dynamic-heading" class="animate-fadeInDown"></h2>
+    <h1>ClarityBots®</h1>
+    <h3>Where AI Meets EOS™</h3>
+  </header>
 
-  <div class="button-container">
-    <a class="button" 
-       href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" 
-       target="_blank"
-       rel="noopener noreferrer" 
-       aria-label="Build SMART Rocks"
-       role="button">
-      <i class="fas fa-mountain"></i> Rocks
-    </a>
-    <a class="button" 
-       href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" 
-       target="_blank"
-       rel="noopener noreferrer" 
-       aria-label="Design a Scorecard"
-       role="button">
-      <i class="fas fa-chart-line"></i> Scorecard
-    </a>
-    <a class="button" 
-       href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" 
-       target="_blank"
-       rel="noopener noreferrer" 
-       aria-label="Clarify Core Values"
-       role="button">
-      <i class="fas fa-heart"></i> Core Values
-    </a>
-    <a class="button" 
-       href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" 
-       target="_blank"
-       rel="noopener noreferrer" 
-       aria-label="Meet ClarityBots Author"
-       role="button">
-      <i class="fas fa-flask"></i> Meet ClarityBots' Author
-    </a>
-    <a class="button" 
-       href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" 
-       target="_blank"
-       rel="noopener noreferrer" 
-       aria-label="Explore EOS Traction"
-       role="button">
-      <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
-    </a>
-  </div>
+  <main>
+    <section class="button-container">
+      <a class="button" href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" target="_blank" rel="noopener noreferrer" aria-label="Build SMART Rocks">
+        <i class="fas fa-mountain"></i> Rocks
+      </a>
+      <a class="button" href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" target="_blank" rel="noopener noreferrer" aria-label="Design a Scorecard">
+        <i class="fas fa-chart-line"></i> Scorecard
+      </a>
+      <a class="button" href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" target="_blank" rel="noopener noreferrer" aria-label="Clarify Core Values">
+        <i class="fas fa-heart"></i> Core Values
+      </a>
+      <a class="button" href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" target="_blank" rel="noopener noreferrer" aria-label="Meet ClarityBots Author">
+        <i class="fas fa-flask"></i> Meet the Author
+      </a>
+      <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" rel="noopener noreferrer" aria-label="Explore EOS Traction">
+        <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
+      </a>
+    </section>
+  </main>
 
-  <img
-    src="images/logo-default.svg"
-    alt="Watermark Logo"
-    class="watermark"
-    loading="lazy"
-  />
+  <img src="images/logo-default.svg" alt="ClarityBots Watermark" class="watermark" loading="lazy" />
 
   <script type="module">
     import { clients } from './clientConfig.js';
 
     const subdomain = window.location.hostname.split(".")[0];
+    const client = clients?.[subdomain] || clients?.business_intuition;
 
-    if (!clients || !clients[subdomain]) {
-      console.warn(`Unknown subdomain '${subdomain}' – falling back to 'business_intuition'.`);
+    if (client?.background) {
+      document.body.style.backgroundImage = `url('${client.background}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundRepeat = 'no-repeat';
     }
 
-    const data = (clients && clients[subdomain]) ? clients[subdomain] : clients?.business_intuition || {};
-
-    if (data.background) {
-      document.body.style.backgroundImage = `url('${data.background}')`;
-    }
-
-    const headingEl = document.querySelector("h2");
-    if (headingEl && data.heading) {
-      headingEl.textContent = data.heading;
-      headingEl.classList.add("animate-fadeInDown");
+    const headingEl = document.getElementById("dynamic-heading");
+    if (headingEl && client?.heading) {
+      headingEl.textContent = client.heading;
     }
 
     const logoEl = document.querySelector(".watermark");
-    if (logoEl && data.logo) {
-      logoEl.src = data.logo;
-      logoEl.alt = `${data.heading || "ClarityBots"} logo`;
+    if (logoEl && client?.logo) {
+      logoEl.src = client.logo;
+      logoEl.alt = `${client.heading || "ClarityBots"} logo`;
     }
 
     console.log("Subdomain loaded:", subdomain);
