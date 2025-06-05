@@ -19,7 +19,7 @@
   <link rel="icon" href="images/favicon.ico" />
   
   <!-- Preload image -->
-  <link rel="preload" as="image" href="images/business_intuition_image.jpg">
+  <link rel="preload" as="image" href="images/business_intuition_image.jpg" />
   
   <!-- Custom stylesheet -->
   <link rel="stylesheet" href="styles.css" />
@@ -32,8 +32,7 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
-
- </head>
+</head>
 <body>
   <h2></h2>
   <h1>ClarityBots®</h1>
@@ -41,43 +40,43 @@
 
   <div class="button-container">
     <a class="button" 
-        href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Build SMART Rocks"
-        role="button">
+       href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" 
+       target="_blank"
+       rel="noopener noreferrer" 
+       aria-label="Build SMART Rocks"
+       role="button">
       <i class="fas fa-mountain"></i> Rocks
     </a>
     <a class="button" 
-        href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Design a Scorecard"
-        role="button">
+       href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" 
+       target="_blank"
+       rel="noopener noreferrer" 
+       aria-label="Design a Scorecard"
+       role="button">
       <i class="fas fa-chart-line"></i> Scorecard
     </a>
     <a class="button" 
-        href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Clarify Core Values"
-        role="button">
+       href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" 
+       target="_blank"
+       rel="noopener noreferrer" 
+       aria-label="Clarify Core Values"
+       role="button">
       <i class="fas fa-heart"></i> Core Values
     </a>
     <a class="button" 
-        href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Meet ClarityBots Author"
-        role="button">
+       href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" 
+       target="_blank"
+       rel="noopener noreferrer" 
+       aria-label="Meet ClarityBots Author"
+       role="button">
       <i class="fas fa-flask"></i> Meet ClarityBots' Author
     </a>
     <a class="button" 
-        href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Explore EOS Traction"
-        role="button">
+       href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" 
+       target="_blank"
+       rel="noopener noreferrer" 
+       aria-label="Explore EOS Traction"
+       role="button">
       <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
     </a>
   </div>
@@ -94,25 +93,26 @@
 
     const subdomain = window.location.hostname.split(".")[0];
 
-    // 🔍 Subdomain Debug Logging
-    if (!clients[subdomain]) {
+    if (!clients || !clients[subdomain]) {
       console.warn(`Unknown subdomain '${subdomain}' – falling back to 'business_intuition'.`);
     }
 
-    const data = clients[subdomain] || clients["business_intuition"];
+    const data = (clients && clients[subdomain]) ? clients[subdomain] : clients?.business_intuition || {};
 
-    document.body.style.backgroundImage = `url('${data.background}')`;
+    if (data.background) {
+      document.body.style.backgroundImage = `url('${data.background}')`;
+    }
 
     const headingEl = document.querySelector("h2");
-    if (headingEl) {
+    if (headingEl && data.heading) {
       headingEl.textContent = data.heading;
       headingEl.classList.add("animate-fadeInDown");
     }
 
     const logoEl = document.querySelector(".watermark");
-    if (logoEl) {
+    if (logoEl && data.logo) {
       logoEl.src = data.logo;
-      logoEl.alt = `${data.heading} logo`;
+      logoEl.alt = `${data.heading || "ClarityBots"} logo`;
     }
 
     console.log("Subdomain loaded:", subdomain);
@@ -120,9 +120,8 @@
 
   <noscript>
     <div style="background-color: #f04e23; color: white; padding: 1rem; text-align: center;">
-    JavaScript is required to use this site. Please enable JavaScript in your browser settings.
+      JavaScript is required to use this site. Please enable JavaScript in your browser settings.
     </div>
   </noscript>
-
 </body>
 </html>
