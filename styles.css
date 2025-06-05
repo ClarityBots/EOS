@@ -20,7 +20,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.15;
+  line-height: 1.5;
 }
 
 body {
@@ -61,13 +61,14 @@ h1 {
 h2 {
   font-size: 2.25rem;
   color: var(--orange);
-  margin-bottom: 1rem;
+  margin: 0.5rem 0 0.25rem 0;
 }
 
 h3 {
   font-size: 2rem;
   color: var(--orange);
   font-style: italic;
+  margin-top: 0;
 }
 
 .animate-fadeInDown {
@@ -123,17 +124,18 @@ h3 {
 /* Responsive */
 @media (max-width: 560px) {
   h1 {
-    font-size: 2.25rem;
+    font-size: 2rem;
   }
 
   h2 {
-    font-size: 2.00rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    margin: 0.5rem 0 0.25rem 0;
   }
 
   h3 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-style: italic;
+    margin-top: 0;
   }
 
   .button {
