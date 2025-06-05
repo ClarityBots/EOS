@@ -1,8 +1,8 @@
 :root {
   --orange: #ff7900;
   --red-orange: #f04e23;
-  --light-gray: #b0b0b0; /* Slightly darker for better contrast */
-  --lightest-gray: #f5f5f5; /* Really light grey */
+  --light-gray: #b0b0b0;       /* Medium gray */
+  --lightest-gray: #f5f5f5;    /* Nearly white, great for contrast */
   --navy: #142233;
 }
 
@@ -15,7 +15,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif; /* Added fallback fonts */
+  font-family: Arial, Helvetica, sans-serif; /* Fallback fonts */
   color: #fff;
   background-color: var(--navy);
 }
@@ -49,14 +49,19 @@ h1, h2, h3 {
   animation: fadeInDown 1s ease-out;
 }
 
-h1, h3 {
-  font-size: 2.25rem;
+h1 {
+  font-size: 2.5rem;
   color: var(--orange);
 }
 
 h2 {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   color: var(--lightest-gray);
+}
+
+h3 {
+  font-size: 2rem;
+  color: var(--orange);
 }
 
 .animate-fadeInDown {
@@ -90,6 +95,7 @@ h2 {
   border-radius: 8px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
   transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer; /* Added for better UX */
 }
 
 .button:hover {
@@ -109,15 +115,18 @@ h2 {
 
 /* Responsive */
 @media (max-width: 560px) {
-  h1, h3 {
-    font-size: 1.75rem;
+  h1 {
+    font-size: 2rem;
   }
 
   h2 {
-    font-size: 2rem;
-    color: var(--light-gray);
-    color: #f5f5f5; /* Really light gray */
+    font-size: 1.75rem;
+    color: var(--lightest-gray); /* Maintain contrast on small screens */
     margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
   }
 
   .button {
