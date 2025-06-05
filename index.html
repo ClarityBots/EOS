@@ -1,3 +1,13 @@
+<!--
+  Open the HTML editor by right clicking the index.html file in the project EOS directory
+  Open the command line prompt working in kylefowles@Kyles-MacBookPro EOS
+  Remember these:
+    git pull
+    git add .
+    git commit -m "explanation text"
+    git push
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +19,7 @@
   <link rel="icon" href="images/favicon.ico" />
   
   <!-- Preload image -->
-  <!-- Preload image will be injected dynamically by script if needed -->
+  <link rel="preload" as="image" href="images/business_intuition_image.jpg">
   
   <!-- Custom stylesheet -->
   <link rel="stylesheet" href="styles.css" />
@@ -18,117 +28,21 @@
   <link
     rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-wYO1R3ptFzWcYQ8nYQNOi7HcRZcOEvTYFyC8zzONFvN2Edc9sDHxdLaL5OpbwlSvzjT2N8j7PSZcMhcU+Me2KQ=="
+    integrity="sha512-wYO1R3ptFzWcY2e1lKfOdbRfxDcM3G2Z0s9bcu0a3EmZREtQKRA+pDAzZ7vHFfRyaG0vN1Rxrj6lm0JK+5Fi6A=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
 </head>
+
 <body>
-  <h2></h2>
-  <h1>ClarityBots®</h1>
+  <h1>ClarityBots</h1>
   <h3>Where AI Meets EOS™</h3>
 
   <div class="button-container">
-    <a class="button" 
-        href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Build SMART Rocks"
-        role="button">
-      <i class="fas fa-mountain"></i> Rocks
-    </a>
-    <a class="button" 
-        href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Design a Scorecard"
-        role="button">
-      <i class="fas fa-chart-line"></i> Scorecard
-    </a>
-    <a class="button" 
-        href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Clarify Core Values"
-        role="button">
-      <i class="fas fa-heart"></i> Core Values
-    </a>
-    <a class="button" 
-        href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Meet ClarityBots Author"
-        role="button">
-      <i class="fas fa-flask"></i> Meet ClarityBots' Author
-    </a>
-    <a class="button" 
-        href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" 
-        target="_blank"
-        rel="noopener noreferrer" 
-        aria-label="Explore EOS Traction"
-        role="button">
-      <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
-    </a>
+    <a href="smart-rocks.html" class="button">SMART Rocks</a>
+    <a href="vision-builder.html" class="button">Vision Builder</a>
+    <a href="scorecard.html" class="button">Scorecard</a>
+    <a href="resources.html" class="button">Resources</a>
   </div>
-
-  <img
-    src="images/logo-default.svg"
-    alt="Watermark Logo"
-    class="watermark"
-    loading="lazy"
-  />
-
-  <script type="module">
-    import { clients } from './clientConfig.js';
-
-    // 🔍 Normalize subdomain to avoid casing/spacing issues
-    const subdomain = window.location.hostname.split(".")[0].toLowerCase().trim();
-    const data = clients[subdomain] || clients["default"];
-
-    if (!clients[subdomain]) {
-      console.warn(`Unknown subdomain '${subdomain}' – falling back to default.`);
-    }
-
-    // ✅ Dynamically preload background image
-    if (data.preloadImage) {
-      const preloadLink = document.createElement("link");
-      preloadLink.rel = "preload";
-      preloadLink.as = "image";
-      preloadLink.href = data.background;
-      document.head.appendChild(preloadLink);
-    }
-
-    // ✅ Set background
-    document.body.style.backgroundImage = `url('${data.background}')`;
-
-    // ✅ Set headline
-    const headingEl = document.querySelector("h2");
-    if (headingEl) {
-      headingEl.textContent = data.heading;
-      headingEl.classList.add("animate-fadeInDown");
-    }
-
-    // ✅ Set logo and alt text
-    const logoEl = document.querySelector(".watermark");
-    if (logoEl) {
-      logoEl.src = data.logo;
-      logoEl.alt = data.altText || `${data.heading} logo`;
-      logoEl.onerror = () => {
-        logoEl.src = clients.default.logo;
-        logoEl.alt = clients.default.altText;
-      };
-    }
-
-    // ✅ Apply dynamic brand color
-    document.documentElement.style.setProperty('--brand-color', data.brandColor);
-
-    console.log("Subdomain loaded:", subdomain);
-  </script>
-
-  <noscript>
-    <div style="background-color: #f04e23; color: white; padding: 1rem; text-align: center;">
-      JavaScript is required to use this site. Please enable JavaScript in your browser settings.
-    </div>
-  </noscript>
 </body>
 </html>
