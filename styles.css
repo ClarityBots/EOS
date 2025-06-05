@@ -1,4 +1,3 @@
-/* Root variables */
 :root {
   --brand-color: #FF7900;
   --text-color: #ffffff;
@@ -6,7 +5,6 @@
   --button-hover-color: #e56c00;
 }
 
-/* Base styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -15,14 +13,12 @@ body {
   color: #333;
 }
 
-/* Centered headings */
 h1, h2, h3 {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
-/* Button container */
 .button-container {
   display: flex;
   justify-content: center;
@@ -31,7 +27,6 @@ h1, h2, h3 {
   margin-top: 30px;
 }
 
-/* Button styles */
 .button {
   background-color: var(--brand-color);
   color: var(--text-color);
@@ -45,12 +40,10 @@ h1, h2, h3 {
   transition: background-color 0.3s ease;
 }
 
-/* Button hover effect */
 .button:hover {
   background-color: var(--button-hover-color);
 }
 
-/* Responsive container */
 .container {
   max-width: 960px;
   margin: 0 auto;
