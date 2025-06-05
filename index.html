@@ -21,7 +21,6 @@
   <!-- Preload image -->
   <link rel="preload" as="image" href="images/business_intuition_image.jpg">
   
-
   <!-- Custom stylesheet -->
   <link rel="stylesheet" href="styles.css" />
 
@@ -94,6 +93,12 @@
     import { clients } from './clientConfig.js';
 
     const subdomain = window.location.hostname.split(".")[0];
+
+    // 🔍 Subdomain Debug Logging
+    if (!clients[subdomain]) {
+      console.warn(`Unknown subdomain '${subdomain}' – falling back to 'business_intuition'.`);
+    }
+
     const data = clients[subdomain] || clients["business_intuition"];
 
     document.body.style.backgroundImage = `url('${data.background}')`;
