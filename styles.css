@@ -6,21 +6,21 @@
   --navy: #142233;
 }
 
-/* Global box-sizing for predictable sizing */
+/* Global box-sizing */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: Arial, Helvetica, sans-serif; /* Fallback fonts */
-  color: #fff;
-  background-color: var(--navy);
+html {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: #fff;
+  background-color: var(--navy);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,7 +46,6 @@ h1, h2, h3 {
   position: relative;
   z-index: 2;
   text-shadow: 2px 2px 4px #000;
-  animation: fadeInDown 1s ease-out;
 }
 
 h1 {
@@ -57,6 +56,7 @@ h1 {
 h2 {
   font-size: 2.25rem;
   color: var(--orange);
+  margin-bottom: 1rem;
 }
 
 h3 {
@@ -95,7 +95,7 @@ h3 {
   border-radius: 8px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
   transition: background-color 0.3s ease, transform 0.3s ease;
-  cursor: pointer; /* Added for better UX */
+  cursor: pointer;
 }
 
 .button:hover {
@@ -117,7 +117,7 @@ h3 {
 @media (max-width: 560px) {
   h1 {
     font-size: 2rem;
-    color: var(--lightest-gray); /* Maintain contrast on small screens */
+    color: var(--lightest-gray);
   }
 
   h2 {
@@ -148,7 +148,7 @@ h3 {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Respect user preference for reduced motion */
+/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
