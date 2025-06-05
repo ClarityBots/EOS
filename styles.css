@@ -1,8 +1,8 @@
 :root {
   --orange: #ff7900;
   --red-orange: #f04e23;
-  --light-gray: #999999;       /* Darker gray for better contrast */
-  --lightest-gray: #f5f5f5;    /* Nearly white, great for contrast */
+  --light-gray: #999999;
+  --lightest-gray: #f5f5f5;
   --navy: #142233;
 
   --layer-content: 2;
@@ -45,9 +45,8 @@ body::before {
   z-index: var(--layer-bg);
 }
 
-/* Typography */
+/* Headings */
 h1, h2, h3 {
-  margin: 0.5rem 0;
   position: relative;
   z-index: var(--layer-content);
   text-shadow: 2px 2px 4px #000;
@@ -58,19 +57,20 @@ h1, h2, h3 {
 h1 {
   font-size: 2.5rem;
   color: var(--lightest-gray);
+  margin: 0 0 0.25rem 0;
 }
 
 h2 {
   font-size: 2.25rem;
   color: var(--orange);
-  margin: 0.5rem 0 0.25rem 0;
+  margin: 0 0 0.25rem 0;
 }
 
 h3 {
   font-size: 2rem;
   color: var(--orange);
   font-style: italic;
-  margin-top: 0;
+  margin: 0;
 }
 
 /* Buttons */
@@ -123,17 +123,18 @@ h3 {
 @media (max-width: 560px) {
   h1 {
     font-size: 2rem;
+    margin: 0 0 0.25rem 0;
   }
 
   h2 {
     font-size: 1.75rem;
-    margin: 0.5rem 0 0.25rem 0;
+    margin: 0 0 0.25rem 0;
   }
 
   h3 {
     font-size: 1.5rem;
     font-style: italic;
-    margin-top: 0;
+    margin: 0;
   }
 
   .button {
@@ -153,7 +154,7 @@ h3 {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Respect reduced motion */
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
