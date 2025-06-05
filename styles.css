@@ -36,9 +36,12 @@ body {
   text-align: center;
 }
 
-/* Ensures main grows and footer stays at bottom */
+/* Ensures main grows and centers content */
 main {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 body::before {
@@ -84,6 +87,7 @@ h3 {
   gap: 1rem;
   width: 100%;
   max-width: 400px;
+  margin: 0 auto;
   padding: 1rem;
   position: relative;
   z-index: var(--layer-content);
