@@ -1,46 +1,58 @@
+/* Root variables */
 :root {
   --brand-color: #FF7900;
+  --text-color: #ffffff;
+  --background-color: #f4f4f4;
+  --button-hover-color: #e56c00;
 }
 
+/* Base styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: background-image 0.5s ease-in-out;
+  background-color: var(--background-color);
+  color: #333;
 }
 
-h1, h3 {
+/* Centered headings */
+h1, h2, h3 {
   text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
+/* Button container */
 .button-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
+/* Button styles */
 .button {
   background-color: var(--brand-color);
-  color: white;
-  padding: 10px 20px;
+  color: var(--text-color);
+  padding: 12px 24px;
   text-decoration: none;
-  border-radius: 5px;
-}
-
-.button:hover {
-  filter: brightness(90%);
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.watermark {
-  display: block;
+/* Button hover effect */
+.button:hover {
+  background-color: var(--button-hover-color);
+}
+
+/* Responsive container */
+.container {
+  max-width: 960px;
   margin: 0 auto;
-  max-width: 150px;
   padding: 20px;
 }
