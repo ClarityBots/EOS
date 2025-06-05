@@ -92,7 +92,8 @@
   <script type="module">
     import { clients } from './clientConfig.js';
 
-    const subdomain = window.location.hostname.split(".")[0];
+    // 🔍 Normalize subdomain to avoid casing/spacing issues
+    const subdomain = window.location.hostname.split(".")[0].toLowerCase().trim();
     const data = clients[subdomain] || clients["default"];
 
     if (!clients[subdomain]) {
