@@ -93,26 +93,40 @@
     import { clients } from './clientConfig.js';
 
     const subdomain = window.location.hostname.split(".")[0];
+    const data = clients[subdomain] || clients["default"];
 
-    // 🔍 Subdomain Debug Logging
     if (!clients[subdomain]) {
-      console.warn(`Unknown subdomain '${subdomain}' – falling back to 'business_intuition'.`);
+      console.warn(`Unknown subdomain '${subdomain}' – falling back to default.`);
     }
 
-    const data = clients[subdomain] || clients["business_intuition"];
+    // ✅ Dynamically preload background image
+    if (data.preloadImage) {
+      const preloadLink = document.createElement("link");
+      preloadLink.rel = "preload";
+      preloadLink.as = "image";
+      preloadLink.href = data.background;
+      document.head.appendChild(preloadLink);
+    }
 
+    // ✅ Set background
     document.body.style.backgroundImage = `url('${data.background}')`;
 
+    // ✅ Set headline
     const headingEl = document.querySelector("h2");
     if (headingEl) {
       headingEl.textContent = data.heading;
       headingEl.classList.add("animate-fadeInDown");
     }
 
+    // ✅ Set logo and alt text
     const logoEl = document.querySelector(".watermark");
     if (logoEl) {
       logoEl.src = data.logo;
-      logoEl.alt = `${data.heading} logo`;
+      logoEl.alt = data.altText || `${data.heading} logo`;
+      logoEl.onerror = () => {
+        logoEl.src = clients.default.logo;
+        logoEl.alt = clients.default.altText;
+      };
     }
 
     console.log("Subdomain loaded:", subdomain);
