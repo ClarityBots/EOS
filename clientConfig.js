@@ -8,7 +8,7 @@ export const clients = {
     altText: "Alder Construction Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#445777", // Alder's primary brand color
+    brandColor: "#445777",
   },
   business_intuition: {
     heading: "Business Intuition's",
@@ -17,7 +17,7 @@ export const clients = {
     altText: "Business Intuition Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#F04E23", // EOS red-orange
+    brandColor: "#F04E23",
   },
   cop: {
     heading: "COP Construction's",
@@ -26,7 +26,7 @@ export const clients = {
     altText: "COP Construction Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#6C7C90", // COP's primary brand color
+    brandColor: "#6C7C90",
   },
   remedyww: {
     heading: "Remedy World Wide's",
@@ -35,7 +35,7 @@ export const clients = {
     altText: "Remedy World Wide Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#A9B7C6", // Remedy World Wide's brand color
+    brandColor: "#A9B7C6",
   },
   skyline: {
     heading: "Skyline Electric's",
@@ -44,7 +44,7 @@ export const clients = {
     altText: "Skyline Electric Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#FBBF24", // Skyline Electric's brand color
+    brandColor: "#FBBF24",
   },
   vlcm: {
     heading: "VLCM's",
@@ -53,7 +53,7 @@ export const clients = {
     altText: "VLCM Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#28A745", // VLCM's primary brand color
+    brandColor: "#28A745",
   },
   winward: {
     heading: "Winward Electric's",
@@ -62,10 +62,10 @@ export const clients = {
     altText: "Winward Electric Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#9C27B0", // Winward Electric's brand color
+    brandColor: "#9C27B0",
   },
 
-  // 🌐 Default fallback for unknown subdomains
+  // 🌐 Fallback configuration
   default: {
     heading: "ClarityBots",
     background: "images/default_background.jpg",
@@ -73,6 +73,6 @@ export const clients = {
     altText: "ClarityBots Default Logo",
     preloadImage: false,
     basePath: "images/",
-    brandColor: "#FF7900", // Default brand color (EOS orange)
+    brandColor: "#FF7900",
   },
 };
