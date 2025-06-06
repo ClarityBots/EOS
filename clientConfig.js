@@ -8,7 +8,7 @@ export const clients = {
     altText: "Alder Construction Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#445777",
+    brandColor: "#445777", // Alder's primary color
   },
   business_intuition: {
     heading: "Business Intuition's",
@@ -17,7 +17,7 @@ export const clients = {
     altText: "Business Intuition Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#F04E23",
+    brandColor: "#F04E23", // EOS red-orange
   },
   cop: {
     heading: "COP Construction's",
@@ -26,7 +26,7 @@ export const clients = {
     altText: "COP Construction Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#6C7C90",
+    brandColor: "#6C7C90", // COP's primary color
   },
   remedyww: {
     heading: "Remedy World Wide's",
@@ -35,7 +35,7 @@ export const clients = {
     altText: "Remedy World Wide Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#A9B7C6",
+    brandColor: "#A9B7C6", // Remedy's primary color
   },
   skyline: {
     heading: "Skyline Electric's",
@@ -44,7 +44,7 @@ export const clients = {
     altText: "Skyline Electric Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#FBBF24",
+    brandColor: "#FBBF24", // Skyline's brand yellow
   },
   vlcm: {
     heading: "VLCM's",
@@ -53,7 +53,7 @@ export const clients = {
     altText: "VLCM Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#28A745",
+    brandColor: "#28A745", // VLCM green
   },
   winward: {
     heading: "Winward Electric's",
@@ -62,10 +62,10 @@ export const clients = {
     altText: "Winward Electric Logo",
     preloadImage: true,
     basePath: "images/",
-    brandColor: "#9C27B0",
+    brandColor: "#9C27B0", // Winward purple
   },
 
-  // 🌐 Fallback configuration
+  // 🌐 Default fallback for unknown subdomains
   default: {
     heading: "ClarityBots",
     background: "images/default_background.jpg",
@@ -73,6 +73,6 @@ export const clients = {
     altText: "ClarityBots Default Logo",
     preloadImage: false,
     basePath: "images/",
-    brandColor: "#FF7900",
+    brandColor: "#FF7900", // EOS orange
   },
 };

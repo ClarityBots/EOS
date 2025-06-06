@@ -13,17 +13,14 @@
 
   <title>ClarityBots® | AI Meets EOS™</title>
 
-  <!-- ✅ Google Fonts - Inter -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Favicon -->
-  <link rel="icon" href="images/favicon.ico" sizes="any" />
-  <link rel="preload" as="image" href="images/business_intuition_image.jpg" type="image/jpeg" />
-
-  <!-- Custom Styles -->
+  <!-- Favicon & Styles -->
+  <link rel="icon" href="images/favicon.ico" />
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Font Awesome -->
+  <!-- Font Awesome Icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -36,74 +33,69 @@
 <body>
   <main>
     <header>
-      <hgroup>
-        <h1 id="dynamic-heading" class="animate-fadeInDown"></h1>
-        <h2>ClarityBots®</h2>
-        <h3>Where AI Meets EOS™</h3>
-      </hgroup>
+      <h1 id="dynamic-heading" class="animate-fadeInDown"></h1>
+      <h2>ClarityBots®</h2>
+      <h3>Where AI Meets EOS™</h3>
     </header>
 
     <section class="button-container">
-      <a class="button" href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" target="_blank" rel="noopener noreferrer" aria-label="Build SMART Rocks">
+      <a class="button" href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" target="_blank" rel="noopener" aria-label="Build SMART Rocks">
         <i class="fas fa-mountain"></i> Build SMART Rocks
       </a>
-      <a class="button" href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" target="_blank" rel="noopener noreferrer" aria-label="Design a Scorecard">
+      <a class="button" href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" target="_blank" rel="noopener" aria-label="Design a Scorecard">
         <i class="fas fa-chart-line"></i> Design a Scorecard
       </a>
-      <a class="button" href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" target="_blank" rel="noopener noreferrer" aria-label="Clarify Core Values">
+      <a class="button" href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" target="_blank" rel="noopener" aria-label="Clarify Core Values">
         <i class="fas fa-heart"></i> Clarify Core Values
       </a>
-      <a class="button" href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" target="_blank" rel="noopener noreferrer" aria-label="Meet ClarityBots' Author">
-        <i class="fas fa-flask"></i> Meet ClarityBots' Author
+      <a class="button" href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" target="_blank" rel="noopener" aria-label="Meet the Author">
+        <i class="fas fa-flask"></i> Meet the Author
       </a>
-      <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" rel="noopener noreferrer" aria-label="Traction™ by Gino Wickman">
+      <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" rel="noopener" aria-label="Traction by Gino Wickman">
         <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
       </a>
     </section>
   </main>
 
-  <section class="watermark-wrapper">
+  <div class="watermark-wrapper">
     <img src="images/logo-default.svg" alt="ClarityBots Watermark" class="watermark" loading="lazy" />
-  </section>
+  </div>
 
   <footer class="footer">
     <p>&copy; 2025 Business Intuition Incorporated</p>
   </footer>
 
+  <!-- Dynamic Client Loader -->
   <script type="module">
     import { clients } from './clientConfig.js';
 
-    const subdomain = window.location.hostname.split(".")[0];
-    const client = clients?.[subdomain] || clients?.business_intuition;
+    const subdomain = window.location.hostname.split('.')[0];
+    const client = clients[subdomain] || clients.business_intuition;
 
     if (client?.background) {
       document.body.style.backgroundImage = `url('${client.background}')`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
-      document.body.style.backgroundRepeat = 'no-repeat';
     }
 
-    const headingEl = document.getElementById("dynamic-heading");
-    if (headingEl && client?.heading) {
-      headingEl.textContent = client.heading;
+    const heading = document.getElementById('dynamic-heading');
+    if (heading && client?.heading) {
+      heading.textContent = client.heading;
     }
 
-    const logoEl = document.querySelector(".watermark");
-    if (logoEl && client?.logo) {
-      logoEl.src = client.logo;
-      logoEl.alt = `${client.heading || "ClarityBots"} logo`;
+    const logo = document.querySelector('.watermark');
+    if (logo && client?.logo) {
+      logo.src = client.logo;
+      logo.alt = client.altText;
     }
-
-    console.log("Subdomain loaded:", subdomain);
   </script>
 
+  <!-- Fallback for No Module Support -->
   <script nomodule>
-    alert("Your browser does not support modern JavaScript features required to use this site.");
+    alert("This site requires a modern browser with JavaScript support.");
   </script>
 
   <noscript>
     <div style="background-color: #f04e23; color: white; padding: 1rem; text-align: center;">
-      JavaScript is required to use this site. Please enable JavaScript in your browser settings.
+      JavaScript is required to use this site. Please enable it in your browser settings.
     </div>
   </noscript>
 </body>
