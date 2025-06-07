@@ -31,7 +31,7 @@ export const clients = {
   havenlight: {
     heading: "Havenlight's",
     background: "images/havenlight_image.jpg",
-    logo: "images/havenlight_logo.png.old",
+    logo: "images/havenlight_logo.png",
     altText: "Havenlight Logo",
     preloadImage: true,
     basePath: "images/",
