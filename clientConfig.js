@@ -28,6 +28,15 @@ export const clients = {
     basePath: "images/",
     brandColor: "#6C7C90",
   },
+  cop: {
+    heading: "EOS Worldwide's",
+    background: "images/eosww_image.jpg",
+    logo: "images/eosww_logo.webp",
+    altText: "EOS Worldwide Logo",
+    preloadImage: true,
+    basePath: "images/",
+    brandColor: "#6C7C90",
+  },  
   havenlight: {
     heading: "Havenlight's",
     background: "images/havenlight_image.jpg",
