@@ -66,15 +66,15 @@ h1 {
 
 h2 {
   font-size: 2.25rem;
-  color: var(--orange);
+  color: var(--lightest-gray);
   margin-bottom: 0.15rem;
 }
 
 h3 {
   font-size: 1.75rem;
-  color: var(--orange);
+  color: var(--lightest-gray);
   font-style: italic;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.15rem;
 }
 
 /* Button Section */
