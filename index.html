@@ -32,6 +32,17 @@
 
 <body>
   <main>
+    <div id="loginReminder" style="background-color: #fef3c7; color: #92400e; padding: 1rem; border-bottom: 2px solid #facc15; font-family: sans-serif;">
+      <strong>🚀 Welcome to ClarityBots®</strong><br>
+      To get started, please <strong>sign into your own ChatGPT account</strong>:
+      <ol style="margin-top: 0.5rem;">
+        <li>Click the <strong>“Log In”</strong> button at the top right of the screen.</li>
+        <li>Use your personal or work email associated with ChatGPT.</li>
+        <li>Return here and refresh the page.</li>
+      </ol>
+      <p style="margin: 0.5rem 0;"><em>🔒 Your conversations are secure and only visible to you.</em></p>
+      <button onclick="document.getElementById('loginReminder').style.display='none';" style="margin-top: 0.5rem; background-color: #facc15; color: #92400e; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">Got it</button>
+    </div>
     <div class="overlay-panel">
       <header>
         <h1 id="dynamic-heading" class="animate-fadeInDown"></h1>
