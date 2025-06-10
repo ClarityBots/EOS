@@ -31,18 +31,53 @@
 </head>
 
 <body>
-  <main>
-    <div id="loginReminder" style="background-color: #fef3c7; color: #92400e; padding: 1rem; border-bottom: 2px solid #facc15; font-family: sans-serif;">
-      <strong>🚀 Welcome to ClarityBots®</strong><br>
-      To get started, please <strong>sign into your own ChatGPT account</strong>:
-      <ol style="margin-top: 0.5rem;">
-        <li>Click the <strong>“Log In”</strong> button at the top right of the screen.</li>
-        <li>Use your personal or work email associated with ChatGPT.</li>
-        <li>Return here and refresh the page.</li>
-      </ol>
-      <p style="margin: 0.5rem 0;"><em>🔒 Your conversations are secure and only visible to you.</em></p>
-      <button onclick="document.getElementById('loginReminder').style.display='none';" style="margin-top: 0.5rem; background-color: #facc15; color: #92400e; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">Got it</button>
+    <div id="loginOverlay" style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(20, 34, 51, 0.9); /* semi-transparent navy overlay */
+      color: white;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      text-align: left;
+      padding: 2rem;
+      box-sizing: border-box;
+    ">
+      <div style="
+        background-color: white;
+        color: #142233;
+        max-width: 600px;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        text-align: left;
+      ">
+        <h2 style="margin-top: 0;">🚀 Welcome to ClarityBots®</h2>
+        <p>To get started, please <strong>sign into your own ChatGPT account</strong>:</p>
+        <ol>
+          <li>Click the <strong>“Log In”</strong> button at the top right of the screen.</li>
+          <li>Use your personal or work email associated with ChatGPT.</li>
+          <li>Return here and refresh the page.</li>
+        </ol>
+        <p><em>🔒 Your conversations are secure and only visible to you.</em></p>
+        <button onclick="document.getElementById('loginOverlay').style.display='none';" style="
+          margin-top: 1rem;
+          background-color: #ff7900;
+          color: white;
+          padding: 0.6rem 1.2rem;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 1rem;
+        ">Got it</button>
+      </div>
     </div>
+  <main>
     <div class="overlay-panel">
       <header>
         <h1 id="dynamic-heading" class="animate-fadeInDown"></h1>
