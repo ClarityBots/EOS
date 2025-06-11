@@ -13,14 +13,10 @@
 
   <title>ClarityBots® | AI Meets EOS™</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Favicon & Styles -->
+  <!-- Fonts & Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="images/favicon.ico" />
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Font Awesome Icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -59,31 +55,56 @@
   </footer>
 
   <!-- Client Branding Loader -->
-  <script type="module">
-    import { clients } from './clientConfig.js';
+  <script>
+    const clients = {
+      alder: {
+        heading: "Alder Construction's",
+        background: "images/alder_image.jpg",
+        logo: "images/alder_logo.png",
+        altText: "Alder Construction Logo",
+        brandColor: "#445777",
+      },
+      business_intuition: {
+        heading: "Business Intuition's",
+        background: "images/business_intuition_image.jpg",
+        logo: "images/business_intuition_logo.svg",
+        altText: "Business Intuition Logo",
+        brandColor: "#F04E23",
+      },
+      cop: {
+        heading: "COP Construction's",
+        background: "images/cop_image.jpg",
+        logo: "images/cop_logo.png",
+        altText: "COP Construction Logo",
+        brandColor: "#6C7C90",
+      },
+      eosww: {
+        heading: "EOS Worldwide's",
+        background: "images/eosww_image.jpg",
+        logo: "images/eosww_logo.svg",
+        altText: "EOS Worldwide Logo",
+        brandColor: "#142233",
+      }
+    };
 
     const subdomain = window.location.hostname.split('.')[0];
     const client = clients[subdomain] || clients.business_intuition;
 
-    // Set background image
     if (client?.background) {
       document.body.style.backgroundImage = `url('${client.background}')`;
     }
 
-    // Set heading
     const heading = document.getElementById('dynamic-heading');
     if (heading && client?.heading) {
       heading.textContent = client.heading;
     }
 
-    // Swap logo
     const logo = document.querySelector('.watermark');
     if (logo && client?.logo) {
       logo.src = client.logo;
       logo.alt = client.altText;
     }
 
-    // Set brand color for dynamic theming (optional for CSS)
     if (client?.brandColor) {
       document.documentElement.style.setProperty('--brand-color', client.brandColor);
     }
@@ -95,33 +116,26 @@
     let auth0Client;
 
     document.addEventListener('DOMContentLoaded', async () => {
-      console.log("🔄 Auth0 login script starting...");
-
       try {
         auth0Client = await createAuth0Client({
           domain: 'dev-gzd73sqrzon2vuly.us.auth0.com',
           client_id: 'H7lgO2CFzBoy3J2XpQrHq5XAXQxMDaRf',
         });
 
-        console.log("✅ Auth0 client initialized");
-
         if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-          console.log("🔁 Handling Auth0 redirect...");
           await auth0Client.handleRedirectCallback();
           window.history.replaceState({}, document.title, '/');
-          window.location.reload(); // Force full refresh
+          window.location.reload();
           return;
         }
 
         const isAuthenticated = await auth0Client.isAuthenticated();
-        console.log("🔍 Authenticated:", isAuthenticated);
 
         if (isAuthenticated) {
           document.querySelector('main').style.display = 'block';
           const user = await auth0Client.getUser();
           console.log('✅ Logged in as:', user.email || user.name);
         } else {
-          console.log("🔐 Not logged in. Redirecting to Auth0...");
           await auth0Client.loginWithRedirect({
             redirect_uri: window.location.origin,
           });
