@@ -36,7 +36,7 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#6C7C90",
-  },  
+  },
   havenlight: {
     heading: "Havenlight's",
     background: "images/havenlight_image.jpg",

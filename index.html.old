@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools to Build SMART Rocks, Clarify Vision, and Lead with Traction." />
+  <meta name="theme-color" content="#142233" />
+  <meta property="og:title" content="ClarityBots® | AI Meets EOS™" />
+  <meta property="og:description" content="Build SMART Rocks, Clarify Vision, and Lead with Traction using AI-enhanced EOS® tools." />
+  <meta property="og:image" content="images/social_preview.jpg" />
+  <meta property="og:url" content="https://claritybots.netlify.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <title>ClarityBots® | AI and EOS® Converge</title>
+
+  <!-- Fonts & Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="images/favicon.ico" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-wYO1R3ptFzWcYQ8nYQNOi7HcRZcOEvTYFyC8zzONFvN2Edc9sDHxdLaL5OpbwlSvzjT2N8j7PSZcMhcU+Me2KQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+</head>
+
+<body>
+  <main style="display: none;">
+    <div class="overlay-panel">
+      <header>
+        <h1 id="dynamic-heading" class="animate-fadeInDown"></h1>
+        <h2>ClarityBots®</h2>
+        <h3>Where AI Meets EOS®</h3>
+      </header>
+
+      <section class="button-container">
+        <a class="button" href="#">IDS ClarityBot™</a>
+        <a class="button" href="#">SMART Rocks ClarityBot™</a>
+        <a class="button" href="#">Scorecard ClarityBot™</a>
+        <a class="button" href="#">Core Values ClarityBot™</a>
+        <a class="button" href="#">Meet the Creator</a>
+        <a class="button" href="#">Traction™ by Gino Wickman</a>
+      </section>
+    </div>
+  </main>
+
+  <div class="watermark-wrapper">
+    <img src="images/logo-default.svg" alt="ClarityBots Watermark" class="watermark" loading="lazy" />
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2025 Business Intuition Incorporated</p>
+  </footer>
+
+  <!-- Client Branding Loader -->
+  <script>
+    const clients = {
+      alder: {
+        heading: "Alder Construction's",
+        background: "images/alder_image.jpg",
+        logo: "images/alder_logo.png",
+        altText: "Alder Construction Logo",
+        brandColor: "#445777",
+      },
+      business_intuition: {
+        heading: "Business Intuition's",
+        background: "images/business_intuition_image.jpg",
+        logo: "images/business_intuition_logo.svg",
+        altText: "Business Intuition Logo",
+        brandColor: "#F04E23",
+      },
+      cop: {
+        heading: "COP Construction's",
+        background: "images/cop_image.jpg",
+        logo: "images/cop_logo.png",
+        altText: "COP Construction Logo",
+        brandColor: "#6C7C90",
+      },
+      eosww: {
+        heading: "EOS Worldwide's",
+        background: "images/eosww_image.jpg",
+        logo: "images/eosww_logo.svg",
+        altText: "EOS Worldwide Logo",
+        brandColor: "#142233",
+      }
+    };
+
+    const subdomain = window.location.hostname.split('.')[0];
+    const client = clients[subdomain] || clients.business_intuition;
+
+    if (client?.background) {
+      document.body.style.backgroundImage = `url('${client.background}')`;
+    }
+
+    const heading = document.getElementById('dynamic-heading');
+    if (heading && client?.heading) {
+      heading.textContent = client.heading;
+    }
+
+    const logo = document.querySelector('.watermark');
+    if (logo && client?.logo) {
+      logo.src = client.logo;
+      logo.alt = client.altText;
+    }
+
+    if (client?.brandColor) {
+      document.documentElement.style.setProperty('--brand-color', client.brandColor);
+    }
+  </script>
+
+  <!-- Auth0 Login Script -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script>
+    let auth0Client;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        auth0Client = await createAuth0Client({
+          domain: 'dev-gzd73sqrzon2vuly.us.auth0.com',
+          client_id: 'H7lgO2CFzBoy3J2XpQrHq5XAXQxMDaRf',
+        });
+
+        if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+          await auth0Client.handleRedirectCallback();
+          window.history.replaceState({}, document.title, '/');
+          window.location.reload();
+          return;
+        }
+
+        const isAuthenticated = await auth0Client.isAuthenticated();
+
+        if (isAuthenticated) {
+          document.querySelector('main').style.display = 'block';
+          const user = await auth0Client.getUser();
+          console.log('✅ Logged in as:', user.email || user.name);
+        } else {
+          await auth0Client.loginWithRedirect({
+            redirect_uri: window.location.origin,
+          });
+        }
+      } catch (err) {
+        console.error("❌ Auth0 error:", err);
+        alert("Authentication error. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

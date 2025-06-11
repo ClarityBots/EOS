@@ -5,6 +5,8 @@
   --lightest-gray: #f5f5f5;
   --navy: #142233;
 
+  --brand-color: var(--red-orange); /* Will be overridden by clientConfig.js */
+
   --layer-content: 2;
   --layer-bg: -1;
 
@@ -87,7 +89,7 @@ main {
 }
 
 .overlay-panel {
-  background-color: rgba(255, 255, 255, 0.4); /* White with 40% opacity */
+  background-color: rgba(20, 34, 51, 0.6); /* Translucent navy (not white) */
   padding: 30px;
   border-radius: 12px;
   max-width: 90%;
@@ -118,7 +120,7 @@ main {
   font-weight: 600;
   text-decoration: none;
   color: #fff;
-  background-color: var(--red-orange);
+  background-color: var(--brand-color);
   border-radius: 8px;
   box-shadow: var(--shadow);
   transition: background-color 0.3s ease, transform 0.3s ease;
