@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://claritybots.ai/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <title>ClarityBots® | Where AI EOS® Converge</title>
+  <title>ClarityBots® | AI Meets EOS™</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -31,61 +31,13 @@
 </head>
 
 <body>
-  <!-- 
-    <div id="loginOverlay" style="
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(20, 34, 51, 0.25); /* semi-transparent navy overlay */
-      color: white;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: sans-serif;
-      text-align: left;
-      padding: 2rem;
-      box-sizing: border-box;
-    ">
-      <div style="
-        background-color: white;
-        color: #142233;
-        max-width: 600px;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        text-align: left;
-      ">
-        <h2 style="margin-top: 0;">🚀 Welcome to ClarityBots®</h2>
-        <p>To get started, please <strong>sign into your own ChatGPT account</strong>:</p>
-        <ol>
-          <li>Click the <strong>“Log In”</strong> button at the top right of the screen.</li>
-          <li>Use your personal or work email associated with ChatGPT.</li>
-          <li>Return here and refresh the page.</li>
-        </ol>
-        <p><em>🔒 Your conversations are secure and only visible to you.</em></p>
-        <button onclick="document.getElementById('loginOverlay').style.display='none';" style="
-          margin-top: 1rem;
-          background-color: #ff7900;
-          color: white;
-          padding: 0.6rem 1.2rem;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 1rem;
-        ">Got it</button>
-      </div>
-    </div>
-  -->
-
-  <main>
+  <!-- ClarityBots App Hidden by Default -->
+  <main style="display: none;">
     <div class="overlay-panel">
       <header>
         <h1 id="dynamic-heading" class="animate-fadeInDown"></h1>
-        <h2>- ClarityBots® -</h2>
-        <h3>"Where AI and EOS® Converge"</h3>
+        <h2>ClarityBots®</h2>
+        <h3>Where AI Meets EOS™</h3>
       </header>
 
       <section class="button-container">
@@ -101,11 +53,11 @@
         <a class="button" href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" target="_blank" rel="noopener" aria-label="Discover Core Values">
           <i class="fas fa-heart"></i> Core Values ClarityBot™
         </a>
-        <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" rel="noopener" aria-label="Traction by Gino Wickman">
-          <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
-        </a>
         <a class="button" href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" target="_blank" rel="noopener" aria-label="Meet The ClarityBots® Creator">
           <i class="fas fa-flask"></i> Meet The ClarityBots® Creator
+        </a>
+        <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" rel="noopener" aria-label="Traction by Gino Wickman">
+          <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
         </a>
       </section>
     </div>
@@ -116,8 +68,7 @@
   </div>
 
   <footer class="footer">
-    <div>&copy; 2025 Business Intuition Incorporated</div>
-    <div>Powered by ClarityBots.ai • Where AI and EOS® Converge</div>
+    <p>&copy; 2025 Business Intuition Incorporated</p>
   </footer>
 
   <!-- Dynamic Client Loader -->
@@ -141,6 +92,38 @@
       logo.src = client.logo;
       logo.alt = client.altText;
     }
+  </script>
+
+  <!-- Auth0 Login Script -->
+  console.log("🔄 Auth0 login script starting...");
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script>
+    let auth0Client;
+
+    window.onload = async () => {
+      auth0Client = await createAuth0Client({
+        domain: 'dev-gzd73sqrzon2vuly.us.auth0.com',
+        client_id: 'H7lgO2CFzBoy3J2XpQrHq5XAXQxMDaRf',
+      });
+
+      // Handle redirect back from Auth0
+      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+        await auth0Client.handleRedirectCallback();
+        window.history.replaceState({}, document.title, '/');
+        window.location.reload(); // 🔄 Full refresh after login
+      }
+
+      const isAuthenticated = await auth0Client.isAuthenticated();
+
+      if (isAuthenticated) {
+        document.querySelector('main').style.display = 'block'; // ✅ Show ClarityBots
+        console.log('✅ Logged in');
+      } else {
+        await auth0Client.loginWithRedirect({
+          redirect_uri: window.location.origin,
+        });
+      }
+    };
   </script>
 
   <!-- Fallback for No Module Support -->
