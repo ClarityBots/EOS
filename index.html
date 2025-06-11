@@ -8,17 +8,15 @@
   <meta property="og:title" content="ClarityBots® | AI Meets EOS™" />
   <meta property="og:description" content="Build SMART Rocks, Clarify Vision, and Lead with Traction using AI-enhanced EOS® tools." />
   <meta property="og:image" content="images/social_preview.jpg" />
-  <meta property="og:url" content="https://claritybots.ai/" />
+  <meta property="og:url" content="https://claritybots.netlify.app/" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <title>ClarityBots® | AI Meets EOS™</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Favicon & Styles -->
-  <link rel="icon" href="images/favicon.ico" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="images/favicon.ico" />
 
   <!-- Font Awesome Icons -->
   <link
@@ -31,7 +29,6 @@
 </head>
 
 <body>
-  <!-- ClarityBots App Hidden by Default -->
   <main style="display: none;">
     <div class="overlay-panel">
       <header>
@@ -41,24 +38,12 @@
       </header>
 
       <section class="button-container">
-        <a class="button" href="https://chatgpt.com/g/g-6844396598588191bdfdead2be09d6ed-claritybots-ids" target="_blank" rel="noopener" aria-label="Identify, Discuss, and Solve Issues">
-          <i class="fas fa-heart"></i> IDS ClarityBot™
-        </a> 
-        <a class="button" href="https://chatgpt.com/g/g-682fe631e3948191b83455cd16b6c8f5-claritybots-smart-rocks" target="_blank" rel="noopener" aria-label="Build SMART Rocks">
-          <i class="fas fa-mountain"></i> SMART Rocks ClarityBot™
-        </a>
-        <a class="button" href="https://chatgpt.com/g/g-682f6f00fb5481918997b663d2d6bdcc-claritybots-smart-scorecard" target="_blank" rel="noopener" aria-label="Design a Scorecard">
-          <i class="fas fa-chart-line"></i> Scorecard ClarityBot™
-        </a>
-        <a class="button" href="https://chatgpt.com/g/g-6823a5c5e36c819195d6c280b196c359-claritybots-core-values-clarifier" target="_blank" rel="noopener" aria-label="Discover Core Values">
-          <i class="fas fa-heart"></i> Core Values ClarityBot™
-        </a>
-        <a class="button" href="https://chatgpt.com/g/g-682b24c7f4d881919884989d08b645ed-claritybots-meet-the-author" target="_blank" rel="noopener" aria-label="Meet The ClarityBots® Creator">
-          <i class="fas fa-flask"></i> Meet The ClarityBots® Creator
-        </a>
-        <a class="button" href="https://chatgpt.com/g/g-682b1a17970081919e98326822f047e5-claritybots-traction-by-gino-wickman" target="_blank" rel="noopener" aria-label="Traction by Gino Wickman">
-          <i class="fas fa-book-open"></i> Traction™ by Gino Wickman
-        </a>
+        <a class="button" href="#">IDS ClarityBot™</a>
+        <a class="button" href="#">SMART Rocks ClarityBot™</a>
+        <a class="button" href="#">Scorecard ClarityBot™</a>
+        <a class="button" href="#">Core Values ClarityBot™</a>
+        <a class="button" href="#">Meet the Creator</a>
+        <a class="button" href="#">Traction™ by Gino Wickman</a>
       </section>
     </div>
   </main>
@@ -71,70 +56,49 @@
     <p>&copy; 2025 Business Intuition Incorporated</p>
   </footer>
 
-  <!-- Dynamic Client Loader -->
-  <script type="module">
-    import { clients } from './clientConfig.js';
-
-    const subdomain = window.location.hostname.split('.')[0];
-    const client = clients[subdomain] || clients.business_intuition;
-
-    if (client?.background) {
-      document.body.style.backgroundImage = `url('${client.background}')`;
-    }
-
-    const heading = document.getElementById('dynamic-heading');
-    if (heading && client?.heading) {
-      heading.textContent = client.heading;
-    }
-
-    const logo = document.querySelector('.watermark');
-    if (logo && client?.logo) {
-      logo.src = client.logo;
-      logo.alt = client.altText;
-    }
-  </script>
-
   <!-- Auth0 Login Script -->
-  console.log("🔄 Auth0 login script starting...");
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   <script>
     let auth0Client;
 
-    window.onload = async () => {
-      auth0Client = await createAuth0Client({
-        domain: 'dev-gzd73sqrzon2vuly.us.auth0.com',
-        client_id: 'H7lgO2CFzBoy3J2XpQrHq5XAXQxMDaRf',
-      });
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log("🔄 ClarityBots Auth0 script starting...");
 
-      // Handle redirect back from Auth0
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, '/');
-        window.location.reload(); // 🔄 Full refresh after login
-      }
-
-      const isAuthenticated = await auth0Client.isAuthenticated();
-
-      if (isAuthenticated) {
-        document.querySelector('main').style.display = 'block'; // ✅ Show ClarityBots
-        console.log('✅ Logged in');
-      } else {
-        await auth0Client.loginWithRedirect({
-          redirect_uri: window.location.origin,
+      try {
+        auth0Client = await createAuth0Client({
+          domain: 'dev-gzd73sqrzon2vuly.us.auth0.com',
+          client_id: 'H7lgO2CFzBoy3J2XpQrHq5XAXQxMDaRf',
         });
+
+        console.log("✅ Auth0 client initialized");
+
+        // Handle redirect back from Auth0
+        if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+          console.log("🔁 Handling Auth0 redirect...");
+          await auth0Client.handleRedirectCallback();
+          window.history.replaceState({}, document.title, '/');
+          window.location.reload(); // Force reload after login
+          return;
+        }
+
+        const isAuthenticated = await auth0Client.isAuthenticated();
+        console.log("🔍 Authentication check:", isAuthenticated);
+
+        if (isAuthenticated) {
+          document.querySelector('main').style.display = 'block';
+          const user = await auth0Client.getUser();
+          console.log('✅ Logged in as:', user.email || user.name || 'Unknown User');
+        } else {
+          console.log('🔐 Not logged in, redirecting...');
+          await auth0Client.loginWithRedirect({
+            redirect_uri: window.location.origin,
+          });
+        }
+      } catch (err) {
+        console.error("❌ Auth0 error:", err);
+        alert("Authentication error. Please try again.");
       }
-    };
+    });
   </script>
-
-  <!-- Fallback for No Module Support -->
-  <script nomodule>
-    alert("This site requires a modern browser with JavaScript support.");
-  </script>
-
-  <noscript>
-    <div style="background-color: #f04e23; color: white; padding: 1rem; text-align: center;">
-      JavaScript is required to use this site. Please enable it in your browser settings.
-    </div>
-  </noscript>
 </body>
 </html>
