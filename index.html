@@ -15,8 +15,10 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Favicon & Styles -->
   <link rel="icon" href="images/favicon.ico" />
+  <link rel="stylesheet" href="styles.css" />
 
   <!-- Font Awesome Icons -->
   <link
@@ -56,13 +58,44 @@
     <p>&copy; 2025 Business Intuition Incorporated</p>
   </footer>
 
+  <!-- Client Branding Loader -->
+  <script type="module">
+    import { clients } from './clientConfig.js';
+
+    const subdomain = window.location.hostname.split('.')[0];
+    const client = clients[subdomain] || clients.business_intuition;
+
+    // Set background image
+    if (client?.background) {
+      document.body.style.backgroundImage = `url('${client.background}')`;
+    }
+
+    // Set heading
+    const heading = document.getElementById('dynamic-heading');
+    if (heading && client?.heading) {
+      heading.textContent = client.heading;
+    }
+
+    // Swap logo
+    const logo = document.querySelector('.watermark');
+    if (logo && client?.logo) {
+      logo.src = client.logo;
+      logo.alt = client.altText;
+    }
+
+    // Set brand color for dynamic theming (optional for CSS)
+    if (client?.brandColor) {
+      document.documentElement.style.setProperty('--brand-color', client.brandColor);
+    }
+  </script>
+
   <!-- Auth0 Login Script -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   <script>
     let auth0Client;
 
     document.addEventListener('DOMContentLoaded', async () => {
-      console.log("🔄 ClarityBots Auth0 script starting...");
+      console.log("🔄 Auth0 login script starting...");
 
       try {
         auth0Client = await createAuth0Client({
@@ -72,24 +105,23 @@
 
         console.log("✅ Auth0 client initialized");
 
-        // Handle redirect back from Auth0
         if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
           console.log("🔁 Handling Auth0 redirect...");
           await auth0Client.handleRedirectCallback();
           window.history.replaceState({}, document.title, '/');
-          window.location.reload(); // Force reload after login
+          window.location.reload(); // Force full refresh
           return;
         }
 
         const isAuthenticated = await auth0Client.isAuthenticated();
-        console.log("🔍 Authentication check:", isAuthenticated);
+        console.log("🔍 Authenticated:", isAuthenticated);
 
         if (isAuthenticated) {
           document.querySelector('main').style.display = 'block';
           const user = await auth0Client.getUser();
-          console.log('✅ Logged in as:', user.email || user.name || 'Unknown User');
+          console.log('✅ Logged in as:', user.email || user.name);
         } else {
-          console.log('🔐 Not logged in, redirecting...');
+          console.log("🔐 Not logged in. Redirecting to Auth0...");
           await auth0Client.loginWithRedirect({
             redirect_uri: window.location.origin,
           });
