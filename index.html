@@ -75,6 +75,14 @@
           <i class="fas fa-flask"></i> Meet The ClarityBots® Creator
         </a>
       </section>
+
+      <!-- ClarityBots Chat Section -->
+      <section class="chat-container" style="max-width: 600px; margin: 40px auto; text-align: center;">
+        <textarea id="userInput" placeholder="Type your EOS question here..." rows="4" style="width: 100%; padding: 10px; border-radius: 6px;"></textarea>
+        <br />
+        <button onclick="sendToOpenAI()" style="margin-top: 10px; padding: 10px 20px; border-radius: 6px;">Submit</button>
+        <div id="responseArea" style="margin-top: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;"></div>
+      </section>
     </div>
   </main>
 
@@ -120,5 +128,7 @@
       JavaScript is required to use this site. Please enable it in your browser settings.
     </div>
   </noscript>
+
+  <script src="script.js"></script>
 </body>
 </html>
