@@ -35,7 +35,3 @@ function clearChat() {
   document.getElementById('userInput').value = "";
   document.getElementById('responseArea').innerText = "";
 }
-
-function toggleDarkMode() {
-  document.body.classList.toggle("dark-mode");
-}
