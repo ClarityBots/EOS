@@ -33,6 +33,32 @@
       font-size: 2rem;
     }
 
+    #client-fallback-banner {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    }
+
+    #client-fallback-banner button {
+      margin: 5px;
+      padding: 8px 14px;
+      font-weight: bold;
+      background-color: #FF7900;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #client-fallback-banner button:hover {
+      background-color: #F04E23;
+    }
+
     #conversation-starters {
       background-color: #FBEDE2;
       padding: 1rem;
@@ -112,9 +138,7 @@
   <div id="chat-container">
     <div id="conversation-starters"></div>
 
-    <div id="chat-output">
-      <!-- Messages will appear here -->
-    </div>
+    <div id="chat-output"></div>
 
     <form id="chat-form">
       <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" />
@@ -122,37 +146,12 @@
     </form>
   </div>
 
-  <script>
-    const clients = {
-      alder: {
-        heading: "Alder Construction’s",
-        background: "images/alder_image.jpg",
-        logo: "images/alder_logo.png",
-        altText: "Alder Construction Logo",
-        brandColor: "#445777",
-        conversationStarters: [
-          "Build a SMART Rock for the field team",
-          "Create our weekly Scorecard",
-          "Solve a recurring issue using IDS"
-        ]
-      },
-      business_intuition: {
-        heading: "Business Intuition’s",
-        background: "images/business_intuition_image.jpg",
-        logo: "images/business_intuition_logo.svg",
-        altText: "Business Intuition Logo",
-        brandColor: "#F04E23",
-        conversationStarters: [
-          "Define our Core Values",
-          "Build a SMART Rock for Q3",
-          "What’s the Vision/Traction Organizer?"
-        ]
-      }
-    };
+  <script type="module">
+    import { clients } from './clientConfig.js';
 
     function getClientKey() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('client') || 'business_intuition';
+      return params.get('client') || 'default';
     }
 
     function sendPrompt(promptText) {
@@ -167,9 +166,7 @@
 
     function applyClientTheme() {
       const clientKey = getClientKey();
-      const config = clients[clientKey];
-
-      if (!config) return;
+      const config = clients[clientKey] || clients.default;
 
       document.title = `${config.heading} ClarityBots`;
       document.body.style.backgroundImage = `url(${config.background})`;
@@ -178,7 +175,6 @@
       document.getElementById('client-heading').textContent = `${config.heading} ClarityBots®`;
       document.getElementById('submit-button').style.backgroundColor = config.brandColor;
 
-      // Apply conversation starters
       const starterContainer = document.getElementById('conversation-starters');
       starterContainer.innerHTML = `<p><strong>Start with one of these:</strong></p>`;
       config.conversationStarters.forEach(text => {
@@ -187,6 +183,21 @@
         btn.onclick = () => sendPrompt(text);
         starterContainer.appendChild(btn);
       });
+
+      // Fallback UI for unknown clients
+      if (!clients[clientKey]) {
+        const validKeys = Object.keys(clients).filter(k => k !== 'default');
+        const suggestionBanner = document.createElement('div');
+        suggestionBanner.id = 'client-fallback-banner';
+        suggestionBanner.innerHTML = `
+          <p><strong>Hmm... that client wasn’t recognized.</strong></p>
+          <p>Please try one of the following:</p>
+          <div>${validKeys.map(k => `
+            <button onclick="location.search='?client=${k}'">${clients[k].heading}</button>
+          `).join(' ')}</div>
+        `;
+        document.body.prepend(suggestionBanner);
+      }
     }
 
     applyClientTheme();
