@@ -9,6 +9,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#445777",
+    conversationStarters: [
+      "Build a SMART Rock for the field team",
+      "Create our weekly Scorecard",
+      "Solve a recurring issue using IDS"
+    ]
   },
   business_intuition: {
     heading: "Business Intuition's",
@@ -18,6 +23,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#F04E23",
+    conversationStarters: [
+      "Define our Core Values",
+      "Build a SMART Rock for Q3",
+      "What’s the Vision/Traction Organizer?"
+    ]
   },
   cop: {
     heading: "COP Construction's",
@@ -27,6 +37,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#6C7C90",
+    conversationStarters: [
+      "Create a SMART Rock for our crews",
+      "Build out the Scorecard metrics",
+      "Clarify a recurring team issue"
+    ]
   },
   eosww: {
     heading: "EOS Worldwide's",
@@ -36,7 +51,12 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#6C7C90",
-  },  
+    conversationStarters: [
+      "Define your Core Values",
+      "Build a SMART Rock for the quarter",
+      "Solve a Level 10 Issue using IDS"
+    ]
+  },
   havenlight: {
     heading: "Havenlight's",
     background: "images/havenlight_image.jpg",
@@ -45,6 +65,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#A9B7C6",
+    conversationStarters: [
+      "Clarify our company Core Values",
+      "Build a SMART Rock for the sales team",
+      "Run an IDS session for fulfillment"
+    ]
   },
   ninety: {
     heading: "Ninety's",
@@ -54,6 +79,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#A9B7C6",
+    conversationStarters: [
+      "Define a Rock using SMART criteria",
+      "Explore the Vision/Traction Organizer",
+      "Clarify Scorecard expectations"
+    ]
   },
   remedyww: {
     heading: "Remedy World Wide's",
@@ -63,6 +93,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#A9B7C6",
+    conversationStarters: [
+      "What are our company Core Values?",
+      "Build a SMART Rock for the creative team",
+      "Use IDS to solve a marketing challenge"
+    ]
   },
   skyline: {
     heading: "Skyline Electric's",
@@ -72,6 +107,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#FBBF24",
+    conversationStarters: [
+      "Create a SMART Rock for engineering",
+      "Clarify team expectations using Scorecard",
+      "Solve an internal issue using IDS"
+    ]
   },
   vlcm: {
     heading: "VLCM's",
@@ -81,6 +121,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#28A745",
+    conversationStarters: [
+      "Define our quarterly Rocks",
+      "Clarify metrics with a Scorecard",
+      "Use IDS to resolve a tech issue"
+    ]
   },
   winward: {
     heading: "Winward Electric's",
@@ -90,6 +135,11 @@ export const clients = {
     preloadImage: true,
     basePath: "images/",
     brandColor: "#9C27B0",
+    conversationStarters: [
+      "Build a SMART Rock for this quarter",
+      "Define our Core Values",
+      "Solve a recurring challenge using IDS"
+    ]
   },
 
   // 🌐 Fallback configuration
@@ -101,5 +151,10 @@ export const clients = {
     preloadImage: false,
     basePath: "images/",
     brandColor: "#FF7900",
-  },
+    conversationStarters: [
+      "What is a SMART Rock?",
+      "How do I clarify Core Values?",
+      "What does IDS mean and how do I use it?"
+    ]
+  }
 };
