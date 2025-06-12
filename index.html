@@ -42,47 +42,55 @@
   </script>
 </head>
 
-<body class="bg-cover bg-center bg-no-repeat min-h-screen">
-  <main>
-    <div class="overlay-panel max-w-4xl mx-auto px-4 py-10">
-      <header class="text-center text-white mb-6">
-        <h1 id="dynamic-heading" class="text-4xl font-bold mb-2 animate-fadeInDown"></h1>
-        <h2 class="text-2xl font-semibold">- ClarityBots® -</h2>
-        <h3 class="text-lg italic">"Where AI and EOS® Converge"</h3>
+<body class="relative min-h-screen bg-cover bg-center bg-no-repeat text-[#142233]">
+  <div class="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
+
+  <main class="relative z-10">
+    <div class="max-w-5xl mx-auto px-4 py-10">
+
+      <!-- Header -->
+      <header class="text-center text-white mb-10 drop-shadow-lg">
+        <h1 id="dynamic-heading" class="text-5xl font-extrabold mb-3 tracking-tight animate-fadeInDown"></h1>
+        <h2 class="text-2xl font-semibold italic">- ClarityBots® -</h2>
+        <h3 class="text-lg font-medium italic">"Where AI and EOS® Converge"</h3>
       </header>
 
-      <!-- Tool Selector -->
-      <section class="flex flex-col items-center gap-4 py-6 bg-white rounded shadow-lg max-w-xl mx-auto">
-        <label for="toolSelect" class="text-lg font-semibold text-gray-800 mt-4">Choose a ClarityBot Tool:</label>
-        <select id="toolSelect" onchange="updateToolInfo()" class="w-full max-w-md rounded border border-gray-300 p-2 shadow-sm">
-          <option value="ids">IDS ClarityBot™</option>
-          <option value="rocks">SMART Rocks ClarityBot™</option>
-          <option value="scorecard">Scorecard ClarityBot™</option>
-          <option value="core">Core Values ClarityBot™</option>
-          <option value="traction">Traction™ by Gino Wickman</option>
-          <option value="author">Meet the ClarityBots® Creator</option>
-        </select>
+      <!-- Content Card -->
+      <section class="bg-white bg-opacity-90 rounded-2xl shadow-2xl max-w-3xl mx-auto p-8">
 
-        <div id="toolInfo" class="w-full max-w-md rounded bg-gray-50 p-4 shadow mb-4">
-          <h3 class="text-xl font-bold">IDS ClarityBot™</h3>
-          <p class="text-gray-700 mt-2">Identify, Discuss, and Solve team issues using EOS® best practices.</p>
-        </div>
-      </section>
+        <!-- Tool Selector -->
+        <div class="flex flex-col items-center gap-4 mb-6">
+          <label for="toolSelect" class="text-lg font-semibold">Choose a ClarityBot Tool:</label>
+          <select id="toolSelect" onchange="updateToolInfo()" class="w-full max-w-md rounded border border-gray-300 p-2 shadow-sm">
+            <option value="ids">IDS ClarityBot™</option>
+            <option value="rocks">SMART Rocks ClarityBot™</option>
+            <option value="scorecard">Scorecard ClarityBot™</option>
+            <option value="core">Core Values ClarityBot™</option>
+            <option value="traction">Traction™ by Gino Wickman</option>
+            <option value="author">Meet the ClarityBots® Creator</option>
+          </select>
 
-      <!-- Chat Section -->
-      <section class="flex flex-col items-center gap-4 py-6">
-        <textarea id="userInput" placeholder="Type your EOS question here..." rows="4"
-          class="w-full max-w-md rounded border border-gray-300 p-3 shadow-sm focus:border-blue-400 focus:outline-none"
-        ></textarea>
-        <div class="flex gap-4">
-          <button onclick="sendToOpenAI()" class="rounded bg-orange-600 px-5 py-2 font-semibold text-white shadow hover:bg-orange-700 transition">
-            Submit
-          </button>
-          <button id="clearButton" onclick="clearChat()" class="rounded border border-gray-400 px-5 py-2 text-gray-700 shadow hover:bg-gray-100 transition">
-            Clear
-          </button>
+          <div id="toolInfo" class="w-full max-w-md rounded bg-gray-50 p-4 shadow">
+            <h3 class="text-xl font-bold">IDS ClarityBot™</h3>
+            <p class="text-gray-700 mt-2">Identify, Discuss, and Solve team issues using EOS® best practices.</p>
+          </div>
         </div>
-        <div id="responseArea" class="w-full max-w-md rounded bg-gray-100 p-4 text-gray-800 shadow mt-4 min-h-[80px]">
+
+        <!-- Chat Section -->
+        <div class="flex flex-col items-center gap-4">
+          <textarea id="userInput" placeholder="Type your EOS question here..." rows="4"
+            class="w-full max-w-md rounded border border-gray-300 p-3 shadow-sm focus:border-orange-500 focus:outline-none"
+          ></textarea>
+          <div class="flex gap-4">
+            <button onclick="sendToOpenAI()" class="rounded bg-[#F04E23] px-5 py-2 font-semibold text-white shadow hover:bg-[#d63e18] transition">
+              Submit
+            </button>
+            <button id="clearButton" onclick="clearChat()" class="rounded border border-gray-400 px-5 py-2 text-gray-700 shadow hover:bg-gray-100 transition">
+              Clear
+            </button>
+          </div>
+          <div id="responseArea" class="w-full max-w-md rounded bg-gray-100 p-4 text-gray-800 shadow mt-4 min-h-[80px]">
+          </div>
         </div>
       </section>
     </div>
@@ -92,7 +100,7 @@
     <img src="images/logo-default.svg" alt="ClarityBots Watermark" class="watermark" loading="lazy" />
   </div>
 
-  <footer class="footer text-center text-sm text-white bg-gray-900 py-4">
+  <footer class="text-center text-sm text-white bg-[#142233] py-4">
     <div>&copy; 2025 Business Intuition Incorporated</div>
     <div>Powered by ClarityBots.ai • Where AI, Ninety.io, and EOS® Converge</div>
   </footer>
