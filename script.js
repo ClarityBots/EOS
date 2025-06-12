@@ -1,8 +1,6 @@
 async function sendToOpenAI() {
   const userInput = document.getElementById('userInput').value;
   const responseArea = document.getElementById('responseArea');
-
-  // Clear previous response
   responseArea.innerText = "Thinking...";
 
   try {
@@ -23,7 +21,6 @@ async function sendToOpenAI() {
     } else {
       responseArea.innerText = "Unexpected response from server.";
     }
-
   } catch (err) {
     responseArea.innerText = "Network Error: " + err.message;
   }
