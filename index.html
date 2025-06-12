@@ -3,138 +3,228 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools to Build SMART Rocks, Clarify Vision, and Lead with Traction." />
+  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools" />
   <meta name="theme-color" content="#142233" />
-  <meta property="og:title" content="ClarityBots® | AI Meets EOS®" />
-  <meta property="og:description" content="Build SMART Rocks, Clarify Vision, and Lead with Traction using AI-enhanced EOS® tools." />
-  <meta property="og:image" content="images/social_preview.jpg" />
-  <meta property="og:url" content="https://claritybots.ai/" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <title>ClarityBots® | Where AI, Ninety.io, and EOS® Converge</title>
+  <title>ClarityBots®</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-
-  <!-- TailwindCSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-wYO1R3ptFzWcYQ8nYQNOi7HcRZcOEvTYFyC8zzONFvN2Edc9sDHxdLaL5OpbwlSvzjT2N8j7PSZcMhcU+Me2KQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- Dynamic Preload Image Loader -->
-  <script type="module">
-    import { clients } from './clientConfig.js';
-    const subdomain = window.location.hostname.split('.')[0];
-    const client = clients[subdomain] || clients.business_intuition;
-    if (client?.preloadImage && client?.background) {
-      const preloadLink = document.createElement('link');
-      preloadLink.rel = 'preload';
-      preloadLink.as = 'image';
-      preloadLink.href = client.background;
-      document.head.appendChild(preloadLink);
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #fff;
+      background-size: cover;
+      background-position: center;
+      color: #142233;
     }
-  </script>
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header img {
+      max-height: 60px;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    #conversation-starters {
+      background-color: #FBEDE2;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    #conversation-starters button {
+      margin: 6px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: white;
+      background-color: #FF7900;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+
+    #conversation-starters button:hover {
+      background-color: #F04E23;
+    }
+
+    #chat-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    #chat-output {
+      min-height: 300px;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background-color: #fff;
+    }
+
+    #chat-form {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    #submit-button {
+      background-color: #FF7900;
+      color: white;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #submit-button:hover {
+      background-color: #F04E23;
+    }
+  </style>
 </head>
+<body>
+  <header>
+    <img id="client-logo" src="" alt="Client Logo" />
+    <h1>ClarityBots®</h1>
+    <p id="client-heading">AI-enhanced EOS® Tools</p>
+  </header>
 
-<body class="relative min-h-screen bg-cover bg-center bg-no-repeat text-[#142233]">
-  <div class="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
+  <div id="chat-container">
+    <div id="conversation-starters"></div>
 
-  <main class="relative z-10">
-    <div class="max-w-5xl mx-auto px-4 py-10">
-
-      <!-- Header -->
-      <header class="text-center text-white mb-10 drop-shadow-lg">
-        <h1 id="dynamic-heading" class="text-5xl font-extrabold mb-3 tracking-tight animate-fadeInDown"></h1>
-        <h2 class="text-2xl font-semibold italic">- ClarityBots® -</h2>
-        <h3 class="text-lg font-medium italic">"Where AI and EOS® Converge"</h3>
-      </header>
-
-      <!-- Content Card -->
-      <section class="bg-white bg-opacity-90 rounded-2xl shadow-2xl max-w-3xl mx-auto p-8">
-
-        <!-- Tool Selector -->
-        <div class="flex flex-col items-center gap-4 mb-6">
-          <label for="toolSelect" class="text-lg font-semibold">Choose a ClarityBot Tool:</label>
-          <select id="toolSelect" onchange="updateToolInfo()" class="w-full max-w-md rounded border border-gray-300 p-2 shadow-sm">
-            <option value="ids">IDS ClarityBot™</option>
-            <option value="rocks">SMART Rocks ClarityBot™</option>
-            <option value="scorecard">Scorecard ClarityBot™</option>
-            <option value="core">Core Values ClarityBot™</option>
-            <option value="traction">Traction™ by Gino Wickman</option>
-            <option value="author">Meet the ClarityBots® Creator</option>
-          </select>
-
-          <div id="toolInfo" class="w-full max-w-md rounded bg-gray-50 p-4 shadow">
-            <h3 class="text-xl font-bold">IDS ClarityBot™</h3>
-            <p class="text-gray-700 mt-2">Identify, Discuss, and Solve team issues using EOS® best practices.</p>
-          </div>
-        </div>
-
-        <!-- Chat Section -->
-        <div class="flex flex-col items-center gap-4">
-          <textarea id="userInput" placeholder="Type your EOS question here..." rows="4"
-            class="w-full max-w-md rounded border border-gray-300 p-3 shadow-sm focus:border-orange-500 focus:outline-none"
-          ></textarea>
-          <div class="flex gap-4">
-            <button onclick="sendToOpenAI()" class="rounded bg-[#F04E23] px-5 py-2 font-semibold text-white shadow hover:bg-[#d63e18] transition">
-              Submit
-            </button>
-            <button id="clearButton" onclick="clearChat()" class="rounded border border-gray-400 px-5 py-2 text-gray-700 shadow hover:bg-gray-100 transition">
-              Clear
-            </button>
-          </div>
-          <div id="responseArea" class="w-full max-w-md rounded bg-gray-100 p-4 text-gray-800 shadow mt-4 min-h-[80px]">
-          </div>
-        </div>
-      </section>
+    <div id="chat-output">
+      <!-- Messages will appear here -->
     </div>
-  </main>
 
-  <div class="watermark-wrapper">
-    <img src="images/logo-default.svg" alt="ClarityBots Watermark" class="watermark" loading="lazy" />
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" />
+      <button type="submit" id="submit-button">Send</button>
+    </form>
   </div>
 
-  <footer class="text-center text-sm text-white bg-[#142233] py-4">
-    <div>&copy; 2025 Business Intuition Incorporated</div>
-    <div>Powered by ClarityBots.ai • Where AI, Ninety.io, and EOS® Converge</div>
-  </footer>
+  <script>
+    const clients = {
+      alder: {
+        heading: "Alder Construction’s",
+        background: "images/alder_image.jpg",
+        logo: "images/alder_logo.png",
+        altText: "Alder Construction Logo",
+        brandColor: "#445777",
+        conversationStarters: [
+          "Build a SMART Rock for the field team",
+          "Create our weekly Scorecard",
+          "Solve a recurring issue using IDS"
+        ]
+      },
+      business_intuition: {
+        heading: "Business Intuition’s",
+        background: "images/business_intuition_image.jpg",
+        logo: "images/business_intuition_logo.svg",
+        altText: "Business Intuition Logo",
+        brandColor: "#F04E23",
+        conversationStarters: [
+          "Define our Core Values",
+          "Build a SMART Rock for Q3",
+          "What’s the Vision/Traction Organizer?"
+        ]
+      }
+    };
 
-  <!-- Dynamic Client Loader -->
-  <script type="module">
-    import { clients } from './clientConfig.js';
-    const subdomain = window.location.hostname.split('.')[0];
-    const client = clients[subdomain] || clients.business_intuition;
-    if (client?.background) {
-      document.body.style.backgroundImage = `url('${client.background}')`;
+    function getClientKey() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('client') || 'business_intuition';
     }
-    const heading = document.getElementById('dynamic-heading');
-    if (heading && client?.heading) {
-      heading.textContent = client.heading;
+
+    function sendPrompt(promptText) {
+      const inputField = document.getElementById('user-input');
+      const submitBtn = document.getElementById('submit-button');
+
+      if (inputField && submitBtn) {
+        inputField.value = promptText;
+        submitBtn.click();
+      }
     }
-    const logo = document.querySelector('.watermark');
-    if (logo && client?.logo) {
-      logo.src = client.logo;
-      logo.alt = client.altText;
+
+    function applyClientTheme() {
+      const clientKey = getClientKey();
+      const config = clients[clientKey];
+
+      if (!config) return;
+
+      document.title = `${config.heading} ClarityBots`;
+      document.body.style.backgroundImage = `url(${config.background})`;
+      document.getElementById('client-logo').src = config.logo;
+      document.getElementById('client-logo').alt = config.altText;
+      document.getElementById('client-heading').textContent = `${config.heading} ClarityBots®`;
+      document.getElementById('submit-button').style.backgroundColor = config.brandColor;
+
+      // Apply conversation starters
+      const starterContainer = document.getElementById('conversation-starters');
+      starterContainer.innerHTML = `<p><strong>Start with one of these:</strong></p>`;
+      config.conversationStarters.forEach(text => {
+        const btn = document.createElement('button');
+        btn.textContent = text;
+        btn.onclick = () => sendPrompt(text);
+        starterContainer.appendChild(btn);
+      });
     }
+
+    applyClientTheme();
+
+    document.getElementById('chat-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const input = document.getElementById('user-input');
+      const output = document.getElementById('chat-output');
+
+      const message = input.value.trim();
+      if (!message) return;
+
+      const userDiv = document.createElement('div');
+      userDiv.textContent = "🧑‍💼 " + message;
+      output.appendChild(userDiv);
+
+      input.value = '';
+
+      try {
+        const response = await fetch('/api/gpt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: message })
+        });
+
+        const data = await response.json();
+        const botDiv = document.createElement('div');
+        botDiv.textContent = "🤖 " + data.reply;
+        output.appendChild(botDiv);
+      } catch (error) {
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = "🤖 Sorry, something went wrong. Please try again.";
+        output.appendChild(errorDiv);
+        console.error(error);
+      }
+
+      output.scrollTop = output.scrollHeight;
+    });
   </script>
-
-  <!-- Fallback for No Module Support -->
-  <script nomodule>
-    alert("This site requires a modern browser with JavaScript support.");
-  </script>
-
-  <noscript>
-    <div style="background-color: #f04e23; color: white; padding: 1rem; text-align: center;">
-      JavaScript is required to use this site. Please enable it in your browser settings.
-    </div>
-  </noscript>
-
-  <script src="script.js"></script>
 </body>
 </html>
