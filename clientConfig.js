@@ -46,6 +46,15 @@ export const clients = {
     basePath: "images/",
     brandColor: "#A9B7C6",
   },
+  havenlight: {
+    heading: "Ninety's",
+    background: "images/ninety_image.jpg",
+    logo: "images/ninety_logo.png",
+    altText: "Ninety Logo",
+    preloadImage: true,
+    basePath: "images/",
+    brandColor: "#A9B7C6",
+  },
   remedyww: {
     heading: "Remedy World Wide's",
     background: "images/remedyww_image.jpg",
