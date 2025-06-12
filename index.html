@@ -55,12 +55,22 @@
         <h3>"Where AI and EOS® Converge"</h3>
       </header>
 
-      <section class="button-container">
-        <!-- Your GPT tool buttons (unchanged) -->
-        <a class="button" href="https://chatgpt.com/g/g-6844396598588191bdfdead2be09d6ed-claritybots-ids" target="_blank" rel="noopener">
-          <i class="fas fa-heart"></i> IDS ClarityBot™
-        </a>
-        <!-- [Other buttons truncated for brevity] -->
+      <!-- Button Container Section -->
+      <section class="button-container" style="text-align: center; margin: 20px 0;">
+        <label for="toolSelect">Choose a ClarityBot Tool:</label><br />
+        <select id="toolSelect" onchange="updateToolInfo()" style="padding: 8px; margin-top: 10px;">
+          <option value="ids">IDS ClarityBot™</option>
+          <option value="rocks">SMART Rocks ClarityBot™</option>
+          <option value="scorecard">Scorecard ClarityBot™</option>
+          <option value="core">Core Values ClarityBot™</option>
+          <option value="traction">Traction™ by Gino Wickman</option>
+          <option value="author">Meet the ClarityBots® Creator</option>
+        </select>
+
+        <div id="toolInfo" style="margin-top: 20px;">
+          <h3>IDS ClarityBot™</h3>
+          <p>Identify, Discuss, and Solve team issues using EOS® best practices.</p>
+        </div>
       </section>
 
       <!-- ClarityBots Chat Section -->
