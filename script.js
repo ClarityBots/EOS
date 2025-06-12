@@ -2,6 +2,21 @@ async function sendToOpenAI() {
   const userInput = document.getElementById('userInput').value;
   const responseArea = document.getElementById('responseArea');
   const clearBtn = document.getElementById('clearButton');
+  const selectedTool = document.getElementById('toolSelect').value;
+
+  const toolPrompts = {
+    ids: "You are an EOS Implementer helping a team go through the IDS process.",
+    rocks: "You are guiding a leadership team to create clear and SMART 90-day Rocks.",
+    scorecard: "You are an EOS coach helping design a weekly scorecard with measurable numbers.",
+    core: "You are helping an EOS company uncover and clarify their Core Values.",
+    traction: "You are summarizing tools and teachings from the book Traction by Gino Wickman.",
+    author: "You are introducing yourself as the creator of ClarityBots, sharing its vision and purpose."
+  };
+
+  const messages = [
+    { role: "system", content: toolPrompts[selectedTool] || "You are a helpful EOS advisor." },
+    { role: "user", content: userInput }
+  ];
 
   responseArea.innerText = "Thinking...";
   clearBtn.disabled = true;
@@ -12,7 +27,7 @@ async function sendToOpenAI() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ message: userInput })
+      body: JSON.stringify({ message: messages })
     });
 
     const data = await res.json();
