@@ -48,7 +48,7 @@ export const clients = {
   },
   Ninety: {
     heading: "Ninety's",
-    background: "images/ninety_image.jpg",
+    background: "images/ninety_image.webp",
     logo: "images/ninety_logo.png",
     altText: "Ninety Logo",
     preloadImage: true,
