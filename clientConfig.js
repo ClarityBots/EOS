@@ -46,7 +46,7 @@ export const clients = {
     basePath: "images/",
     brandColor: "#A9B7C6",
   },
-  havenlight: {
+  Ninety: {
     heading: "Ninety's",
     background: "images/ninety_image.jpg",
     logo: "images/ninety_logo.png",
