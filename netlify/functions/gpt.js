@@ -15,7 +15,7 @@ export const handler = async (event) => {
   }
 
   try {
-    const { prompt } = JSON.parse(event.body);
+    const { prompt } = JSON.parse(event.body || '{}');
 
     if (!prompt || prompt.trim().length === 0) {
       return {
@@ -25,7 +25,7 @@ export const handler = async (event) => {
     }
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-4", // or "gpt-3.5-turbo"
+      model: "gpt-4", // or "gpt-3.5-turbo" if that's what you're using
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
@@ -35,16 +35,16 @@ export const handler = async (event) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        answer: reply || "🤖 Something went wrong — no reply received.",
+        answer: reply || "🤖 GPT responded, but nothing was returned.",
       }),
     };
   } catch (error) {
-    console.error("OpenAI error:", error);
+    console.error("OpenAI API Error:", error.message);
+
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: "🤖 Sorry, I couldn’t process that right now.",
-        details: error.message,
+        answer: `🤖 Sorry, I couldn’t process your request. (${error.message})`,
       }),
     };
   }
