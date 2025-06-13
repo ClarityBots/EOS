@@ -3,20 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>ClarityBots® | AI and EOS® Converge</title>
-  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools to Build SMART Rocks, Clarify Vision, and Lead with Traction." />
-  <meta name="theme-color" content="#142233" />
-  <meta property="og:title" content="ClarityBots® | AI Meets EOS®" />
-  <meta property="og:description" content="Build SMART Rocks, Clarify Vision, and Lead with Traction using AI-enhanced EOS® tools." />
+  <title>ClarityBots | AI + EOS SMART Rocks</title>
+  <meta name="description" content="ClarityBots | AI-powered EOS tools to clarify vision and create SMART Rocks." />
+  <meta property="og:title" content="ClarityBots | EOS + AI for Growth-Oriented Teams" />
+  <meta property="og:description" content="Build SMART Rocks, solve Issues, and lead with Traction using AI-enhanced EOS tools." />
   <meta property="og:image" content="images/social_preview.jpg" />
   <meta property="og:url" content="https://claritybots.netlify.app/" />
   <meta name="twitter:card" content="summary_large_image" />
-
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -24,41 +20,64 @@
   </style>
 </head>
 
-<body class="bg-white text-gray-800 min-h-screen flex flex-col items-center justify-center p-4">
-
-  <!-- Branding Header -->
-  <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl border border-gray-200">
-    <header class="flex flex-col items-start justify-between px-6 py-4 border-b border-gray-200">
-      <img src="images/logo_claritybots.png" alt="ClarityBots Logo" class="w-32 mb-2" />
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">ClarityBots® – SMART Rocks</h1>
-        <p class="text-sm text-gray-500">AI-enhanced EOS® tools for sharper 90-day priorities</p>
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="w-full bg-[#142233] text-white p-4 shadow">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <img src="images/logo_claritybots.png" alt="ClarityBots Logo" class="w-10 h-10" />
+        <h1 class="text-xl font-bold">ClarityBots®</h1>
       </div>
-    </header>
+      <p class="text-sm text-gray-300">AI + EOS Tools for Visionary Leaders</p>
+    </div>
+  </header>
 
-    <!-- Chat Log -->
-    <main id="chatBox" class="h-96 overflow-y-auto px-6 py-4 space-y-4 bg-gray-50">
-      <!-- Dynamic chat messages will appear here -->
-    </main>
+  <!-- Tool Buttons -->
+  <section class="w-full bg-gray-100 border-b border-gray-200 py-3">
+    <div class="max-w-6xl mx-auto flex space-x-4 justify-center">
+      <button class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded-xl">SMART Rocks</button>
+      <button class="bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-xl" disabled>IDS</button>
+      <button class="bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-xl" disabled>Scorecard</button>
+      <button class="bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-xl" disabled>Core Values</button>
+    </div>
+  </section>
 
-    <!-- Input Footer -->
-    <footer class="flex items-center px-6 py-4 border-t border-gray-200 bg-white">
-      <input
-        id="userInput"
-        type="text"
-        placeholder="Type your Rock here..."
-        class="flex-grow border border-gray-300 rounded-xl px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
-      />
-      <button
-        id="sendButton"
-        class="bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 transition"
-      >
-        Send
-      </button>
-    </footer>
-  </div>
+  <!-- Main Chat Area -->
+  <main class="flex-grow flex justify-center items-center p-4">
+    <div class="w-full max-w-3xl bg-white border rounded-2xl shadow-md flex flex-col">
+      <div class="bg-gray-50 px-6 py-4 border-b rounded-t-2xl">
+        <h2 class="text-xl font-semibold">SMART Rock Builder</h2>
+        <p class="text-sm text-gray-500">Let's turn your idea into a Specific, Measurable, Achievable, Relevant, and Time-bound Rock.</p>
+      </div>
 
-  <!-- Scripts -->
+      <!-- Chat messages -->
+      <div id="chatBox" class="h-96 overflow-y-auto px-6 py-4 space-y-4 bg-white">
+        <!-- Messages will appear here -->
+      </div>
+
+      <!-- Chat input -->
+      <div class="flex items-center border-t bg-gray-50 px-6 py-4 rounded-b-2xl">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="Type your Rock here..."
+          class="flex-grow border border-gray-300 rounded-xl px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <button
+          id="sendButton"
+          class="bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 transition"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full text-center text-xs text-gray-400 py-4">
+    © 2025 ClarityBots® | Built for EOS®-driven teams.
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
