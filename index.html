@@ -7,11 +7,11 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Motion One (Framer Motion-style Animations) -->
+  <!-- Motion One Animations -->
   <script src="https://unpkg.com/@motionone/dom"></script>
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Fonts & Favicon -->
   <link rel="icon" href="images/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <style>
     body {
@@ -26,54 +26,39 @@
       animation: fadeInUp 0.4s ease;
     }
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-900 relative min-h-screen flex flex-col items-center justify-start">
+<body class="relative bg-gray-100 text-gray-900 flex flex-col items-center justify-start min-h-screen">
 
   <!-- Background -->
   <div id="backgroundImage" class="absolute inset-0 bg-cover bg-center opacity-20 z-0"></div>
+  <div class="absolute inset-0 bg-white/70 z-0"></div>
 
   <!-- Sticky Header -->
-  <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/80 backdrop-blur-md rounded-b-lg shadow-md">
-    <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-12 w-auto" />
-    <h1 id="clientHeading" class="text-2xl font-bold text-center flex-grow">ClarityBots®</h1>
+  <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/90 backdrop-blur-md rounded-b-lg shadow-md">
+    <a id="clientWebsite" href="#" target="_blank">
+      <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-12 w-auto" />
+    </a>
+    <h1 id="clientHeading" class="text-2xl font-bold text-center flex-grow pl-4">ClarityBots®</h1>
   </header>
 
-  <!-- Tool Selection -->
-  <div class="z-10 mt-6 flex flex-wrap justify-center gap-3 px-4">
-    <button title="Build clear, measurable priorities" class="tool-button bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-2xl shadow" data-tool="rocks">SMART Rocks</button>
-    <button title="Identify, Discuss, and Solve Issues" class="tool-button bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-2xl shadow" data-tool="ids">IDS</button>
-    <button title="Track weekly numbers that drive results" class="tool-button bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-2xl shadow" data-tool="scorecard">Scorecard</button>
-    <button title="Define what your company truly stands for" class="tool-button bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-2xl shadow" data-tool="core_values">Core Values</button>
-    <button title="Open conversation or test new ideas" class="tool-button bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-2xl shadow" data-tool="available">Available</button>
-  </div>
+  <!-- Tool Buttons -->
+  <div id="toolContainer" class="z-10 mt-6 flex flex-wrap justify-center gap-3 px-4"></div>
 
   <!-- Chat Container -->
   <div class="z-10 mt-6 w-full max-w-3xl bg-white rounded-2xl shadow-md p-4 mx-4 flex flex-col space-y-4">
-    <div id="chat" class="space-y-4 overflow-y-auto">
-      <div class="chat-bubble bg-blue-100 text-gray-800 rounded-xl p-3 w-fit max-w-[90%] shadow-sm">
-        👋 Hi there! Choose a tool above to get started.
-      </div>
-    </div>
-
-    <!-- Loader -->
+    <div id="chat" class="space-y-4 overflow-y-auto"></div>
     <div id="loader" class="hidden text-center text-sm text-gray-500 italic">🤖 Thinking...</div>
 
-    <!-- Input Area -->
+    <!-- Input Row -->
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-4">
-      <input id="userInput" type="text" placeholder="Type your question..." class="flex-grow border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+      <textarea id="userInput" placeholder="Type your question..." rows="2" class="flex-grow border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring focus:border-blue-300 resize-none"></textarea>
       <div class="flex gap-2">
-        <button id="sendButton" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow">Send</button>
-        <button id="resetButton" class="bg-gray-300 hover:bg-gray-400 text-black font-medium px-4 py-2 rounded-lg shadow">Clear</button>
+        <button id="sendButton" class="px-4 py-2 rounded-lg shadow text-white font-semibold">Send</button>
+        <button id="resetButton" class="px-4 py-2 rounded-lg shadow bg-gray-300 hover:bg-gray-400 text-black font-medium">Clear</button>
       </div>
     </div>
   </div>
@@ -84,20 +69,46 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="clientConfig.js"></script>
+  <script type="module">
+    import { clients } from './clientConfig.js';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const clientId = urlParams.get("client") || "business_intuition";
+    const client = clients[clientId];
+
+    if (client) {
+      document.getElementById("backgroundImage").style.backgroundImage = `url(${client.background})`;
+      document.getElementById("clientLogo").src = client.logo;
+      document.getElementById("clientLogo").alt = client.altText;
+      document.getElementById("clientHeading").textContent = `${client.heading} ClarityBot`;
+      document.getElementById("clientWebsite").href = client.website;
+
+      const buttonClasses = `hover:brightness-110 text-white font-semibold px-6 py-2 rounded-2xl shadow`;
+      const tools = ["rocks", "ids", "scorecard", "core_values", "available"];
+      const labels = {
+        rocks: "SMART Rocks",
+        ids: "IDS",
+        scorecard: "Scorecard",
+        core_values: "Core Values",
+        available: "Available"
+      };
+
+      const toolContainer = document.getElementById("toolContainer");
+      tools.forEach(tool => {
+        const btn = document.createElement("button");
+        btn.className = buttonClasses;
+        btn.style.backgroundColor = client.brandColor;
+        btn.setAttribute("data-tool", tool);
+        btn.textContent = labels[tool];
+        btn.classList.add("tool-button");
+        toolContainer.appendChild(btn);
+      });
+
+      document.getElementById("sendButton").style.backgroundColor = client.brandColor;
+    }
+  </script>
+
   <script src="promptConfig.js"></script>
   <script src="script.js"></script>
-
-  <!-- Animate Buttons on Hover -->
-  <script>
-    document.querySelectorAll('.tool-button').forEach(button => {
-      button.addEventListener('mouseenter', () => {
-        window.motion.animate(button, { scale: 1.05 }, { duration: 0.2 });
-      });
-      button.addEventListener('mouseleave', () => {
-        window.motion.animate(button, { scale: 1 }, { duration: 0.2 });
-      });
-    });
-  </script>
 </body>
 </html>

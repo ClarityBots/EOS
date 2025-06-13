@@ -1,21 +1,31 @@
 // clientConfig.js
+
 export const clients = {
-  business_intuition: {
-    heading: "Business Intuition's",
-    logo: "images/business_intuition_logo.svg",
-    altText: "Business Intuition Logo",
-    brandColor: "#F04E23",
-  },
   alder: {
     heading: "Alder Construction's",
+    background: "images/alder_background.jpg",
     logo: "images/alder_logo.png",
     altText: "Alder Construction Logo",
+    preloadImage: true,
     brandColor: "#445777",
+    website: "https://alderconstruction.com"
+  },
+  business_intuition: {
+    heading: "Business Intuition's",
+    background: "images/business_intuition_background.jpg",
+    logo: "images/business_intuition_logo.svg",
+    altText: "Business Intuition Logo",
+    preloadImage: true,
+    brandColor: "#F04E23",
+    website: "https://businessintuition.com"
   },
   cop: {
     heading: "COP Construction's",
+    background: "images/cop_background.jpg",
     logo: "images/cop_logo.png",
     altText: "COP Construction Logo",
+    preloadImage: true,
     brandColor: "#6C7C90",
-  },
+    website: "https://copconstruction.com"
+  }
 };
