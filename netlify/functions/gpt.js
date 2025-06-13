@@ -3,7 +3,7 @@
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY, // Set in Netlify environment settings
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -27,7 +27,7 @@ export const handler = async (event) => {
     }
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-4", // or "gpt-3.5-turbo" for cheaper/faster results
+      model: "gpt-4", // or "gpt-3.5-turbo"
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
@@ -39,11 +39,10 @@ export const handler = async (event) => {
       body: JSON.stringify({ reply }),
     };
   } catch (error) {
-    console.error("OpenAI error:", error);
-
+    console.error("OpenAI error:", error.message);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Something went wrong" }),
+      body: JSON.stringify({ error: "OpenAI API request failed" }),
     };
   }
 };
