@@ -36,8 +36,12 @@ export default async (req) => {
 
   } catch (err) {
     console.error("GPT error:", err);
+
     return new Response(
-      JSON.stringify({ reply: `🤖 Server error: ${err.message}` }),
+      JSON.stringify({
+        reply: `🤖 Server error: ${err.message}`,
+        stack: err.stack, // Optional: remove after debug
+      }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
