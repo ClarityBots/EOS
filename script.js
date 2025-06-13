@@ -1,65 +1,52 @@
-import { clients } from './clientConfig.js';
+// /script.js
 
-let selectedTool = null;
-const chatWindow = document.getElementById("chatWindow");
-const userInput = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".tool-button");
+  const chatBox = document.getElementById("chat-box");
+  const userInput = document.getElementById("user-input");
+  const sendButton = document.getElementById("send-button");
 
-// Load client branding
-const urlParams = new URLSearchParams(window.location.search);
-const clientKey = urlParams.get("client") || "business_intuition";
-const client = clients[clientKey];
+  let selectedTool = "";
 
-document.getElementById("clientLogo").src = client.logo;
-document.getElementById("clientLogo").alt = client.altText;
-document.getElementById("mainHeading").innerText = `${client.heading} ClarityBot™`;
-document.body.style.backgroundColor = client.brandColor + "10";
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedTool = button.dataset.tool;
+      chatBox.innerHTML = `
+        <div class="bot-message">🤖 I’m ClarityBot! Choose a tool to begin.</div>
+        <div class="user-message">🛠 You selected: ${button.textContent}. Go ahead and ask your first question.</div>
+      `;
+    });
+  });
 
-// Tool selection
-document.querySelectorAll(".tool-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    selectedTool = btn.dataset.tool;
-    appendBotMessage(`🛠 You selected: ${btn.innerText}. Go ahead and ask your first question.`);
+  sendButton.addEventListener("click", async () => {
+    const message = userInput.value.trim();
+    if (!message || !selectedTool) return;
+
+    // Show user message and loader
+    chatBox.innerHTML += `<div class="user-message">${message}</div>`;
+    chatBox.innerHTML += `<div class="bot-message" id="loading-message">🤖 Thinking...</div>`;
+    userInput.value = "";
+
+    try {
+      const response = await fetch("/.netlify/functions/gpt", {
+        method: "POST",
+        body: JSON.stringify({ message, tool: selectedTool }),
+      });
+
+      const data = await response.json();
+
+      // Remove loader and add GPT reply
+      const loading = document.getElementById("loading-message");
+      if (loading) loading.remove();
+
+      chatBox.innerHTML += `<div class="bot-message">${data.reply}</div>`;
+    } catch (err) {
+      const loading = document.getElementById("loading-message");
+      if (loading) loading.remove();
+
+      chatBox.innerHTML += `<div class="bot-message">🤖 Sorry, something went wrong.</div>`;
+    }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
   });
 });
-
-// Send message
-sendBtn.addEventListener("click", async () => {
-  const userText = userInput.value.trim();
-  if (!userText || !selectedTool) return;
-
-  appendUserMessage(userText);
-  userInput.value = "";
-  appendBotMessage("🤖 Thinking...");
-
-  try {
-    const res = await fetch("/.netlify/functions/gpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userText, tool: selectedTool }),
-    });
-
-    const data = await res.json();
-    const lastBot = document.querySelector("#chatWindow div:last-child");
-    lastBot.innerHTML = `🤖 ${data.reply || "Sorry, something went wrong."}`;
-  } catch (err) {
-    appendBotMessage("🤖 Error reaching GPT.");
-  }
-});
-
-// Chat display helpers
-function appendUserMessage(text) {
-  const div = document.createElement("div");
-  div.className = "text-right mb-2";
-  div.innerHTML = `<span class="inline-block bg-blue-100 p-2 rounded">${text}</span>`;
-  chatWindow.appendChild(div);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-}
-
-function appendBotMessage(text) {
-  const div = document.createElement("div");
-  div.className = "text-left mb-2";
-  div.innerHTML = `<span class="inline-block bg-gray-100 p-2 rounded">${text}</span>`;
-  chatWindow.appendChild(div);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-}
