@@ -151,7 +151,17 @@
 
     function getClientKey() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('client') || 'default';
+      const queryKey = params.get('client');
+
+      if (queryKey && clients[queryKey]) return queryKey;
+
+      const hostParts = window.location.hostname.split('.');
+      if (hostParts.length > 2) {
+        const subdomainKey = hostParts[0].toLowerCase();
+        if (clients[subdomainKey]) return subdomainKey;
+      }
+
+      return queryKey || 'default';
     }
 
     function sendPrompt(promptText) {
@@ -184,19 +194,16 @@
         starterContainer.appendChild(btn);
       });
 
-      // Fallback UI for unknown clients
       if (!clients[clientKey]) {
         const validKeys = Object.keys(clients).filter(k => k !== 'default');
-        const suggestionBanner = document.createElement('div');
-        suggestionBanner.id = 'client-fallback-banner';
-        suggestionBanner.innerHTML = `
+        const banner = document.createElement('div');
+        banner.id = 'client-fallback-banner';
+        banner.innerHTML = `
           <p><strong>Hmm... that client wasn’t recognized.</strong></p>
           <p>Please try one of the following:</p>
-          <div>${validKeys.map(k => `
-            <button onclick="location.search='?client=${k}'">${clients[k].heading}</button>
-          `).join(' ')}</div>
+          <div>${validKeys.map(k => `<button onclick="location.href='?client=${k}'">${clients[k].heading}</button>`).join(' ')}</div>
         `;
-        document.body.prepend(suggestionBanner);
+        document.body.prepend(banner);
       }
     }
 
