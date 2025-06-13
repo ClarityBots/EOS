@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai";
+const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -6,7 +6,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-export const handler = async (event) => {
+exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -25,7 +25,7 @@ export const handler = async (event) => {
     }
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-4", // Use "gpt-3.5-turbo" if needed
+      model: "gpt-4", // Or use "gpt-3.5-turbo" if needed
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
