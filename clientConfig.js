@@ -3,7 +3,7 @@
 export const clients = {
   alder: {
     heading: "Alder Construction's",
-    background: "images/alder_background.jpg",
+    background: "https://source.unsplash.com/1920x1080/?construction",
     logo: "images/alder_logo.png",
     altText: "Alder Construction Logo",
     preloadImage: true,
