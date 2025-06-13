@@ -1,22 +1,25 @@
 // /netlify/functions/gpt.js
-import { Configuration, OpenAIApi } from "openai";
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
 
 export default async function handler() {
   try {
-    const completion = await openai.createChatCompletion({
-      model: "gpt-4",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: "Say something wise about EOS Rocks." },
-      ],
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: "You are a helpful EOS® assistant." },
+          { role: "user", content: "Say something wise about EOS Rocks." },
+        ],
+      }),
     });
 
-    const reply = completion.data.choices[0].message.content;
+    const data = await response.json();
+
+    const reply = data.choices?.[0]?.message?.content || "🤖 GPT returned an empty response.";
 
     return new Response(
       JSON.stringify({ reply }),
