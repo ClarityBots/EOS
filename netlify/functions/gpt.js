@@ -25,7 +25,7 @@ export const handler = async (event) => {
     }
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-4", // or "gpt-3.5-turbo"
+      model: "gpt-4", // Use "gpt-3.5-turbo" if needed
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
@@ -39,12 +39,12 @@ export const handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error("💥 GPT ERROR:", error.message);
+    console.error("💥 GPT ERROR:", error);
 
     return {
       statusCode: 500,
       body: JSON.stringify({
-        answer: `🤖 GPT Error: ${error.message}`,
+        answer: `🤖 GPT Error: ${error?.response?.data?.error?.message || error.message}`,
       }),
     };
   }
