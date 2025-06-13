@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/ClarityBots/EOS#readme",
   "dependencies": {
-    "node-fetch": "^3.3.2"
+  "openai": "^4.0.0"  // or whatever the latest version is
   }
 }
