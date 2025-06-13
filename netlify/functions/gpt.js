@@ -1,19 +1,22 @@
 // /netlify/functions/gpt.js
 import { Configuration, OpenAIApi } from "openai";
-import { prompts } from "./promptConfig.js"; // Must be in same folder
+import { prompts } from "./promptConfig.js";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export default async (req, context) => {
+export default async (req) => {
   try {
     const { message, tool } = await req.json();
     const prompt = prompts[tool] || "You're an EOS® assistant. Help the user get started.";
 
     if (!process.env.OPENAI_API_KEY) {
-      return Response.json({ reply: "❌ Missing OpenAI API key in environment settings." });
+      return new Response(
+        JSON.stringify({ reply: "❌ Missing OpenAI API key in environment settings." }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     const completion = await openai.createChatCompletion({
@@ -25,10 +28,17 @@ export default async (req, context) => {
     });
 
     const reply = completion.data.choices[0].message.content;
-    return Response.json({ reply });
+
+    return new Response(
+      JSON.stringify({ reply }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
 
   } catch (err) {
     console.error("GPT error:", err);
-    return Response.json({ reply: `🤖 Server error: ${err.message}` });
+    return new Response(
+      JSON.stringify({ reply: `🤖 Server error: ${err.message}` }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 };
