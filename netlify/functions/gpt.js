@@ -25,7 +25,7 @@ export const handler = async (event) => {
     }
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-4", // or "gpt-3.5-turbo" if that's what you're using
+      model: "gpt-4", // or "gpt-3.5-turbo"
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
@@ -35,16 +35,16 @@ export const handler = async (event) => {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        answer: reply || "🤖 GPT responded, but nothing was returned.",
+        answer: reply || "🤖 GPT responded, but returned nothing.",
       }),
     };
   } catch (error) {
-    console.error("OpenAI API Error:", error.message);
+    console.error("💥 GPT ERROR:", error.message);
 
     return {
       statusCode: 500,
       body: JSON.stringify({
-        answer: `🤖 Sorry, I couldn’t process your request. (${error.message})`,
+        answer: `🤖 GPT Error: ${error.message}`,
       }),
     };
   }
