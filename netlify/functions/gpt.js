@@ -1,6 +1,6 @@
 // /netlify/functions/gpt.js
 import { Configuration, OpenAIApi } from "openai";
-import { prompts } from "./promptConfig.js";
+import { prompts } from "../../config/promptConfig.js"; // ✅ Updated import path
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,7 +14,7 @@ export default async (req) => {
 
     if (!process.env.OPENAI_API_KEY) {
       return new Response(
-        JSON.stringify({ reply: "❌ Missing OpenAI API key in environment settings." }),
+        JSON.stringify({ reply: "❌ Missing OpenAI API key." }),
         { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
