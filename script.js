@@ -4,10 +4,8 @@ let selectedTool = null;
 const chatWindow = document.getElementById("chatWindow");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
-const startPromptWrap = document.getElementById("startPromptWrap");
-const startPromptBtn = document.getElementById("startPromptBtn");
 
-// Load branding from query string
+// Load client branding
 const urlParams = new URLSearchParams(window.location.search);
 const clientKey = urlParams.get("client") || "business_intuition";
 const client = clients[clientKey];
@@ -21,14 +19,8 @@ document.body.style.backgroundColor = client.brandColor + "10";
 document.querySelectorAll(".tool-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     selectedTool = btn.dataset.tool;
-    startPromptWrap.classList.remove("hidden");
-    appendBotMessage(`You selected: ${btn.innerText}. Click "Next" to begin.`);
+    appendBotMessage(`🛠 You selected: ${btn.innerText}. Go ahead and ask your first question.`);
   });
-});
-
-// Start prompt logic
-startPromptBtn.addEventListener("click", () => {
-  appendBotMessage("🧠 What would you like help with?");
 });
 
 // Send message
@@ -55,7 +47,7 @@ sendBtn.addEventListener("click", async () => {
   }
 });
 
-// Helpers
+// Chat display helpers
 function appendUserMessage(text) {
   const div = document.createElement("div");
   div.className = "text-right mb-2";

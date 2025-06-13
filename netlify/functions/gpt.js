@@ -1,49 +1,26 @@
-// gpt.js
-import fetch from 'node-fetch';
-import { prompts } from './promptConfig.js';
+// /netlify/functions/gpt.js
+import { Configuration, OpenAIApi } from "openai-edge";
+import { prompts } from "../../promptConfig.js";
 
-export async function handler(event, context) {
+const config = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAIApi(config);
+
+export default async (req, context) => {
   try {
-    const { tool = "rocks", userMessage } = JSON.parse(event.body || "{}");
+    const { message, tool } = await req.json();
+    const prompt = prompts[tool] || "You're an EOS® assistant.";
 
-    const systemPrompt = prompts[tool]?.system || "You are a helpful assistant.";
-
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userMessage },
-        ],
-      }),
+    const response = await openai.createChatCompletion({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: prompt },
+        { role: "user", content: message },
+      ],
     });
 
-    const data = await openaiRes.json();
-
-    if (!openaiRes.ok) {
-      console.error("OpenAI API error:", data);
-      return {
-        statusCode: openaiRes.status,
-        body: JSON.stringify({ error: data }),
-      };
-    }
-
-    const reply = data.choices?.[0]?.message?.content?.trim() || "Sorry, I didn’t get that.";
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ reply }),
-    };
-  } catch (error) {
-    console.error("Server error:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Something went wrong on the server." }),
-    };
+    const reply = await response.json();
+    return Response.json({ reply: reply.choices[0].message.content });
+  } catch (err) {
+    return Response.json({ reply: "Sorry, something went wrong on the server." });
   }
-}
+};
