@@ -121,8 +121,9 @@
         });
 
         const data = await response.json();
+        const botReply = data.answer || "🤖 Sorry, I didn’t catch that.";
         const botDiv = document.createElement('div');
-        botDiv.textContent = "🤖 " + data.reply;
+        botDiv.textContent = botReply;
         output.appendChild(botDiv);
       } catch (error) {
         const errorDiv = document.createElement('div');
