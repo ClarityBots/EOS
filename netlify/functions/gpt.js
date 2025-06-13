@@ -36,4 +36,9 @@ export default async (req, context) => {
     console.error("GPT error:", err);
     return Response.json({ reply: `🤖 Server error: ${err.message}` });
   }
+
+  } catch (err) {
+    console.error("GPT error:", err); // For Netlify logs
+    return Response.json({ reply: `🤖 Server error: ${err.message}` }); // Show this in chat
+  }
 };
