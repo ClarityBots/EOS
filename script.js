@@ -1,75 +1,65 @@
-// script.js
+import { clients } from './clientConfig.js';
 
-// Handles sending user input to the server-side function
-async function sendMessage(userMessage) {
-  const tool = "rocks"; // Default tool
+let selectedTool = null;
+const chatWindow = document.getElementById("chatWindow");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
 
-  // POST to Netlify function
-  const response = await fetch("/.netlify/functions/gpt", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      tool: tool,
-      userMessage: userMessage,
-    }),
+// Load branding
+const urlParams = new URLSearchParams(window.location.search);
+const clientKey = urlParams.get("client") || "business_intuition";
+const client = clients[clientKey];
+
+document.getElementById("clientLogo").src = client.logo;
+document.getElementById("clientLogo").alt = client.altText;
+document.getElementById("mainHeading").innerText = `${client.heading} ClarityBot™`;
+document.body.style.backgroundColor = client.brandColor + "10";
+
+// Tool selection
+document.querySelectorAll(".tool-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    selectedTool = btn.dataset.tool;
+    appendBotMessage(`You selected: ${btn.innerText}. Now ask me a question.`);
   });
+});
 
-  const data = await response.json();
+// Send button
+sendBtn.addEventListener("click", async () => {
+  const userText = userInput.value.trim();
+  if (!userText || !selectedTool) return;
 
-  // Display messages
-  displayUserMessage(userMessage);
-  displayBotMessage(data.reply);
-  document.getElementById("userInput").value = "";
-}
+  appendUserMessage(userText);
+  userInput.value = "";
+  appendBotMessage("🤖 Thinking...");
 
-// Appends the user's message to the chat
-function displayUserMessage(message) {
-  const chatBox = document.getElementById("chatBox");
-  const userMessage = document.createElement("div");
-  userMessage.className = "text-right";
-  userMessage.innerHTML = `
-    <div class="inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-xl max-w-[80%]">
-      ${escapeHtml(message)}
-    </div>`;
-  chatBox.appendChild(userMessage);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+  try {
+    const res = await fetch("/.netlify/functions/gpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText, tool: selectedTool }),
+    });
 
-// Appends the bot's reply to the chat
-function displayBotMessage(message) {
-  const chatBox = document.getElementById("chatBox");
-  const botMessage = document.createElement("div");
-  botMessage.className = "text-left";
-  botMessage.innerHTML = `
-    <div class="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded-xl max-w-[80%]">
-      ${escapeHtml(message)}
-    </div>`;
-  chatBox.appendChild(botMessage);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Escape HTML to prevent injection
-function escapeHtml(unsafe) {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
-    .replace(/\'/g, "&#039;");
-}
-
-// Send message on button click
-document.getElementById("sendButton").addEventListener("click", () => {
-  const input = document.getElementById("userInput").value;
-  if (input.trim() !== "") {
-    sendMessage(input);
+    const data = await res.json();
+    const lastBot = document.querySelector("#chatWindow div:last-child");
+    lastBot.innerHTML = `🤖 ${data.reply || "Sorry, something went wrong."}`;
+  } catch (err) {
+    appendBotMessage("🤖 Error reaching GPT.");
   }
 });
 
-// Send message on Enter key press
-document.getElementById("userInput").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    document.getElementById("sendButton").click();
-  }
-});
+// Helpers
+function appendUserMessage(text) {
+  const div = document.createElement("div");
+  div.className = "text-right mb-2";
+  div.innerHTML = `<span class="inline-block bg-blue-100 p-2 rounded">${text}</span>`;
+  chatWindow.appendChild(div);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function appendBotMessage(text) {
+  const div = document.createElement("div");
+  div.className = "text-left mb-2";
+  div.innerHTML = `<span class="inline-block bg-gray-100 p-2 rounded">${text}</span>`;
+  chatWindow.appendChild(div);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
