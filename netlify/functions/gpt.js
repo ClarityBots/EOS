@@ -1,6 +1,8 @@
 // /netlify/functions/gpt.js
 import { Configuration, OpenAIApi } from "openai";
-import { prompts } from "../../config/promptConfig.js"; // ✅ Updated import path
+import { prompts } from "../../config/promptConfig.js"; // ✅ Ensure path is correct
+
+console.log("GPT Function Hit"); // Debug log at top
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,6 +13,8 @@ export default async (req) => {
   try {
     const { message, tool } = await req.json();
     const prompt = prompts[tool] || "You're an EOS® assistant. Help the user get started.";
+
+    console.log("Received:", { message, tool, prompt }); // Debug log
 
     if (!process.env.OPENAI_API_KEY) {
       return new Response(
@@ -39,8 +43,8 @@ export default async (req) => {
 
     return new Response(
       JSON.stringify({
-        reply: `🤖 Server error: ${err.message}`,
-        stack: err.stack, // Optional: remove after debug
+        reply: "🤖 Fallback error triggered. GPT is not responding correctly.",
+        stack: err.stack,
       }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
