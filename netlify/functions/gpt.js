@@ -1,4 +1,5 @@
 const OpenAI = require("openai");
+const { prompts } = require("./promptConfig.js"); // ← Imports the prompt library
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,9 +23,17 @@ exports.handler = async function (event) {
       };
     }
 
+    // 🚀 Step 1: Set your active tool here (will make dynamic later)
+    const tool = "smartRock";
+    const systemPrompt = prompts[tool].system;
+
+    // 🚀 Step 2: Call OpenAI with both system + user messages
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // 👈 This model works with all API keys
-      messages: [{ role: "user", content: prompt }],
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: prompt }
+      ],
       temperature: 0.7,
     });
 
