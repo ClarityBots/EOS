@@ -1,6 +1,6 @@
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["openai"]
+  external_node_modules = ["openai", "node-fetch"]
 
 [build]
   publish = "."
