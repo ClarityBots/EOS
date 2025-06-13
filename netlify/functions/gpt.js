@@ -1,5 +1,3 @@
-// netlify/functions/gpt.js
-
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
@@ -32,17 +30,22 @@ export const handler = async (event) => {
       temperature: 0.7,
     });
 
-    const reply = completion.data.choices[0].message.content;
+    const reply = completion.data.choices?.[0]?.message?.content;
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ reply }),
+      body: JSON.stringify({
+        answer: reply || "🤖 Something went wrong — no reply received.",
+      }),
     };
   } catch (error) {
-    console.error("OpenAI error:", error.message);
+    console.error("OpenAI error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "OpenAI API request failed" }),
+      body: JSON.stringify({
+        error: "🤖 Sorry, I couldn’t process that right now.",
+        details: error.message,
+      }),
     };
   }
 };
