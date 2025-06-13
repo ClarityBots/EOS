@@ -1,87 +1,75 @@
-async function sendToOpenAI() {
-  const userInput = document.getElementById('userInput').value;
-  const responseArea = document.getElementById('responseArea');
-  const clearBtn = document.getElementById('clearButton');
-  const selectedTool = document.getElementById('toolSelect').value;
+// script.js
 
-  const toolPrompts = {
-    ids: "You are an EOS Implementer helping a team go through the IDS process.",
-    rocks: "You are guiding a leadership team to create clear and SMART 90-day Rocks.",
-    scorecard: "You are an EOS coach helping design a weekly scorecard with measurable numbers.",
-    core: "You are helping an EOS company uncover and clarify their Core Values.",
-    traction: "You are summarizing tools and teachings from the book Traction by Gino Wickman.",
-    author: "You are introducing yourself as the creator of ClarityBots, sharing its vision and purpose."
-  };
+// Handles sending user input to the server-side function
+async function sendMessage(userMessage) {
+  const tool = "rocks"; // Default tool
 
-  const messages = [
-    { role: "system", content: toolPrompts[selectedTool] || "You are a helpful EOS advisor." },
-    { role: "user", content: userInput }
-  ];
+  // POST to Netlify function
+  const response = await fetch("/.netlify/functions/gpt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      tool: tool,
+      userMessage: userMessage,
+    }),
+  });
 
-  responseArea.innerText = "Thinking...";
-  clearBtn.disabled = true;
+  const data = await response.json();
 
-  try {
-    const res = await fetch("/.netlify/functions/chatgpt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message: messages })
-    });
+  // Display messages
+  displayUserMessage(userMessage);
+  displayBotMessage(data.reply);
+  document.getElementById("userInput").value = "";
+}
 
-    const data = await res.json();
-    clearBtn.disabled = false;
+// Appends the user's message to the chat
+function displayUserMessage(message) {
+  const chatBox = document.getElementById("chatBox");
+  const userMessage = document.createElement("div");
+  userMessage.className = "text-right";
+  userMessage.innerHTML = `
+    <div class="inline-block bg-orange-100 text-orange-800 px-4 py-2 rounded-xl max-w-[80%]">
+      ${escapeHtml(message)}
+    </div>`;
+  chatBox.appendChild(userMessage);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-    if (data.reply) {
-      responseArea.innerText = data.reply;
-    } else if (data.error) {
-      responseArea.innerText = "OpenAI Error: " + data.error;
-    } else {
-      responseArea.innerText = "Unexpected response from server.";
-    }
-  } catch (err) {
-    clearBtn.disabled = false;
-    responseArea.innerText = "Network Error: " + err.message;
+// Appends the bot's reply to the chat
+function displayBotMessage(message) {
+  const chatBox = document.getElementById("chatBox");
+  const botMessage = document.createElement("div");
+  botMessage.className = "text-left";
+  botMessage.innerHTML = `
+    <div class="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded-xl max-w-[80%]">
+      ${escapeHtml(message)}
+    </div>`;
+  chatBox.appendChild(botMessage);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Escape HTML to prevent injection
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/\'/g, "&#039;");
+}
+
+// Send message on button click
+document.getElementById("sendButton").addEventListener("click", () => {
+  const input = document.getElementById("userInput").value;
+  if (input.trim() !== "") {
+    sendMessage(input);
   }
-}
+});
 
-function clearChat() {
-  document.getElementById('userInput').value = "";
-  document.getElementById('responseArea').innerText = "";
-}
-
-function updateToolInfo() {
-  const selected = document.getElementById("toolSelect").value;
-  const toolInfo = document.getElementById("toolInfo");
-
-  const tools = {
-    ids: {
-      title: "IDS ClarityBot™",
-      desc: "Identify, Discuss, and Solve team issues using EOS® best practices."
-    },
-    rocks: {
-      title: "SMART Rocks ClarityBot™",
-      desc: "Build meaningful 90-day goals using the SMART Rock framework."
-    },
-    scorecard: {
-      title: "Scorecard ClarityBot™",
-      desc: "Design measurable weekly numbers for accountability and traction."
-    },
-    core: {
-      title: "Core Values ClarityBot™",
-      desc: "Uncover and clarify your company's Core Values through guided prompts."
-    },
-    traction: {
-      title: "Traction™ by Gino Wickman",
-      desc: "Explore tools and teachings from the book *Traction™* by Gino Wickman."
-    },
-    author: {
-      title: "Meet the ClarityBots® Creator",
-      desc: "Get to know the creator of ClarityBots and how it all came together."
-    }
-  };
-
-  const selectedTool = tools[selected];
-  toolInfo.innerHTML = `<h3>${selectedTool.title}</h3><p>${selectedTool.desc}</p>`;
-}
+// Send message on Enter key press
+document.getElementById("userInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("sendButton").click();
+  }
+});

@@ -3,139 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools" />
+
+  <title>ClarityBots® | AI and EOS® Converge</title>
+  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools to Build SMART Rocks, Clarify Vision, and Lead with Traction." />
   <meta name="theme-color" content="#142233" />
-  <title>ClarityBots®</title>
+  <meta property="og:title" content="ClarityBots® | AI Meets EOS®" />
+  <meta property="og:description" content="Build SMART Rocks, Clarify Vision, and Lead with Traction using AI-enhanced EOS® tools." />
+  <meta property="og:image" content="images/social_preview.jpg" />
+  <meta property="og:url" content="https://claritybots.netlify.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body>
-  <header>
-    <img id="client-logo" src="" alt="Client Logo" />
-    <h1>ClarityBots®</h1>
-    <p id="client-heading">AI-enhanced EOS® Tools</p>
-  </header>
 
-  <main>
-    <div id="chat-container" class="overlay-panel">
-      <div id="conversation-starters"></div>
+<body class="bg-white text-gray-800 min-h-screen flex flex-col items-center justify-center p-4">
 
-      <div id="chat-output" style="min-height: 300px; text-align: left; background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; color: black;"></div>
+  <!-- Branding Header -->
+  <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl border border-gray-200">
+    <header class="flex flex-col items-start justify-between px-6 py-4 border-b border-gray-200">
+      <img src="images/logo_claritybots.png" alt="ClarityBots Logo" class="w-32 mb-2" />
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">ClarityBots® – SMART Rocks</h1>
+        <p class="text-sm text-gray-500">AI-enhanced EOS® tools for sharper 90-day priorities</p>
+      </div>
+    </header>
 
-      <form id="chat-form" style="display: flex; gap: 0.5rem; justify-content: center;">
-        <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" style="flex: 1; padding: 0.75rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc;" />
-        <button type="submit" class="button" id="submit-button">Send</button>
-      </form>
-    </div>
-  </main>
+    <!-- Chat Log -->
+    <main id="chatBox" class="h-96 overflow-y-auto px-6 py-4 space-y-4 bg-gray-50">
+      <!-- Dynamic chat messages will appear here -->
+    </main>
 
-  <script type="module">
-    import { clients } from './clientConfig.js';
+    <!-- Input Footer -->
+    <footer class="flex items-center px-6 py-4 border-t border-gray-200 bg-white">
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Type your Rock here..."
+        class="flex-grow border border-gray-300 rounded-xl px-4 py-2 mr-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+      />
+      <button
+        id="sendButton"
+        class="bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 transition"
+      >
+        Send
+      </button>
+    </footer>
+  </div>
 
-    function getClientKey() {
-      const params = new URLSearchParams(window.location.search);
-      const queryKey = params.get('client');
-
-      if (queryKey && clients[queryKey]) return queryKey;
-
-      const hostParts = window.location.hostname.split('.');
-      if (hostParts.length > 2) {
-        const subdomainKey = hostParts[0].toLowerCase();
-        if (clients[subdomainKey]) return subdomainKey;
-      }
-
-      return queryKey || 'default';
-    }
-
-    function sendPrompt(promptText) {
-      const inputField = document.getElementById('user-input');
-      const submitBtn = document.getElementById('submit-button');
-
-      if (inputField && submitBtn) {
-        inputField.value = promptText;
-        submitBtn.click();
-      }
-    }
-
-    function applyClientTheme() {
-      const clientKey = getClientKey();
-      const config = clients[clientKey] || clients.default;
-
-      document.title = `${config.heading} ClarityBots`;
-      document.body.style.backgroundImage = `url(${config.background})`;
-      document.getElementById('client-logo').src = config.logo;
-      document.getElementById('client-logo').alt = config.altText;
-      document.getElementById('client-heading').textContent = `${config.heading} ClarityBots®`;
-
-      const starterContainer = document.getElementById('conversation-starters');
-      starterContainer.innerHTML = `<p><strong>Start with one of these:</strong></p>`;
-
-      if (Array.isArray(config.conversationStarters)) {
-        config.conversationStarters.forEach(text => {
-          const btn = document.createElement('button');
-          btn.textContent = text;
-          btn.className = 'button';
-          btn.onclick = () => sendPrompt(text);
-          starterContainer.appendChild(btn);
-        });
-      }
-
-      if (!clients[clientKey]) {
-        const validKeys = Object.keys(clients).filter(k => k !== 'default');
-        const banner = document.createElement('div');
-        banner.id = 'client-fallback-banner';
-        banner.className = 'overlay-panel';
-        banner.innerHTML = `
-          <p><strong>Hmm... that client wasn’t recognized.</strong></p>
-          <p>Please try one of the following:</p>
-          <div class="button-container">
-            ${validKeys.map(k => `<button class="button" onclick="location.href='?client=${k}'">${clients[k].heading}</button>`).join('')}
-          </div>
-        `;
-        document.body.prepend(banner);
-      }
-    }
-
-    applyClientTheme();
-
-    document.getElementById('chat-form').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const input = document.getElementById('user-input');
-      const output = document.getElementById('chat-output');
-
-      const message = input.value.trim();
-      if (!message) return;
-
-      const userDiv = document.createElement('div');
-      userDiv.textContent = "🧑‍💼 " + message;
-      output.appendChild(userDiv);
-
-      input.value = '';
-
-      try {
-        const response = await fetch('/.netlify/functions/gpt', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: message })
-        });
-
-        const data = await response.json();
-        console.log("GPT response:", data); // 👈 LOGGING HERE
-
-        const botReply = data.answer || `🤖 No reply received.\nRaw: ${JSON.stringify(data)}`;
-        const botDiv = document.createElement('div');
-        botDiv.textContent = botReply;
-        output.appendChild(botDiv);
-      } catch (error) {
-        const errorDiv = document.createElement('div');
-        errorDiv.textContent = "🤖 Sorry, something went wrong. Please try again.";
-        output.appendChild(errorDiv);
-        console.error(error);
-      }
-
-      output.scrollTop = output.scrollHeight;
-    });
-  </script>
+  <!-- Scripts -->
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,58 +1,49 @@
-const OpenAI = require("openai");
-const { prompts } = require("./promptConfig.js"); // ← Imports the prompt library
+// gpt.js
+import fetch from 'node-fetch';
+import { prompts } from './promptConfig.js';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-exports.handler = async function (event) {
-  if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: "Method Not Allowed" }),
-    };
-  }
-
+export async function handler(event, context) {
   try {
-    const { prompt } = JSON.parse(event.body || '{}');
+    const { tool = "rocks", userMessage } = JSON.parse(event.body || "{}");
 
-    if (!prompt || prompt.trim().length === 0) {
+    const systemPrompt = prompts[tool]?.system || "You are a helpful assistant.";
+
+    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userMessage },
+        ],
+      }),
+    });
+
+    const data = await openaiRes.json();
+
+    if (!openaiRes.ok) {
+      console.error("OpenAI API error:", data);
       return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Missing prompt" }),
+        statusCode: openaiRes.status,
+        body: JSON.stringify({ error: data }),
       };
     }
 
-    // 🚀 Step 1: Set your active tool here (will make dynamic later)
-    const tool = "smartRock";
-    const systemPrompt = prompts[tool].system;
-
-    // 🚀 Step 2: Call OpenAI with both system + user messages
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.7,
-    });
-
-    const reply = completion.choices?.[0]?.message?.content;
+    const reply = data.choices?.[0]?.message?.content?.trim() || "Sorry, I didn’t get that.";
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        answer: reply || "🤖 GPT responded, but returned nothing.",
-      }),
+      body: JSON.stringify({ reply }),
     };
   } catch (error) {
-    console.error("💥 GPT ERROR:", error);
-
+    console.error("Server error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        answer: `🤖 GPT Error: ${error?.response?.data?.error?.message || error.message}`,
-      }),
+      body: JSON.stringify({ error: "Something went wrong on the server." }),
     };
   }
-};
+}
