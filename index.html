@@ -121,7 +121,9 @@
         });
 
         const data = await response.json();
-        const botReply = data.answer || "🤖 Sorry, I didn’t catch that.";
+        console.log("GPT response:", data); // 👈 LOGGING HERE
+
+        const botReply = data.answer || `🤖 No reply received.\nRaw: ${JSON.stringify(data)}`;
         const botDiv = document.createElement('div');
         botDiv.textContent = botReply;
         output.appendChild(botDiv);
