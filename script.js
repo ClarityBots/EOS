@@ -1,14 +1,19 @@
 // script.js
+
 import prompts from './promptConfig.js';
 
 const toolContainer = document.getElementById("toolContainer");
+const toolLabel = document.getElementById("toolLabel");
 const chat = document.getElementById("chat");
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 const resetButton = document.getElementById("resetButton");
+const exportButton = document.getElementById("exportButton");
 const loader = document.getElementById("loader");
 
 let currentTool = null;
+let stepIndex = 0;
+let conversationState = {};
 
 function addMessage(content, sender = "user") {
   const messageEl = document.createElement("div");
@@ -43,11 +48,24 @@ async function sendMessage() {
     const response = await fetch("/.netlify/functions/gpt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input, tool: currentTool })
+      body: JSON.stringify({
+        message: input,
+        tool: currentTool,
+        step: stepIndex,
+        state: conversationState
+      })
     });
 
     const data = await response.json();
-    addMessage(data.reply || "Sorry, something went wrong.", "bot");
+    if (data.reply) {
+      addMessage(data.reply, "bot");
+    }
+    if (data.nextStep !== undefined) {
+      stepIndex = data.nextStep;
+    }
+    if (data.updatedState) {
+      conversationState = data.updatedState;
+    }
   } catch (error) {
     console.error("GPT Error:", error);
     addMessage("Something went wrong while getting a response.", "bot");
@@ -61,14 +79,32 @@ function setupToolButtons() {
   Object.keys(prompts).forEach((toolKey) => {
     const button = document.createElement("button");
     button.innerText = prompts[toolKey].label || toolKey;
-    button.className = "px-4 py-2 rounded-lg shadow bg-white hover:bg-gray-100 border text-gray-800 font-semibold text-left";
+    button.className =
+      "px-4 py-2 rounded-lg shadow bg-white hover:bg-gray-100 border text-gray-800 font-semibold text-left";
     button.onclick = () => {
       currentTool = toolKey;
+      stepIndex = 0;
+      conversationState = {};
       clearChat();
+      toolLabel.innerText = prompts[toolKey].label || toolKey;
+      toolLabel.classList.remove("hidden");
       addMessage(prompts[toolKey].initialPrompt, "bot");
     };
     toolContainer.appendChild(button);
   });
+}
+
+function exportChat() {
+  const messages = chat.querySelectorAll(".chat-bubble");
+  let chatLog = "";
+  messages.forEach((msg) => {
+    chatLog += msg.innerText + "\n\n";
+  });
+  const blob = new Blob([chatLog], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${currentTool || "chat"}-log.txt`;
+  link.click();
 }
 
 sendButton.addEventListener("click", sendMessage);
@@ -83,6 +119,8 @@ resetButton.addEventListener("click", () => {
   userInput.value = "";
   clearChat();
 });
+
+exportButton.addEventListener("click", exportChat);
 
 window.onload = () => {
   setupToolButtons();
