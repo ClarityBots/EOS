@@ -1,167 +1,114 @@
-let selectedTool = null;
-let chatHistory = [];
+// script.js
 
-const chatContainer = document.getElementById("chat");
+import { promptConfig } from './promptConfig.js';
 
-function formatTimestamp() {
-  const now = new Date();
-  return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
+let currentTool = null;
+let stepIndex = 0;
+let conversationHistory = [];
+let toolMemory = {}; // Tracks current step for tools like SMART Rocks
 
-function createChatBubble(message, isUser = false, skipSave = false, timestamp = null) {
-  const bubble = document.createElement("div");
-  bubble.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+document.addEventListener('DOMContentLoaded', () => {
+  const sendButton = document.getElementById('sendButton');
+  const resetButton = document.getElementById('resetButton');
+  const userInput = document.getElementById('userInput');
+  const chat = document.getElementById('chat');
+  const loader = document.getElementById('loader');
 
-  const inner = document.createElement("div");
-  inner.className = `flex items-start space-x-2 max-w-[90%] ${isUser ? 'flex-row-reverse' : ''}`;
+  document.querySelectorAll('.tool-button').forEach(button => {
+    button.addEventListener('click', () => {
+      currentTool = button.getAttribute('data-tool');
+      stepIndex = 0;
+      conversationHistory = [];
 
-  const avatar = document.createElement("div");
-  avatar.className = "text-2xl pt-1";
-  avatar.textContent = isUser ? "🙂" : "🤖";
+      const config = promptConfig[currentTool];
+      if (!config) return;
 
-  const textBlock = document.createElement("div");
-  textBlock.className = `chat-bubble p-3 rounded-xl shadow ${
-    isUser ? 'bg-blue-500 text-white' : 'bg-blue-100 text-gray-900'
-  }`;
-
-  const text = document.createElement("div");
-  text.textContent = message;
-
-  const time = document.createElement("div");
-  time.className = `text-xs mt-1 ${isUser ? 'text-blue-200' : 'text-gray-500'}`;
-  time.textContent = timestamp || formatTimestamp();
-
-  textBlock.appendChild(text);
-  textBlock.appendChild(time);
-  inner.appendChild(avatar);
-  inner.appendChild(textBlock);
-  bubble.appendChild(inner);
-
-  chatContainer.appendChild(bubble);
-  bubble.scrollIntoView({ behavior: "smooth" });
-
-  if (!skipSave) {
-    chatHistory.push({ message, isUser, timestamp: time.textContent });
-    localStorage.setItem("clarityChat", JSON.stringify(chatHistory));
-  }
-}
-
-function loadChatFromStorage() {
-  const saved = localStorage.getItem("clarityChat");
-  if (saved) {
-    chatHistory = JSON.parse(saved);
-    chatHistory.forEach(({ message, isUser, timestamp }) => {
-      createChatBubble(message, isUser, true, timestamp);
-    });
-  } else {
-    showWelcomeMessage();
-  }
-}
-
-function showWelcomeMessage() {
-  createChatBubble("👋 Welcome to ClarityBots! Select a tool above to get started.");
-  setTimeout(() => {
-    createChatBubble("💡 Tip: Press Enter to send, or Shift + Enter to add a new line.");
-  }, 400);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".tool-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      selectedTool = button.getAttribute("data-tool");
-      chatHistory = [];
-      localStorage.removeItem("clarityChat");
-      chatContainer.innerHTML = "";
-
-      // Load system + starter prompt from promptConfig
-      const toolConfig = promptConfig[selectedTool];
-      if (toolConfig?.starterPrompt) {
-        createChatBubble(`🛠 You selected: ${button.textContent}`);
-        setTimeout(() => {
-          createChatBubble(toolConfig.starterPrompt);
-        }, 300);
-      } else {
-        createChatBubble(`🛠 You selected: ${button.textContent}. Go ahead and ask your first question.`);
-      }
+      const userMsg = config.starterPrompt;
+      addMessage("user", userMsg);
+      showLoader();
+      fetchGPT(userMsg, config.systemPrompt, null);
     });
   });
 
-  document.getElementById("sendButton").addEventListener("click", sendMessage);
-  document.getElementById("resetButton").addEventListener("click", resetChat);
+  sendButton.addEventListener('click', () => {
+    const msg = userInput.value.trim();
+    if (msg === "") return;
 
-  document.getElementById("userInput").addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
+    addMessage("user", msg);
+    userInput.value = "";
+    showLoader();
+
+    const config = promptConfig[currentTool];
+    const systemPrompt = config?.systemPrompt || "";
+    const step = toolMemory[currentTool]?.step || null;
+
+    fetchGPT(msg, systemPrompt, step);
   });
 
-  loadChatFromStorage();
+  resetButton.addEventListener('click', () => {
+    chat.innerHTML = "";
+    userInput.value = "";
+    conversationHistory = [];
+    stepIndex = 0;
+    toolMemory[currentTool] = { step: null };
+  });
+
+  function showLoader() {
+    loader.classList.remove("hidden");
+  }
+
+  function hideLoader() {
+    loader.classList.add("hidden");
+  }
+
+  function addMessage(role, content) {
+    const bubble = document.createElement("div");
+    bubble.className = `chat-bubble p-3 rounded-xl max-w-xl ${
+      role === "user" ? "bg-blue-100 self-end text-right" : "bg-gray-100 self-start text-left"
+    }`;
+    bubble.textContent = content;
+    chat.appendChild(bubble);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function fetchGPT(userMsg, systemPrompt, currentStep) {
+    conversationHistory.push({ role: "user", content: userMsg });
+
+    fetch("/.netlify/functions/gpt", {
+      method: "POST",
+      body: JSON.stringify({
+        messages: conversationHistory,
+        systemPrompt,
+        tool: currentTool,
+        step: currentStep,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const reply = data.reply?.trim() || "🤖 Sorry, I didn’t understand that.";
+        conversationHistory.push({ role: "assistant", content: reply });
+        addMessage("assistant", reply);
+        hideLoader();
+
+        // Step progression logic
+        const config = promptConfig[currentTool];
+        const steps = config?.steps;
+
+        if (steps && stepIndex < steps.length) {
+          const nextStep = steps[stepIndex];
+          toolMemory[currentTool] = { step: nextStep.id };
+
+          setTimeout(() => {
+            addMessage("assistant", nextStep.prompt);
+          }, 800);
+
+          stepIndex++;
+        }
+      })
+      .catch((err) => {
+        console.error("GPT Error:", err);
+        hideLoader();
+        addMessage("assistant", "🤖 Something went wrong. Please try again.");
+      });
+  }
 });
-
-function sendMessage() {
-  const input = document.getElementById("userInput");
-  const message = input.value.trim();
-  if (!message || !selectedTool) return;
-
-  createChatBubble(message, true);
-  input.value = "";
-  document.getElementById("loader").classList.remove("hidden");
-
-  fetch("/.netlify/functions/gpt", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tool: selectedTool, message }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      const botReply = data.reply || "⚠️ Hmm, I couldn’t generate a response. Try rephrasing your question.";
-      createChatBubble(botReply);
-    })
-    .catch((err) => {
-      console.error(err);
-      createChatBubble("⚠️ Sorry, something went wrong. Please try again.");
-    })
-    .finally(() => {
-      document.getElementById("loader").classList.add("hidden");
-    });
-}
-
-function resetChat() {
-  chatContainer.innerHTML = "";
-  chatHistory = [];
-  localStorage.removeItem("clarityChat");
-
-  if (selectedTool) {
-    const toolConfig = promptConfig[selectedTool];
-    createChatBubble(`🛠 You selected: ${selectedTool}`);
-    setTimeout(() => {
-      if (toolConfig?.starterPrompt) {
-        createChatBubble(toolConfig.starterPrompt);
-      }
-    }, 300);
-  } else {
-    showWelcomeMessage();
-  }
-}
-
-// Export chat to text file
-function exportChat() {
-  if (!chatHistory.length) return alert("No chat history to export.");
-  const lines = chatHistory.map(entry => {
-    const who = entry.isUser ? "You" : "ClarityBot";
-    return `[${entry.timestamp}] ${who}: ${entry.message}`;
-  });
-  const blob = new Blob([lines.join("\n")], { type: "text/plain" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "ClarityChat.txt";
-  link.click();
-}
-
-// Add Export Button
-const exportBtn = document.createElement("button");
-exportBtn.textContent = "Download Chat";
-exportBtn.className = "bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow mt-4";
-exportBtn.addEventListener("click", exportChat);
-document.querySelector(".flex.flex-col.space-y-4")?.appendChild(exportBtn);

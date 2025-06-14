@@ -1,51 +1,41 @@
-// /netlify/functions/gpt.js
+// netlify/functions/gpt.js
 
-export default async function handler(req) {
+import { OpenAI } from "openai";
+
+const openai = new OpenAI();
+
+export default async (req, res) => {
   try {
-    const { message, tool } = await req.json();
+    const { messages, systemPrompt, tool, step } = JSON.parse(req.body || "{}");
 
-    const toolPrompts = {
-      rocks: "You are an EOS® Implementer helping a team craft SMART Rocks.",
-      scorecard: "You are an EOS® coach helping define measurables and a Scorecard.",
-      ids: "You are an EOS® facilitator guiding an IDS (Identify–Discuss–Solve) session.",
-      corevalues: "You help EOS® teams clarify and apply their Core Values.",
-      available: "You're a friendly AI helping users get to know ClarityBots™ tools.",
-    };
+    // Smart prompt injection for current step
+    let enrichedMessages = [];
+    if (systemPrompt) {
+      enrichedMessages.push({ role: "system", content: systemPrompt });
+    }
 
-    const prompt = toolPrompts[tool] || "You are a helpful EOS® assistant.";
+    if (messages && messages.length > 0) {
+      enrichedMessages = enrichedMessages.concat(messages);
+    }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: prompt },
-          { role: "user", content: message },
-        ],
-      }),
+    // Step-specific logic (Phase 2)
+    if (tool === "rocks" && step) {
+      enrichedMessages.push({
+        role: "system",
+        content: `You are currently guiding the user through the "${step}" part of the SMART Rock process.`,
+      });
+    }
+
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: enrichedMessages,
+      temperature: 0.7,
     });
 
-    const data = await response.json();
-
-    const reply = data.choices?.[0]?.message?.content || "🤖 GPT returned an empty response.";
-
-    return new Response(
-      JSON.stringify({ reply }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
-
-  } catch (err) {
-    console.error("GPT error:", err);
-    return new Response(
-      JSON.stringify({
-        reply: `🤖 GPT error: ${err.message}`,
-        stack: err.stack,
-      }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    const reply = chatCompletion.choices[0].message.content;
+    res.status(200).json({ reply });
+  } catch (error) {
+    console.error("GPT Error:", error);
+    res.status(500).json({ error: "GPT request failed." });
   }
-}
+};
