@@ -1,62 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ClarityBots</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-50 text-gray-800">
-    <div class="min-h-screen flex flex-col items-center p-4">
-      <!-- Logo and Heading -->
-      <header class="w-full max-w-4xl text-center mb-6">
-        <img src="images/default_logo.png" alt="Logo" class="h-12 mx-auto mb-2" />
-        <h1 class="text-2xl font-bold">ClarityBots</h1>
-        <p class="text-sm text-gray-500">AI-enhanced EOS® Coaching Tools</p>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools for SMART Rocks, Vision, and Leadership." />
+  <title>ClarityBots® | AI Meets EOS™</title>
 
-      <!-- Tool Buttons -->
-      <div id="toolContainer" class="flex flex-wrap gap-2 mb-4"></div>
+  <!-- Fonts & Tailwind -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 
-      <!-- Chat Box Container -->
-      <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-4 flex flex-col gap-3">
-        <!-- Tool Label Header -->
-        <div id="toolLabel" class="text-lg font-semibold text-gray-700 px-2 hidden"></div>
+  <!-- Styles -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+    #backgroundImage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="relative bg-white text-gray-800">
+  <div id="backgroundImage"></div>
 
-        <!-- Chat Area -->
-        <div id="chat" class="flex flex-col gap-2 h-96 overflow-y-auto border rounded p-2 bg-gray-50"></div>
+  <header class="flex items-center justify-between p-4">
+    <img id="logoImg" src="" alt="Client Logo" class="h-12" />
+    <h1 id="pageHeading" class="text-2xl font-bold text-gray-900"></h1>
+  </header>
 
-        <!-- Loader -->
-        <div id="loader" class="hidden text-sm text-center text-gray-500">Thinking...</div>
+  <main class="p-4">
+    <div id="toolContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4"></div>
 
-        <!-- User Input Area -->
-        <div class="flex gap-2 mt-2">
-          <textarea
-            id="userInput"
-            placeholder="Type your message..."
-            class="flex-grow border rounded p-2"
-            rows="2"
-          ></textarea>
-          <button
-            id="sendButton"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-          >
-            Send
-          </button>
-        </div>
+    <div id="chat" class="flex flex-col gap-2 p-4 border rounded-lg h-96 overflow-y-auto bg-gray-50"></div>
 
-        <!-- Control Buttons -->
-        <div class="flex gap-2 justify-end mt-2">
-          <button id="resetButton" class="text-sm text-gray-600 hover:underline">
-            Reset Chat
-          </button>
-          <button id="exportButton" class="text-sm text-gray-600 hover:underline">
-            Export Chat
-          </button>
-        </div>
-      </div>
+    <div class="flex items-center gap-2 mt-4">
+      <textarea id="userInput" rows="2" placeholder="Type your message..." class="flex-grow p-2 border rounded-lg"></textarea>
+      <button id="sendButton" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Send</button>
+      <button id="resetButton" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Reset</button>
+      <button id="exportButton" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Export</button>
     </div>
 
-    <script type="module" src="./script.js"></script>
-  </body>
+    <div id="loader" class="mt-2 hidden text-sm text-blue-600 animate-pulse">Thinking...</div>
+  </main>
+
+  <footer id="footer" class="mt-8 p-4 text-center text-white">
+    ClarityBots® | Built for EOS® Leaders
+  </footer>
+
+  <script type="module" src="./script.js"></script>
+</body>
 </html>
