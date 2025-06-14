@@ -1,140 +1,98 @@
 // script.js
 
-let selectedTool = null;
-const chatForm = document.getElementById("chat-form");
-const userInput = document.getElementById("user-input");
-const messagesDiv = document.getElementById("messages");
-const toolButtons = document.querySelectorAll(".tool-button");
+import { promptConfig } from './promptConfig.js';
 
-// Load client-specific theming
-importConfig();
+let currentTool = null;
+let currentStep = 0;
+let messageHistory = [];
 
-// Tool selection logic
-toolButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    selectedTool = button.getAttribute("data-tool");
-    messagesDiv.innerHTML = "";
+const chatContainer = document.getElementById('chat');
+const userInput = document.getElementById('userInput');
+const sendButton = document.getElementById('sendButton');
+const resetButton = document.getElementById('resetButton');
+const loader = document.getElementById('loader');
+const toolButtons = document.querySelectorAll('.tool-button');
 
-    const { promptConfig } = window;
-    const tool = promptConfig[selectedTool];
+function appendMessage(role, content) {
+  if (!chatContainer) return;
+  const bubble = document.createElement('div');
+  bubble.className = `chat-bubble p-3 rounded-lg shadow text-sm whitespace-pre-wrap ${role === 'user' ? 'bg-blue-100 self-end' : 'bg-gray-100 self-start'}`;
+  bubble.textContent = content;
+  chatContainer.appendChild(bubble);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 
-    if (tool?.welcomeMessage) {
-      addMessage("🤖", tool.welcomeMessage);
-    } else {
-      addMessage("🤖", "You selected a tool. Ask your first question!");
-    }
-  });
-});
+function resetChat() {
+  if (chatContainer) chatContainer.innerHTML = '';
+  if (userInput) userInput.value = '';
+  if (loader) loader.classList.add('hidden');
+  messageHistory = [];
+  currentStep = 0;
+}
 
-// Chat form submit
-chatForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const message = userInput.value.trim();
-  if (!message || !selectedTool) return;
+async function sendMessage() {
+  const msg = userInput.value.trim();
+  if (!msg) return;
 
-  addMessage("🧑‍💼", message);
-  userInput.value = "";
+  appendMessage('user', msg);
+  if (loader) loader.classList.remove('hidden');
 
-  addLoader();
+  messageHistory.push({ role: 'user', content: msg });
 
   try {
-    const response = await fetch("/.netlify/functions/gpt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const config = promptConfig[currentTool] || {};
+    const systemPrompt = config.systemPrompt || '';
+    const response = await fetch('/.netlify/functions/gpt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message,
-        tool: selectedTool,
-      }),
+        messages: messageHistory,
+        systemPrompt,
+        tool: currentTool,
+        step: config.steps?.[currentStep]?.id || null
+      })
     });
 
-    removeLoader();
-
-    if (!response.ok) {
-      throw new Error("GPT Error");
-    }
-
     const data = await response.json();
-    if (data && data.reply) {
-      addMessage("🤖", data.reply);
-    } else {
-      handleFallback();
+    const reply = data.reply || "Sorry, something went wrong.";
+
+    appendMessage('assistant', reply);
+    messageHistory.push({ role: 'assistant', content: reply });
+    if (loader) loader.classList.add('hidden');
+
+    // advance step if using step flow
+    if (config.steps && currentStep < config.steps.length - 1) {
+      currentStep++;
+      const nextPrompt = config.steps[currentStep].prompt;
+      appendMessage('assistant', nextPrompt);
+      messageHistory.push({ role: 'assistant', content: nextPrompt });
     }
-  } catch (error) {
-    console.error(error);
-    removeLoader();
-    handleFallback();
+  } catch (err) {
+    console.error("GPT fetch error:", err);
+    appendMessage('assistant', "⚠️ Error: Failed to connect to GPT.");
+    if (loader) loader.classList.add('hidden');
+  }
+}
+
+sendButton?.addEventListener('click', sendMessage);
+resetButton?.addEventListener('click', resetChat);
+userInput?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
   }
 });
 
-// Helper functions
-function addMessage(sender, text) {
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("p-2", "rounded", "shadow", "bg-gray-100");
-  messageDiv.innerHTML = `<strong>${sender}</strong><br>${formatText(text)}`;
-  messagesDiv.appendChild(messageDiv);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
+toolButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const selected = button.getAttribute('data-tool');
+    currentTool = selected;
+    resetChat();
 
-function addLoader() {
-  const loader = document.createElement("div");
-  loader.id = "loader";
-  loader.classList.add("p-2", "text-sm", "text-gray-500");
-  loader.textContent = "🤖 Thinking...";
-  messagesDiv.appendChild(loader);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
-
-function removeLoader() {
-  const loader = document.getElementById("loader");
-  if (loader) loader.remove();
-}
-
-function handleFallback() {
-  const fallback =
-    window.promptConfig?.[selectedTool]?.fallbackMessage ||
-    "⚠️ Something went wrong. Please try again.";
-  addMessage("🤖", fallback);
-}
-
-function formatText(text) {
-  return text
-    .replace(/\n/g, "<br>")
-    .replace(/•/g, "•&nbsp;")
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-}
-
-// Load logo, background, and theming
-function importConfig() {
-  import("./clientConfig.js")
-    .then((module) => {
-      const { clients } = module;
-      const query = new URLSearchParams(window.location.search);
-      const clientKey = query.get("client") || "business_intuition";
-      const client = clients[clientKey];
-
-      if (client) {
-        document.getElementById("client-logo").src = client.logo;
-        document.getElementById("client-logo").alt = client.altText;
-        document.getElementById("client-heading").textContent = client.heading;
-
-        if (client.background) {
-          document.getElementById("body").style.backgroundImage = `url('${client.background}')`;
-        }
-
-        if (client.brandColor) {
-          document.querySelector("meta[name='theme-color']").setAttribute("content", client.brandColor);
-        }
-
-        if (client.preloadImage) {
-          const preload = document.createElement("link");
-          preload.rel = "preload";
-          preload.as = "image";
-          preload.href = client.background;
-          document.head.appendChild(preload);
-        }
-      }
-    })
-    .catch((err) => console.error("Client config error:", err));
-}
+    const toolData = promptConfig[selected];
+    if (toolData?.starterPrompt) {
+      appendMessage('assistant', toolData.starterPrompt);
+      messageHistory.push({ role: 'assistant', content: toolData.starterPrompt });
+    }
+  });
+});
