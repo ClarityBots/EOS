@@ -1,66 +1,47 @@
-// netlify/functions/gpt.js
+import OpenAI from "openai";
 
-import { Configuration, OpenAIApi } from "openai-edge";
-import { OpenAIStream, StreamingTextResponse } from "ai";
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const promptConfig = {
-  rocks: {
-    systemPrompt: `You are a SMART Rocks Coach trained in EOS® (Entrepreneurial Operating System®). Your job is to guide users through writing effective SMART Rocks—clear, 90-day priorities that are:
-
-- Specific
-- Measurable
-- Attainable
-- Realistic
-- Time-bound
-
-Start by asking the user for a rough Rock idea in their own words. Then walk them through refining it using SMART criteria. Be direct, encouraging, and structured.
-
-For each Rock:
-1. Ask clarifying questions.
-2. Suggest a SMARTer version.
-3. Confirm it meets SMART criteria.
-4. Output the final version.
-
-Keep responses focused and friendly. End each Rock cycle by asking, “Would you like to work on another Rock?”`,
-  },
-  // Add other tools here as needed...
-};
-
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(config);
-
-export const configRuntime = {
-  runtime: "edge",
-};
-
-export default async function handler(req) {
+export default async (req, res) => {
   try {
-    const { message, tool } = await req.json();
+    console.log("🟡 gpt.js function running...");
 
-    if (!tool || !promptConfig[tool]) {
-      return new Response("Invalid tool", { status: 400 });
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("❌ Missing OpenAI API Key");
+      return res.status(500).json({ reply: "Missing OpenAI key." });
     }
 
-    const systemPrompt = promptConfig[tool].systemPrompt || "You are a helpful assistant.";
-    const userMessage = message || "Help me get started.";
+    const { messages, systemPrompt, tool, step } = req.body || {};
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4",
-      stream: true,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userMessage },
-      ],
+    if (!messages || !Array.isArray(messages)) {
+      console.error("❌ Invalid or missing messages");
+      return res.status(400).json({ reply: "Invalid input format." });
+    }
+
+    const fullMessages = [
+      ...(systemPrompt ? [{ role: "system", content: systemPrompt }] : []),
+      ...messages,
+    ];
+
+    console.log("📨 Calling GPT with messages:", fullMessages);
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: fullMessages,
       temperature: 0.7,
     });
 
-    const stream = OpenAIStream(response);
-    return new StreamingTextResponse(stream);
+    const reply = completion.choices?.[0]?.message?.content?.trim();
+
+    if (!reply) {
+      console.error("⚠️ GPT returned empty content");
+      return res.status(500).json({ reply: "No reply from GPT." });
+    }
+
+    console.log("✅ GPT replied:", reply);
+    res.status(200).json({ reply });
   } catch (err) {
-    console.error("GPT function error:", err);
-    return new Response("GPT processing error", { status: 500 });
+    console.error("❌ GPT Error:", err);
+    res.status(500).json({ reply: "GPT function failed." });
   }
-}
+};
