@@ -1,11 +1,12 @@
-const { Configuration, OpenAIApi } = require("openai");
+// netlify/functions/gpt.js
 
-const configuration = new Configuration({
+const OpenAI = require("openai");
+
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
-const openai = new OpenAIApi(configuration);
 
-exports.handler = async function(event, context) {
+exports.handler = async function (event, context) {
   try {
     const body = JSON.parse(event.body);
     const { message, tool } = body;
@@ -20,7 +21,7 @@ exports.handler = async function(event, context) {
 
     const system = systemPrompts[tool] || "You are a helpful EOS®-aligned assistant.";
 
-    const completion = await openai.createChatCompletion({
+    const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: system },
@@ -28,7 +29,7 @@ exports.handler = async function(event, context) {
       ]
     });
 
-    const reply = completion.data.choices[0]?.message?.content?.trim() || "No reply generated.";
+    const reply = chatCompletion.choices[0]?.message?.content || "No response.";
     return {
       statusCode: 200,
       body: JSON.stringify({ reply })
