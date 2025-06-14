@@ -1,44 +1,43 @@
-// gpt.js
+// netlify/functions/gpt.js
 
-import { Configuration, OpenAIApi } from "openai-edge";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import { promptConfig } from "../../promptConfig.js";
+import { OpenAI } from "openai";
 
-const config = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const openai = new OpenAI();
 
-const openai = new OpenAIApi(config);
-
-export const configRuntime = {
-  runtime: "edge",
-};
-
-export default async function handler(req) {
+export default async (req, res) => {
   try {
-    const { message, tool } = await req.json();
+    const { messages, systemPrompt, tool, step } = JSON.parse(req.body || "{}");
 
-    if (!tool || !promptConfig[tool]) {
-      return new Response("Invalid tool", { status: 400 });
+    let enrichedMessages = [];
+
+    // Add system-level context if provided
+    if (systemPrompt) {
+      enrichedMessages.push({ role: "system", content: systemPrompt });
     }
 
-    const systemPrompt = promptConfig[tool].systemPrompt || "You are a helpful assistant.";
-    const userMessage = message || "Help me get started.";
+    // Add conversation history
+    if (messages && messages.length > 0) {
+      enrichedMessages = enrichedMessages.concat(messages);
+    }
 
-    const response = await openai.createChatCompletion({
+    // Optional: Add extra guidance per tool step
+    if (tool === "rocks" && step) {
+      enrichedMessages.push({
+        role: "system",
+        content: `You are currently guiding the user through the "${step}" part of the SMART Rock process. Respond accordingly with helpful guidance and examples.`
+      });
+    }
+
+    const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4",
-      stream: true,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userMessage },
-      ],
+      messages: enrichedMessages,
       temperature: 0.7,
     });
 
-    const stream = OpenAIStream(response);
-    return new StreamingTextResponse(stream);
-  } catch (err) {
-    console.error("GPT function error:", err);
-    return new Response("GPT processing error", { status: 500 });
+    const reply = chatCompletion.choices[0].message.content;
+    res.status(200).json({ reply });
+  } catch (error) {
+    console.error("GPT Error:", error);
+    res.status(500).json({ error: "GPT request failed." });
   }
-}
+};
