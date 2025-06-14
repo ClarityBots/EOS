@@ -34,6 +34,43 @@ export const promptConfig = {
         prompt: "Would you like me to combine everything into a finished SMART Rock?"
       }
     ]
+  },
+  vision: {
+    systemPrompt: `You are a Vision Builder™ Guide helping EOS® teams clarify and document their company vision using the 8 Questions of the Vision/Traction Organizer™. Coach the user step-by-step or answer their questions directly, always aligning with EOS® principles.`,
+    starterPrompt: "Let's clarify your vision. What's your core focus, mission, or long-term goal?",
+    steps: [
+      {
+        id: "core_values",
+        prompt: "What are your company's Core Values? List 3–5 values that define your culture."
+      },
+      {
+        id: "core_focus",
+        prompt: "What is your Core Focus? This includes your Purpose/Cause/Passion and your Niche."
+      },
+      {
+        id: "10_year_target",
+        prompt: "What is your 10-Year Target™? Describe a single, measurable goal you'd like to hit in 10 years."
+      },
+      {
+        id: "marketing_strategy",
+        prompt: "What is your Marketing Strategy? Define your target market, 3 uniques, proven process, and guarantee."
+      },
+      {
+        id: "3_year_picture",
+        prompt: "Describe your 3-Year Picture™: revenue, profit, key measurables, and what the business looks like."
+      },
+      {
+        id: "1_year_plan",
+        prompt: "What is your 1-Year Plan? List 3–7 goals with revenue, profit, and clear priorities."
+      },
+      {
+        id: "rocks",
+        prompt: "What are your current Quarterly Rocks? List 3–7 key priorities for the next 90 days."
+      },
+      {
+        id: "issues",
+        prompt: "What are your Issues? List the obstacles or ideas that need to be discussed or solved."
+      }
+    ]
   }
-  // Additional tools will go here...
 };
