@@ -40,7 +40,7 @@ export default async (req, res) => {
     }
 
     const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o turbo",
       messages: enrichedMessages,
       temperature: 0.7,
     });
