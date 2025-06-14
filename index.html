@@ -8,9 +8,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="images/favicon.png" />
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    #chat { max-height: 60vh; overflow-y: auto; }
-    .chat-bubble { white-space: pre-wrap; animation: fadeInUp 0.4s ease; }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    #chat {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    .chat-bubble {
+      white-space: pre-wrap;
+      animation: fadeInUp 0.4s ease;
+    }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -18,28 +26,18 @@
   </style>
 </head>
 <body class="relative bg-gray-100 text-gray-900 flex flex-col items-center justify-start min-h-screen">
-
-  <!-- Background Layers -->
   <div id="backgroundImage" class="absolute inset-0 bg-cover bg-center opacity-20 z-0"></div>
   <div id="overlayLayer" class="absolute inset-0 bg-white z-0"></div>
-
-  <!-- Sticky Header -->
   <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/90 backdrop-blur-md rounded-b-lg shadow-md">
-    <a id="clientWebsite" href="#" target="_blank">
+    <a id="clientWebsite" href="#" target="_blank" class="shrink-0">
       <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-10 sm:h-12 w-auto" />
     </a>
     <h1 id="clientHeading" class="text-lg sm:text-2xl font-bold text-center flex-grow pl-4">ClarityBots®</h1>
   </header>
-
-  <!-- Tool Buttons -->
   <div id="toolContainer" class="z-10 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 px-4 w-full max-w-4xl"></div>
-
-  <!-- Chat Container -->
   <div class="z-10 mt-6 w-full max-w-3xl bg-white rounded-2xl shadow-md p-4 mx-4 flex flex-col space-y-4">
     <div id="chat" class="space-y-4 overflow-y-auto"></div>
     <div id="loader" class="hidden text-center text-sm text-gray-500 italic">🤖 Thinking...</div>
-
-    <!-- Input Row -->
     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-4">
       <textarea id="userInput" placeholder="Type your question..." rows="2" class="flex-grow border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring focus:border-blue-300 resize-none"></textarea>
       <div class="flex gap-2">
@@ -48,12 +46,9 @@
       </div>
     </div>
   </div>
-
   <footer class="z-10 mt-10 mb-6 text-center text-sm text-gray-500 px-4">
-    &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
+    &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Enthusiasts
   </footer>
-
-  <!-- Load JS -->
   <script type="module" src="clientConfig.js"></script>
   <script type="module" src="script.js"></script>
 </body>

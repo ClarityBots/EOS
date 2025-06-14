@@ -1,47 +1,52 @@
 export const clients = {
+  default: {
+    heading: "ClarityBots®",
+    background: "images/default_background.jpg",
+    logo: "images/default_logo.png",
+    altText: "ClarityBots Logo",
+    preloadImage: true,
+    basePath: "images/",
+    brandColor: "#142233",
+    opacity: 0.2
+  },
   business_intuition: {
-    heading: "Business Intuition's",
+    heading: "Business Intuition's Tools",
     background: "images/business_intuition_image.jpg",
     logo: "images/business_intuition_logo.svg",
     altText: "Business Intuition Logo",
-    website: "https://claritybots.ai",
+    preloadImage: true,
+    basePath: "images/",
     brandColor: "#F04E23",
-    overlayOpacity: 0.7
+    opacity: 0.15
+  },
+  cop: {
+    heading: "COP Construction's Tools",
+    background: "images/cop_image.jpg",
+    logo: "images/cop_logo.png",
+    altText: "COP Construction Logo",
+    preloadImage: true,
+    basePath: "images/",
+    brandColor: "#6C7C90",
+    opacity: 0.25
   }
 };
 
-window.addEventListener("DOMContentLoaded", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const clientId = urlParams.get("client") || "business_intuition";
-  const client = clients[clientId];
+const urlParams = new URLSearchParams(window.location.search);
+const clientKey = urlParams.get('client') || 'default';
+const client = clients[clientKey] || clients.default;
 
-  if (!client) return;
+const headingEl = document.getElementById('clientHeading');
+const logoEl = document.getElementById('clientLogo');
+const backgroundEl = document.getElementById('backgroundImage');
+const overlayEl = document.getElementById('overlayLayer');
 
-  document.getElementById("backgroundImage").style.backgroundImage = `url(${client.background})`;
-  document.getElementById("overlayLayer").style.opacity = client.overlayOpacity ?? 0.7;
-  document.getElementById("clientLogo").src = client.logo;
-  document.getElementById("clientLogo").alt = client.altText;
-  document.getElementById("clientHeading").textContent = `${client.heading} ClarityBot`;
-  document.getElementById("clientWebsite").href = client.website;
-
-  const tools = ["rocks", "ids", "scorecard", "core_values", "available"];
-  const labels = {
-    rocks: "SMART Rocks",
-    ids: "IDS",
-    scorecard: "Scorecard",
-    core_values: "Core Values",
-    available: "Available Tools"
-  };
-
-  const toolContainer = document.getElementById("toolContainer");
-  tools.forEach(tool => {
-    const btn = document.createElement("button");
-    btn.className = "tool-button hover:brightness-110 text-white font-semibold px-4 py-2 rounded-2xl shadow text-sm sm:text-base";
-    btn.style.backgroundColor = client.brandColor;
-    btn.setAttribute("data-tool", tool);
-    btn.textContent = labels[tool];
-    toolContainer.appendChild(btn);
-  });
-
-  document.getElementById("sendButton").style.backgroundColor = client.brandColor;
-});
+if (client) {
+  headingEl.innerHTML = client.heading;
+  logoEl.src = client.logo;
+  logoEl.alt = client.altText;
+  backgroundEl.style.backgroundImage = `url('${client.background}')`;
+  backgroundEl.style.opacity = client.opacity.toString();
+  if (client.brandColor) {
+    document.getElementById('sendButton').style.backgroundColor = client.brandColor;
+  }
+}

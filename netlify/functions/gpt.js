@@ -1,45 +1,32 @@
-import OpenAI from "openai";
+import { Configuration, OpenAIApi } from "openai";
 
-const openai = new OpenAI({
+const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const handler = async (event) => {
+const openai = new OpenAIApi(configuration);
+
+export default async (req, res) => {
   try {
-    const body = JSON.parse(event.body);
-    const { messages, systemPrompt } = body;
+    const { message, tool } = req.body;
 
-    if (!messages || !Array.isArray(messages)) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Invalid messages array." }),
-      };
-    }
+    const systemPrompt = {
+      rocks: "You are a helpful EOS® Implementer. Guide the user to build a clear, concise, and complete SMART Rock using EOS language and structure.",
+    };
 
-    const chatMessages = [
-      { role: "system", content: systemPrompt },
-      ...messages,
-    ];
-
-    const completion = await openai.chat.completions.create({
+    const response = await openai.createChatCompletion({
       model: "gpt-4o",
-      messages: chatMessages,
+      messages: [
+        { role: "system", content: systemPrompt[tool] || "You're a helpful assistant." },
+        { role: "user", content: message }
+      ],
     });
 
-    const reply = completion.choices?.[0]?.message?.content?.trim() || "No reply from OpenAI.";
+    const reply = response.data.choices[0]?.message?.content || "No response from GPT.";
+    res.status(200).json({ reply });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ reply }),
-    };
-  } catch (err) {
-    console.error("🔥 GPT Error:", err.message);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: "Server error",
-        details: err.message,
-      }),
-    };
+  } catch (error) {
+    console.error("GPT Error:", error);
+    res.status(500).json({ reply: "⚠️ GPT error. Please try again later." });
   }
 };
