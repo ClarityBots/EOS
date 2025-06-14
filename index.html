@@ -3,59 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#142233" />
   <title>ClarityBots</title>
-  <link rel="icon" href="images/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      height: 100%;
-    }
     #backgroundImage {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
       background-size: cover;
       background-position: center;
-      opacity: 0.1;
-      z-index: -1;
     }
   </style>
 </head>
-<body class="bg-white text-gray-800 flex flex-col h-screen">
+<body class="flex flex-col min-h-screen bg-white text-gray-900 relative">
+  <div id="backgroundImage" class="absolute inset-0 -z-10 opacity-10"></div>
 
-  <div id="backgroundImage"></div>
-
-  <header class="p-4 flex items-center justify-between border-b shadow">
-    <img id="logoImg" src="" alt="Logo" class="h-10" />
-    <h1 id="pageHeading" class="text-xl font-bold"></h1>
+  <header class="p-4 flex items-center justify-between shadow-md bg-white z-10 relative">
+    <img id="logoImg" src="" alt="Client Logo" class="h-12" />
+    <h1 id="pageHeading" class="text-2xl font-bold text-right">ClarityBots</h1>
   </header>
 
-  <main class="flex-1 p-4 overflow-auto flex flex-col gap-4">
-    <div id="toolContainer" class="flex gap-2 flex-wrap"></div>
+  <main class="flex flex-col gap-4 p-4 flex-grow max-w-4xl mx-auto w-full">
+    <div id="toolContainer" class="flex flex-wrap gap-2 justify-start mb-4"></div>
 
-    <div id="chat" class="flex flex-col gap-2 overflow-y-auto border p-4 rounded-lg h-[300px] bg-gray-50"></div>
+    <div id="chat" class="flex flex-col gap-2 p-4 border rounded-lg overflow-y-auto h-96 bg-gray-50"></div>
 
-    <div class="flex items-center gap-2">
-      <textarea id="userInput" placeholder="Type your message..." class="flex-1 p-2 border rounded-lg"></textarea>
-      <button id="sendButton" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Send</button>
-      <button id="resetButton" class="px-4 py-2 bg-gray-200 rounded-lg">Reset</button>
-      <button id="exportButton" class="px-4 py-2 bg-green-600 text-white rounded-lg">Export</button>
+    <div class="flex gap-2 mt-4">
+      <textarea id="userInput" rows="2" placeholder="Type your message..." class="flex-grow p-2 border rounded"></textarea>
+      <button id="sendButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Send</button>
     </div>
 
-    <div id="loader" class="hidden text-center mt-2">Loading...</div>
+    <div class="flex gap-2 mt-2">
+      <button id="resetButton" class="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400">Clear</button>
+      <button id="exportButton" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Export</button>
+    </div>
+
+    <div id="loader" class="hidden text-center mt-2 text-blue-600 font-medium">Thinking...</div>
   </main>
 
-  <footer id="footer" class="text-center p-2 text-white text-sm">
-    Powered by ClarityBots
+  <footer id="footer" class="text-center p-4 text-white mt-8 bg-gray-800">
+    &copy; 2025 ClarityBots. Powered by EOS® and GPT.
   </footer>
 
-  <!-- ✅ This must be at the bottom and must use type="module" -->
-  <script type="module" src="./script.js"></script>
+  <script type="module" src="./js/script.js"></script>
 </body>
 </html>
