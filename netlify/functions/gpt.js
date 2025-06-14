@@ -1,54 +1,42 @@
-// netlify/functions/gpt.js
+import OpenAI from "openai";
 
-import { OpenAI } from "openai";
-
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export default async (req, res) => {
   try {
-    const { messages, systemPrompt, tool, step } = JSON.parse(req.body || "{}");
+    // Log the incoming request for debugging
+    console.log("📥 Incoming request to /gpt:", req.body);
 
-    let enrichedMessages = [];
+    const { messages, systemPrompt, tool, step } = req.body;
 
-    // Add system prompt
-    if (systemPrompt) {
-      enrichedMessages.push({ role: "system", content: systemPrompt });
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ reply: "Invalid input: 'messages' is required." });
     }
 
-    // Add message history
-    if (messages && messages.length > 0) {
-      enrichedMessages = enrichedMessages.concat(messages);
-    }
+    const fullMessages = [
+      ...(systemPrompt ? [{ role: "system", content: systemPrompt }] : []),
+      ...messages
+    ];
 
-    // Tool + Step awareness (Phase 2 logic)
-    if (tool && step) {
-      const stepMessage = {
-        rocks: `You're helping define the "${step}" part of a SMART Rock. Be clear, helpful, and EOS-aligned.`,
-        vision: `You're guiding the team through the "${step}" part of the Vision Builder™. Respond with EOS® best practices.`,
-        people: `You're helping the team analyze someone using the People Analyzer™. The current focus is "${step}".`,
-        vto: `You're walking through the "${step}" section of the V/TO™ (Vision/Traction Organizer). Help them get clear.`,
-        lma: `You're coaching someone to better Lead + Manage + hold Accountable (LMA™). Focus on "${step}".`,
-        quarterly: `You're preparing a team for a Quarterly Session. Focus now on "${step}" planning priorities.`
-      };
-
-      if (stepMessage[tool]) {
-        enrichedMessages.push({
-          role: "system",
-          content: stepMessage[tool]
-        });
-      }
-    }
-
-    const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4o turbo",
-      messages: enrichedMessages,
-      temperature: 0.7,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // ✅ Updated to use GPT-4o
+      messages: fullMessages,
+      temperature: 0.7
     });
 
-    const reply = chatCompletion.choices[0].message.content;
+    const reply = completion.choices?.[0]?.message?.content?.trim();
+
+    if (!reply) {
+      console.error("⚠️ GPT response was empty.");
+      return res.status(500).json({ reply: "Sorry, no response from GPT." });
+    }
+
+    console.log("✅ GPT reply:", reply);
+
     res.status(200).json({ reply });
+
   } catch (error) {
-    console.error("GPT Error:", error);
-    res.status(500).json({ error: "GPT request failed." });
+    console.error("❌ GPT function error:", error);
+    res.status(500).json({ reply: "Sorry, something went wrong with the GPT function." });
   }
 };
