@@ -1,52 +1,48 @@
-// gpt.js
-import { OpenAI } from "openai";
+// netlify/functions/gpt.js
+
+import { OpenAI } from 'openai';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
 
-export async function handler(event, context) {
+export const handler = async (event) => {
   try {
-    const body = JSON.parse(event.body);
-    const { message, tool, step, state } = body;
+    const { message, tool, step, state } = JSON.parse(event.body);
 
-    const prompt = buildPrompt(tool, step, message, state);
+    const tools = {
+      rocks: "You're a SMART Rock™ Coach helping users clarify their quarterly priorities using EOS®. Guide them step by step.",
+      scorecard: "You're a Scorecard Coach guiding EOS® users to define and track weekly activity-based metrics.",
+      coreValues: "You're a Core Values Coach helping EOS® users define their company's essential Core Values.",
+      vision: "You're a Vision Coach guiding EOS® users to clarify their long-term vision using the V/TO™.",
+      lma: "You're an LMA™ Coach helping leaders improve how they Lead and Manage Accountably."
+    };
+
+    const systemPrompt = tools[tool] || "You're a helpful business coach.";
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: message }
+      ],
+      model: "gpt-3.5-turbo"
     });
 
-    const reply = completion.choices[0].message.content.trim();
-
-    const nextStep = step + 1;
-    const updatedState = { ...state, [`step_${step}`]: message };
+    const reply = completion.choices[0]?.message?.content || "Sorry, I didn't get that.";
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ reply, nextStep, updatedState }),
+      body: JSON.stringify({
+        reply,
+        nextStep: step + 1,
+        updatedState: state
+      })
     };
-  } catch (error) {
-    console.error("GPT Function Error:", error);
+  } catch (err) {
+    console.error("GPT Function Error:", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to process message." }),
+      body: JSON.stringify({ error: "Function failed to respond properly." })
     };
   }
-}
-
-function buildPrompt(tool, step, message, state) {
-  // Basic logic to create a prompt; customize this per tool
-  let contextText = Object.entries(state)
-    .map(([key, val]) => `${key}: ${val}`)
-    .join("\n");
-
-  return `You are helping build a SMART Rock using the EOS model.
-Tool: ${tool}
-Step: ${step}
-Previous inputs:
-${contextText}
-
-Current input: ${message}
-Respond with the next question or clarification needed.`;
-}
+};

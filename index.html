@@ -3,25 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools for SMART Rocks, Vision, and Leadership." />
-  <title>ClarityBots® | AI Meets EOS™</title>
-
-  <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#142233" />
+  <title>ClarityBots</title>
+  <link rel="icon" href="images/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Styles -->
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      min-height: 100vh;
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      height: 100%;
     }
     #backgroundImage {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
+      width: 100%;
+      height: 100%;
       background-size: cover;
       background-position: center;
       opacity: 0.1;
@@ -29,33 +27,35 @@
     }
   </style>
 </head>
-<body class="relative bg-white text-gray-800">
+<body class="bg-white text-gray-800 flex flex-col h-screen">
+
   <div id="backgroundImage"></div>
 
-  <header class="flex items-center justify-between p-4">
-    <img id="logoImg" src="" alt="Client Logo" class="h-12" />
-    <h1 id="pageHeading" class="text-2xl font-bold text-gray-900"></h1>
+  <header class="p-4 flex items-center justify-between border-b shadow">
+    <img id="logoImg" src="" alt="Logo" class="h-10" />
+    <h1 id="pageHeading" class="text-xl font-bold"></h1>
   </header>
 
-  <main class="p-4">
-    <div id="toolContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4"></div>
+  <main class="flex-1 p-4 overflow-auto flex flex-col gap-4">
+    <div id="toolContainer" class="flex gap-2 flex-wrap"></div>
 
-    <div id="chat" class="flex flex-col gap-2 p-4 border rounded-lg h-96 overflow-y-auto bg-gray-50"></div>
+    <div id="chat" class="flex flex-col gap-2 overflow-y-auto border p-4 rounded-lg h-[300px] bg-gray-50"></div>
 
-    <div class="flex items-center gap-2 mt-4">
-      <textarea id="userInput" rows="2" placeholder="Type your message..." class="flex-grow p-2 border rounded-lg"></textarea>
-      <button id="sendButton" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Send</button>
-      <button id="resetButton" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Reset</button>
-      <button id="exportButton" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Export</button>
+    <div class="flex items-center gap-2">
+      <textarea id="userInput" placeholder="Type your message..." class="flex-1 p-2 border rounded-lg"></textarea>
+      <button id="sendButton" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Send</button>
+      <button id="resetButton" class="px-4 py-2 bg-gray-200 rounded-lg">Reset</button>
+      <button id="exportButton" class="px-4 py-2 bg-green-600 text-white rounded-lg">Export</button>
     </div>
 
-    <div id="loader" class="mt-2 hidden text-sm text-blue-600 animate-pulse">Thinking...</div>
+    <div id="loader" class="hidden text-center mt-2">Loading...</div>
   </main>
 
-  <footer id="footer" class="mt-8 p-4 text-center text-white">
-    ClarityBots® | Built for EOS® Leaders
+  <footer id="footer" class="text-center p-2 text-white text-sm">
+    Powered by ClarityBots
   </footer>
 
+  <!-- ✅ This must be at the bottom and must use type="module" -->
   <script type="module" src="./script.js"></script>
 </body>
 </html>
