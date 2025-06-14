@@ -4,25 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClarityBots® | AI + EOS® Tools</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@motionone/dom"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="images/favicon.png" />
-
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    #chat {
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    .chat-bubble {
-      white-space: pre-wrap;
-      animation: fadeInUp 0.4s ease;
-    }
+    body { font-family: 'Inter', sans-serif; }
+    #chat { max-height: 60vh; overflow-y: auto; }
+    .chat-bubble { white-space: pre-wrap; animation: fadeInUp 0.4s ease; }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -37,7 +25,7 @@
 
   <!-- Sticky Header -->
   <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/90 backdrop-blur-md rounded-b-lg shadow-md">
-    <a id="clientWebsite" href="#" target="_blank" class="shrink-0">
+    <a id="clientWebsite" href="#" target="_blank">
       <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-10 sm:h-12 w-auto" />
     </a>
     <h1 id="clientHeading" class="text-lg sm:text-2xl font-bold text-center flex-grow pl-4">ClarityBots®</h1>
@@ -61,13 +49,12 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="z-10 mt-10 mb-6 text-center text-sm text-gray-500 px-4">
     &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
   </footer>
 
-  <!-- Scripts -->
-  <script src="promptConfig.js" type="module"></script>
-  <script src="script.js" type="module"></script>
+  <!-- Load JS -->
+  <script type="module" src="clientConfig.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

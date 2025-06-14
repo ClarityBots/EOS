@@ -1,97 +1,72 @@
-import { prompts } from "./promptConfig.js";
+import prompts from './promptConfig.js';
 
-console.log("✅ script.js loaded");
+let currentStep = 0;
+let currentTool = '';
+let messages = [];
 
-let selectedTool = null;
-let conversation = [];
-
-const chat = document.getElementById("chat");
-const input = document.getElementById("userInput");
-const sendButton = document.getElementById("sendButton");
-const resetButton = document.getElementById("resetButton");
-const loader = document.getElementById("loader");
-const toolButtons = document.querySelectorAll(".tool-button");
-
-toolButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    selectedTool = btn.getAttribute("data-tool");
-    conversation = [];
-
-    const prompt = prompts[selectedTool];
-    if (prompt) {
-      conversation.push({ role: "assistant", content: prompt.starter });
-      renderConversation();
-    }
-  });
-});
-
-sendButton.addEventListener("click", sendMessage);
-resetButton.addEventListener("click", resetConversation);
-
-function renderConversation() {
-  chat.innerHTML = "";
-  conversation.forEach((msg) => {
-    addMessage(msg.role === "user" ? "🧑‍💼" : "🤖", msg.content);
-  });
-}
-
-function addMessage(sender, text) {
+function addMessage(text, isUser = false) {
+  const chat = document.getElementById("chat");
   const bubble = document.createElement("div");
-  bubble.className = "chat-bubble";
-  bubble.innerHTML = `<strong>${sender}</strong><br>${text}`;
+  bubble.className = `chat-bubble p-3 rounded-xl ${isUser ? 'bg-blue-100 self-end' : 'bg-gray-200 self-start'}`;
+  bubble.textContent = text;
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
 }
 
-async function sendMessage() {
-  const inputText = input.value.trim();
-  if (!inputText || !selectedTool) return;
-
-  conversation.push({ role: "user", content: inputText });
-  renderConversation();
-  input.value = "";
-  loader.classList.remove("hidden");
-
-  try {
-    const payload = {
-      messages: conversation,
-      systemPrompt: prompts[selectedTool].system,
-      tool: selectedTool,
-      step: null,
-    };
-
-    const response = await fetch("/.netlify/functions/gpt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`GPT call failed: ${response.status} ${response.statusText}\n${errorText}`);
-    }
-
-    const data = await response.json();
-
-    if (!data.reply || typeof data.reply !== "string") {
-      throw new Error("GPT returned an invalid or empty reply.");
-    }
-
-    conversation.push({ role: "assistant", content: data.reply });
-  } catch (err) {
-    console.error("GPT error:", err);
-    conversation.push({
-      role: "assistant",
-      content: `🤖 Sorry! GPT call failed.\n${err.message}`,
-    });
-  } finally {
-    loader.classList.add("hidden");
-    renderConversation();
-  }
+function showLoader(show = true) {
+  document.getElementById("loader").classList.toggle("hidden", !show);
 }
 
-function resetConversation() {
-  conversation = [];
-  chat.innerHTML = "";
-  input.value = "";
+function resetChat() {
+  document.getElementById("chat").innerHTML = '';
+  currentStep = 0;
+  currentTool = '';
+  messages = [];
 }
+
+function sendPrompt() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage(text, true);
+  messages.push({ role: "user", content: text });
+  input.value = '';
+  showLoader(true);
+
+  fetch('/.netlify/functions/gpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tool: currentTool, messages })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const reply = data.reply || "🤖 Sorry, something went wrong.";
+      addMessage(reply);
+      messages.push({ role: "assistant", content: reply });
+      showLoader(false);
+    })
+    .catch(err => {
+      console.error("GPT Error:", err);
+      addMessage("🤖 Sorry, something went wrong.");
+      showLoader(false);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const buttons = document.querySelectorAll(".tool-button");
+  const sendBtn = document.getElementById("sendButton");
+  const resetBtn = document.getElementById("resetButton");
+
+  sendBtn.addEventListener("click", sendPrompt);
+  resetBtn.addEventListener("click", resetChat);
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      currentTool = button.getAttribute("data-tool");
+      currentStep = 0;
+      messages = [{ role: "system", content: `You are ClarityBot, helping with ${currentTool}` }];
+      resetChat();
+      addMessage(prompts[currentTool][currentStep++] || "Let's get started.");
+    });
+  });
+});
