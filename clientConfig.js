@@ -11,7 +11,7 @@ export const clients = {
   },
   business_intuition: {
     heading: "Business Intuition's Tools",
-    background: "images/business_intuition_image.jpg",
+    background: "images/business_intuition_background.jpg",
     logo: "images/business_intuition_logo.svg",
     altText: "Business Intuition Logo",
     preloadImage: true,
@@ -21,7 +21,7 @@ export const clients = {
   },
   cop: {
     heading: "COP Construction's Tools",
-    background: "images/cop_image.jpg",
+    background: "images/cop_background.jpg",
     logo: "images/cop_logo.png",
     altText: "COP Construction Logo",
     preloadImage: true,
