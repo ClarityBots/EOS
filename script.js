@@ -1,17 +1,13 @@
-// script.js
-
 let selectedTool = null;
 let chatHistory = [];
 
 const chatContainer = document.getElementById("chat");
 
-// Format timestamp
 function formatTimestamp() {
   const now = new Date();
   return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-// Create chat bubble with avatar, timestamp, and optional history skip
 function createChatBubble(message, isUser = false, skipSave = false, timestamp = null) {
   const bubble = document.createElement("div");
   bubble.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
@@ -44,7 +40,6 @@ function createChatBubble(message, isUser = false, skipSave = false, timestamp =
   chatContainer.appendChild(bubble);
   bubble.scrollIntoView({ behavior: "smooth" });
 
-  // Save if not from history
   if (!skipSave) {
     chatHistory.push({ message, isUser, timestamp: time.textContent });
     localStorage.setItem("clarityChat", JSON.stringify(chatHistory));
@@ -67,31 +62,43 @@ function showWelcomeMessage() {
   createChatBubble("👋 Welcome to ClarityBots! Select a tool above to get started.");
   setTimeout(() => {
     createChatBubble("💡 Tip: Press Enter to send, or Shift + Enter to add a new line.");
-  }, 500);
+  }, 400);
 }
 
-document.querySelectorAll(".tool-button").forEach((button) => {
-  button.addEventListener("click", () => {
-    selectedTool = button.getAttribute("data-tool");
-    chatHistory = [];
-    localStorage.removeItem("clarityChat");
-    chatContainer.innerHTML = "";
-    createChatBubble(`🛠 You selected: ${button.textContent}. Go ahead and ask your first question.`);
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".tool-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedTool = button.getAttribute("data-tool");
+      chatHistory = [];
+      localStorage.removeItem("clarityChat");
+      chatContainer.innerHTML = "";
+
+      // Load system + starter prompt from promptConfig
+      const toolConfig = promptConfig[selectedTool];
+      if (toolConfig?.starterPrompt) {
+        createChatBubble(`🛠 You selected: ${button.textContent}`);
+        setTimeout(() => {
+          createChatBubble(toolConfig.starterPrompt);
+        }, 300);
+      } else {
+        createChatBubble(`🛠 You selected: ${button.textContent}. Go ahead and ask your first question.`);
+      }
+    });
   });
+
+  document.getElementById("sendButton").addEventListener("click", sendMessage);
+  document.getElementById("resetButton").addEventListener("click", resetChat);
+
+  document.getElementById("userInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  loadChatFromStorage();
 });
 
-document.getElementById("sendButton").addEventListener("click", sendMessage);
-document.getElementById("resetButton").addEventListener("click", resetChat);
-
-// Keyboard shortcuts: Enter = send, Shift+Enter = newline
-document.getElementById("userInput").addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-// Send message
 function sendMessage() {
   const input = document.getElementById("userInput");
   const message = input.value.trim();
@@ -99,7 +106,6 @@ function sendMessage() {
 
   createChatBubble(message, true);
   input.value = "";
-
   document.getElementById("loader").classList.remove("hidden");
 
   fetch("/.netlify/functions/gpt", {
@@ -125,10 +131,21 @@ function resetChat() {
   chatContainer.innerHTML = "";
   chatHistory = [];
   localStorage.removeItem("clarityChat");
-  showWelcomeMessage();
+
+  if (selectedTool) {
+    const toolConfig = promptConfig[selectedTool];
+    createChatBubble(`🛠 You selected: ${selectedTool}`);
+    setTimeout(() => {
+      if (toolConfig?.starterPrompt) {
+        createChatBubble(toolConfig.starterPrompt);
+      }
+    }, 300);
+  } else {
+    showWelcomeMessage();
+  }
 }
 
-// Export chat as .txt file
+// Export chat to text file
 function exportChat() {
   if (!chatHistory.length) return alert("No chat history to export.");
   const lines = chatHistory.map(entry => {
@@ -142,12 +159,9 @@ function exportChat() {
   link.click();
 }
 
-// Add export button dynamically (or you can hardcode into HTML)
+// Add Export Button
 const exportBtn = document.createElement("button");
 exportBtn.textContent = "Download Chat";
 exportBtn.className = "bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow mt-4";
 exportBtn.addEventListener("click", exportChat);
-document.querySelector(".flex.flex-col.space-y-4").appendChild(exportBtn);
-
-// Load chat from storage on load
-window.onload = loadChatFromStorage;
+document.querySelector(".flex.flex-col.space-y-4")?.appendChild(exportBtn);

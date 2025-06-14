@@ -7,7 +7,7 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Motion One Animations -->
+  <!-- Motion One -->
   <script src="https://unpkg.com/@motionone/dom"></script>
   <!-- Fonts & Favicon -->
   <link rel="icon" href="images/favicon.png" />
@@ -33,7 +33,7 @@
 </head>
 <body class="relative bg-gray-100 text-gray-900 flex flex-col items-center justify-start min-h-screen">
 
-  <!-- Background -->
+  <!-- Background Image -->
   <div id="backgroundImage" class="absolute inset-0 bg-cover bg-center opacity-20 z-0"></div>
   <div class="absolute inset-0 bg-white/70 z-0"></div>
 
@@ -68,7 +68,7 @@
     &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
   </footer>
 
-  <!-- Scripts -->
+  <!-- Client Loader Script -->
   <script type="module">
     import { clients } from './clientConfig.js';
 
@@ -84,13 +84,21 @@
       document.getElementById("clientWebsite").href = client.website;
 
       const buttonClasses = `hover:brightness-110 text-white font-semibold px-6 py-2 rounded-2xl shadow`;
-      const tools = ["rocks", "ids", "scorecard", "core_values", "available"];
+      const tools = [
+        "rocks", "ids", "scorecard", "core_values", "available",
+        "vision", "people", "vto", "lma", "quarterly"
+      ];
       const labels = {
         rocks: "SMART Rocks",
         ids: "IDS",
         scorecard: "Scorecard",
         core_values: "Core Values",
-        available: "Available"
+        available: "Available",
+        vision: "Vision Builder",
+        people: "People Analyzer",
+        vto: "V/TO Summary",
+        lma: "LMA® Coach",
+        quarterly: "Quarterly Planning"
       };
 
       const toolContainer = document.getElementById("toolContainer");
@@ -108,6 +116,7 @@
     }
   </script>
 
+  <!-- App Scripts -->
   <script src="promptConfig.js"></script>
   <script src="script.js"></script>
 </body>
