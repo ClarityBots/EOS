@@ -1,6 +1,9 @@
 [build]
-  publish = "."            # <-- Use root folder where index.html lives
+  publish = "./"
   functions = "netlify/functions"
 
 [functions]
   node_bundler = "esbuild"
+
+[build.environment]
+  OPENAI_API_KEY = "your-api-key-will-be-injected-by-netlify"

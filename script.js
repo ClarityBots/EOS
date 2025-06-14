@@ -1,5 +1,4 @@
 // script.js
-
 import prompts from './promptConfig.js';
 
 const toolContainer = document.getElementById("toolContainer");
@@ -67,7 +66,6 @@ function setupToolButtons() {
       currentTool = toolKey;
       clearChat();
       addMessage(prompts[toolKey].initialPrompt, "bot");
-      addMessage("🧪 Chat connection test message.", "bot");
     };
     toolContainer.appendChild(button);
   });
