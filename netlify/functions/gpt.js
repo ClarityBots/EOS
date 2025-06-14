@@ -8,8 +8,8 @@ export default async (req, res) => {
   try {
     const { messages, systemPrompt, tool, step } = JSON.parse(req.body || "{}");
 
-    // Smart prompt injection for current step
     let enrichedMessages = [];
+
     if (systemPrompt) {
       enrichedMessages.push({ role: "system", content: systemPrompt });
     }
@@ -18,11 +18,11 @@ export default async (req, res) => {
       enrichedMessages = enrichedMessages.concat(messages);
     }
 
-    // Step-specific logic (Phase 2)
+    // If this is a SMART Rocks session and a step is defined, add it to the system context
     if (tool === "rocks" && step) {
       enrichedMessages.push({
         role: "system",
-        content: `You are currently guiding the user through the "${step}" part of the SMART Rock process.`,
+        content: `You are currently guiding the user through the \"${step}\" part of the SMART Rock process. Respond accordingly with helpful guidance and examples.`
       });
     }
 

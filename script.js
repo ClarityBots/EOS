@@ -5,7 +5,7 @@ import { promptConfig } from './promptConfig.js';
 let currentTool = null;
 let stepIndex = 0;
 let conversationHistory = [];
-let toolMemory = {}; // Tracks current step for tools like SMART Rocks
+let toolMemory = {}; // Tracks step for each tool
 
 document.addEventListener('DOMContentLoaded', () => {
   const sendButton = document.getElementById('sendButton');
@@ -19,14 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
       currentTool = button.getAttribute('data-tool');
       stepIndex = 0;
       conversationHistory = [];
+      chat.innerHTML = "";
+      userInput.value = "";
+      toolMemory[currentTool] = { step: null };
 
       const config = promptConfig[currentTool];
       if (!config) return;
 
-      const userMsg = config.starterPrompt;
-      addMessage("user", userMsg);
+      const starter = config.starterPrompt;
+      addMessage("user", starter);
       showLoader();
-      fetchGPT(userMsg, config.systemPrompt, null);
+      fetchGPT(starter, config.systemPrompt, null);
     });
   });
 
@@ -90,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addMessage("assistant", reply);
         hideLoader();
 
-        // Step progression logic
+        // Step advancement
         const config = promptConfig[currentTool];
         const steps = config?.steps;
 
