@@ -1,71 +1,90 @@
-import { prompts } from './promptConfig.js';
+// script.js
 
-let selectedTool = null;
-const chat = document.getElementById('chat');
-const userInput = document.getElementById('userInput');
-const sendButton = document.getElementById('sendButton');
-const resetButton = document.getElementById('resetButton');
-const loader = document.getElementById('loader');
+import prompts from './promptConfig.js';
 
-function appendMessage(role, content) {
-  const bubble = document.createElement('div');
-  bubble.className = `chat-bubble p-3 rounded-xl max-w-xl ${role === 'user' ? 'bg-blue-100 self-end' : 'bg-gray-200 self-start'}`;
-  bubble.textContent = content;
-  chat.appendChild(bubble);
+const toolContainer = document.getElementById("toolContainer");
+const chat = document.getElementById("chat");
+const userInput = document.getElementById("userInput");
+const sendButton = document.getElementById("sendButton");
+const resetButton = document.getElementById("resetButton");
+const loader = document.getElementById("loader");
+
+let currentTool = null;
+
+function addMessage(content, sender = "user") {
+  const messageEl = document.createElement("div");
+  messageEl.className = `chat-bubble p-3 rounded-lg shadow-md w-fit max-w-[90%] ${
+    sender === "user" ? "bg-blue-100 self-end" : "bg-gray-200 self-start"
+  }`;
+  messageEl.innerText = content;
+  chat.appendChild(messageEl);
   chat.scrollTop = chat.scrollHeight;
 }
 
-function toggleLoader(show) {
-  loader.classList.toggle('hidden', !show);
+function clearChat() {
+  chat.innerHTML = "";
 }
 
-function resetChat() {
-  chat.innerHTML = '';
-  userInput.value = '';
+function showLoader() {
+  loader.classList.remove("hidden");
 }
 
-function handleToolClick(tool) {
-  selectedTool = tool;
-  resetChat();
-  const intro = prompts[tool]?.intro || `🤖 You selected: ${tool}. Ask your first question.`;
-  appendMessage('assistant', intro);
+function hideLoader() {
+  loader.classList.add("hidden");
 }
 
-function handleSend() {
+async function sendMessage() {
   const input = userInput.value.trim();
-  if (!input || !selectedTool) return;
-  appendMessage('user', input);
-  userInput.value = '';
-  toggleLoader(true);
+  if (!input || !currentTool) return;
+  addMessage(input, "user");
+  userInput.value = "";
+  showLoader();
 
-  fetch('/.netlify/functions/gpt', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tool: selectedTool, message: input })
-  })
-  .then(res => res.json())
-  .then(data => {
-    toggleLoader(false);
-    const reply = data?.reply || '⚠️ Sorry, something went wrong.';
-    appendMessage('assistant', reply);
-  })
-  .catch(err => {
-    toggleLoader(false);
-    console.error(err);
-    appendMessage('assistant', '⚠️ Error connecting to GPT function.');
+  try {
+    const response = await fetch("/.netlify/functions/gpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: input, tool: currentTool })
+    });
+
+    const data = await response.json();
+    addMessage(data.reply || "Sorry, something went wrong.", "bot");
+  } catch (error) {
+    console.error("GPT Error:", error);
+    addMessage("Something went wrong while getting a response.", "bot");
+  } finally {
+    hideLoader();
+  }
+}
+
+function setupToolButtons() {
+  toolContainer.innerHTML = "";
+  Object.keys(prompts).forEach((toolKey) => {
+    const button = document.createElement("button");
+    button.innerText = prompts[toolKey].label || toolKey;
+    button.className = "px-4 py-2 rounded-lg shadow bg-white hover:bg-gray-100 border text-gray-800 font-semibold text-left";
+    button.onclick = () => {
+      currentTool = toolKey;
+      clearChat();
+      addMessage(prompts[toolKey].initialPrompt, "bot");
+    };
+    toolContainer.appendChild(button);
   });
 }
 
-document.querySelectorAll('.tool-button').forEach(button => {
-  button.addEventListener('click', () => handleToolClick(button.dataset.tool));
-});
-
-sendButton.addEventListener('click', handleSend);
-userInput.addEventListener('keypress', e => {
-  if (e.key === 'Enter' && !e.shiftKey) {
+sendButton.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
-    handleSend();
+    sendMessage();
   }
 });
 
-resetButton.addEventListener('click', resetChat);
+resetButton.addEventListener("click", () => {
+  userInput.value = "";
+  clearChat();
+});
+
+window.onload = () => {
+  setupToolButtons();
+};

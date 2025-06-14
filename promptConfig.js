@@ -1,25 +1,26 @@
-export const prompts = {
+// promptConfig.js
+
+const prompts = {
   rocks: {
-    intro: "Let's build a SMART Rock together. What's your most important outcome this quarter?",
-    steps: [
-      {
-        prompt: "How will success be measured? What evidence will show the Rock is complete?",
-        key: "measurable"
-      },
-      {
-        prompt: "What's the due date for this Rock? (e.g., June 30, 2025)",
-        key: "dueDate"
-      },
-      {
-        prompt: "Who owns this Rock?",
-        key: "owner"
-      },
-      {
-        prompt: "Any notes or details to include?",
-        key: "notes"
-      }
-    ],
-    summaryTemplate: ({ goal, measurable, dueDate, owner, notes }) =>
-      `📍 SMART Rock Summary:\n\n🎯 **Goal:** ${goal}\n📏 **Measurable:** ${measurable}\n📅 **Due Date:** ${dueDate}\n👤 **Owner:** ${owner}\n📝 **Notes:** ${notes}`
-  }
+    label: "SMART Rocks",
+    initialPrompt: "Let's build a SMART Rock together. What's your most important outcome this quarter?",
+  },
+  core_values: {
+    label: "Core Values",
+    initialPrompt: "Let’s clarify your company's Core Values. What behaviors are essential to who you are?",
+  },
+  scorecard: {
+    label: "Scorecard",
+    initialPrompt: "Let’s create a measurable. What specific result or activity should be tracked weekly?",
+  },
+  people_analyzer: {
+    label: "People Analyzer",
+    initialPrompt: "Let’s walk through your People Analyzer. Who are you evaluating first?",
+  },
+  vision_builder: {
+    label: "Vision Builder",
+    initialPrompt: "Let’s get clear on your Vision. Start with this: What are your 3 Uniques™?",
+  },
 };
+
+export default prompts;
