@@ -9,7 +9,7 @@ export const clients = {
     preloadImage: true,
     brandColor: "#445777",
     website: "https://alderconstruction.com",
-    overlayOpacity: 0.75
+    overlayOpacity: 0.5
   },
   business_intuition: {
     heading: "Business Intuition's",
@@ -19,7 +19,7 @@ export const clients = {
     preloadImage: true,
     brandColor: "#F04E23",
     website: "https://businessintuition.com",
-    overlayOpacity: 0.6
+    overlayOpacity: 0.5
   },
   cop: {
     heading: "COP Construction's",
@@ -29,6 +29,6 @@ export const clients = {
     preloadImage: true,
     brandColor: "#6C7C90",
     website: "https://copconstruction.com",
-    overlayOpacity: 0.8
+    overlayOpacity: 0.5
   }
 };
