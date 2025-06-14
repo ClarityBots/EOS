@@ -1,41 +1,44 @@
-// netlify/functions/gpt.js
+// gpt.js
 
-import { OpenAI } from "openai";
+import { Configuration, OpenAIApi } from "openai-edge";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+import { promptConfig } from "../../promptConfig.js";
 
-const openai = new OpenAI();
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export default async (req, res) => {
+const openai = new OpenAIApi(config);
+
+export const configRuntime = {
+  runtime: "edge",
+};
+
+export default async function handler(req) {
   try {
-    const { messages, systemPrompt, tool, step } = JSON.parse(req.body || "{}");
+    const { message, tool } = await req.json();
 
-    let enrichedMessages = [];
-
-    if (systemPrompt) {
-      enrichedMessages.push({ role: "system", content: systemPrompt });
+    if (!tool || !promptConfig[tool]) {
+      return new Response("Invalid tool", { status: 400 });
     }
 
-    if (messages && messages.length > 0) {
-      enrichedMessages = enrichedMessages.concat(messages);
-    }
+    const systemPrompt = promptConfig[tool].systemPrompt || "You are a helpful assistant.";
+    const userMessage = message || "Help me get started.";
 
-    // If this is a SMART Rocks session and a step is defined, add it to the system context
-    if (tool === "rocks" && step) {
-      enrichedMessages.push({
-        role: "system",
-        content: `You are currently guiding the user through the \"${step}\" part of the SMART Rock process. Respond accordingly with helpful guidance and examples.`
-      });
-    }
-
-    const chatCompletion = await openai.chat.completions.create({
+    const response = await openai.createChatCompletion({
       model: "gpt-4",
-      messages: enrichedMessages,
+      stream: true,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
+      ],
       temperature: 0.7,
     });
 
-    const reply = chatCompletion.choices[0].message.content;
-    res.status(200).json({ reply });
-  } catch (error) {
-    console.error("GPT Error:", error);
-    res.status(500).json({ error: "GPT request failed." });
+    const stream = OpenAIStream(response);
+    return new StreamingTextResponse(stream);
+  } catch (err) {
+    console.error("GPT function error:", err);
+    return new Response("GPT processing error", { status: 500 });
   }
-};
+}

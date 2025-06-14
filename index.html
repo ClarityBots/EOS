@@ -3,120 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ClarityBots® | AI + EOS® Tools</title>
+  <meta name="description" content="ClarityBots® | AI-enhanced EOS® Tools to Build SMART Rocks, Clarify Vision, and Lead with Traction." />
+  <meta name="theme-color" content="#142233" />
+  <meta property="og:title" content="ClarityBots® | AI Meets EOS™" />
+  <meta property="og:description" content="Build SMART Rocks, Clarify Vision, and Lead with Traction using AI-enhanced EOS® tools." />
+  <meta property="og:image" content="images/social_preview.jpg" />
+  <meta property="og:url" content="https://claritybots.netlify.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Tailwind CSS -->
+  <title>ClarityBots® | AI and EOS® Converge</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@motionone/dom"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="icon" href="images/favicon.png" />
-
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    #chat {
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    .chat-bubble {
-      white-space: pre-wrap;
-      animation: fadeInUp 0.4s ease;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
 </head>
-<body class="relative bg-gray-100 text-gray-900 flex flex-col items-center justify-start min-h-screen">
+<body class="bg-cover bg-center text-gray-900" id="body">
 
-  <!-- Background Layers -->
-  <div id="backgroundImage" class="absolute inset-0 bg-cover bg-center opacity-20 z-0"></div>
-  <div id="overlayLayer" class="absolute inset-0 bg-white z-0"></div>
+  <div class="min-h-screen bg-white/90 backdrop-blur-sm p-6 sm:p-12">
+    <header class="mb-8 text-center">
+      <img id="client-logo" src="images/business_intuition_logo.svg" alt="ClarityBots Logo" class="mx-auto mb-4 h-16">
+      <h1 class="text-3xl font-bold" id="client-heading">Business Intuition’s ClarityBots®</h1>
+      <p class="text-sm text-gray-600">AI-enhanced EOS® tools to simplify clarity and amplify traction.</p>
+    </header>
 
-  <!-- Sticky Header -->
-  <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/90 backdrop-blur-md rounded-b-lg shadow-md">
-    <a id="clientWebsite" href="#" target="_blank" class="shrink-0">
-      <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-10 sm:h-12 w-auto" />
-    </a>
-    <h1 id="clientHeading" class="text-lg sm:text-2xl font-bold text-center flex-grow pl-4">ClarityBots®</h1>
-  </header>
-
-  <!-- Tool Buttons -->
-  <div id="toolContainer" class="z-10 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 px-4 w-full max-w-4xl"></div>
-
-  <!-- Chat Container -->
-  <div class="z-10 mt-6 w-full max-w-3xl bg-white rounded-2xl shadow-md p-4 mx-4 flex flex-col space-y-4">
-    <div id="chat" class="space-y-4 overflow-y-auto"></div>
-    <div id="loader" class="hidden text-center text-sm text-gray-500 italic">🤖 Thinking...</div>
-
-    <!-- Input Row -->
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-4">
-      <textarea id="userInput" placeholder="Type your question..." rows="2" class="flex-grow border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring focus:border-blue-300 resize-none"></textarea>
-      <div class="flex gap-2">
-        <button id="sendButton" class="px-4 py-2 rounded-lg shadow text-white font-semibold">Send</button>
-        <button id="resetButton" class="px-4 py-2 rounded-lg shadow bg-gray-300 hover:bg-gray-400 text-black font-medium">Clear</button>
-      </div>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+      <button class="tool-button border p-4 rounded-xl shadow hover:shadow-md transition bg-white" data-tool="rocks">🪨 SMART Rocks Coach</button>
+      <button class="tool-button border p-4 rounded-xl shadow hover:shadow-md transition bg-white" data-tool="vision">🔭 Vision Builder</button>
+      <button class="tool-button border p-4 rounded-xl shadow hover:shadow-md transition bg-white" data-tool="people">🧍 People Analyzer</button>
+      <button class="tool-button border p-4 rounded-xl shadow hover:shadow-md transition bg-white" data-tool="summary">📄 V/TO Summary</button>
+      <button class="tool-button border p-4 rounded-xl shadow hover:shadow-md transition bg-white" data-tool="lma">🧠 LMA Coach</button>
+      <button class="tool-button border p-4 rounded-xl shadow hover:shadow-md transition bg-white" data-tool="quarterly">📆 Quarterly Planning</button>
     </div>
+
+    <div id="chatbox" class="border border-gray-300 rounded-xl bg-white p-4 max-w-4xl mx-auto shadow-inner">
+      <div id="messages" class="space-y-4 max-h-[50vh] overflow-y-auto mb-4"></div>
+      <form id="chat-form" class="flex gap-2">
+        <input id="user-input" type="text" placeholder="Ask a question..." class="flex-grow border rounded-lg p-2 shadow-sm" autocomplete="off">
+        <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded-lg shadow">Send</button>
+      </form>
+    </div>
+
+    <footer class="mt-10 text-center text-xs text-gray-500">
+      ClarityBots® by Business Intuition | Built on EOS® principles | Powered by OpenAI
+    </footer>
   </div>
 
-  <!-- Footer -->
-  <footer class="z-10 mt-10 mb-6 text-center text-sm text-gray-500 px-4">
-    &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
-  </footer>
-
-  <!-- Dynamic Client Loader -->
-  <script type="module">
-    import { clients } from './clientConfig.js';
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const clientId = urlParams.get("client") || "business_intuition";
-    const client = clients[clientId];
-
-    if (client) {
-      document.getElementById("backgroundImage").style.backgroundImage = `url(${client.background})`;
-      document.getElementById("overlayLayer").style.opacity = client.overlayOpacity ?? 0.7;
-      document.getElementById("clientLogo").src = client.logo;
-      document.getElementById("clientLogo").alt = client.altText;
-      document.getElementById("clientHeading").textContent = `${client.heading} ClarityBot`;
-      document.getElementById("clientWebsite").href = client.website;
-
-      const buttonClasses = `hover:brightness-110 text-white font-semibold px-4 py-2 rounded-2xl shadow text-sm sm:text-base`;
-      const tools = [
-        "rocks", "ids", "scorecard", "core_values", "available",
-        "vision", "people", "vto", "lma", "quarterly"
-      ];
-      const labels = {
-        rocks: "SMART Rocks",
-        ids: "IDS",
-        scorecard: "Scorecard",
-        core_values: "Core Values",
-        available: "Available",
-        vision: "Vision Builder",
-        people: "People Analyzer",
-        vto: "V/TO Summary",
-        lma: "LMA® Coach",
-        quarterly: "Quarterly Planning"
-      };
-
-      const toolContainer = document.getElementById("toolContainer");
-      tools.forEach(tool => {
-        const btn = document.createElement("button");
-        btn.className = buttonClasses;
-        btn.style.backgroundColor = client.brandColor;
-        btn.setAttribute("data-tool", tool);
-        btn.textContent = labels[tool];
-        btn.classList.add("tool-button");
-        toolContainer.appendChild(btn);
-      });
-
-      document.getElementById("sendButton").style.backgroundColor = client.brandColor;
-    }
-  </script>
-
-  <!-- App Scripts -->
-  <script src="promptConfig.js" type="module"></script>
-  <script src="script.js" type="module"></script>
+  <script src="clientConfig.js"></script>
+  <script src="promptConfig.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

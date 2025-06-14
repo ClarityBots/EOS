@@ -1,117 +1,140 @@
 // script.js
 
-import { promptConfig } from './promptConfig.js';
+let selectedTool = null;
+const chatForm = document.getElementById("chat-form");
+const userInput = document.getElementById("user-input");
+const messagesDiv = document.getElementById("messages");
+const toolButtons = document.querySelectorAll(".tool-button");
 
-let currentTool = null;
-let stepIndex = 0;
-let conversationHistory = [];
-let toolMemory = {}; // Tracks step for each tool
+// Load client-specific theming
+importConfig();
 
-document.addEventListener('DOMContentLoaded', () => {
-  const sendButton = document.getElementById('sendButton');
-  const resetButton = document.getElementById('resetButton');
-  const userInput = document.getElementById('userInput');
-  const chat = document.getElementById('chat');
-  const loader = document.getElementById('loader');
+// Tool selection logic
+toolButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    selectedTool = button.getAttribute("data-tool");
+    messagesDiv.innerHTML = "";
 
-  document.querySelectorAll('.tool-button').forEach(button => {
-    button.addEventListener('click', () => {
-      currentTool = button.getAttribute('data-tool');
-      stepIndex = 0;
-      conversationHistory = [];
-      chat.innerHTML = "";
-      userInput.value = "";
-      toolMemory[currentTool] = { step: null };
+    const { promptConfig } = window;
+    const tool = promptConfig[selectedTool];
 
-      const config = promptConfig[currentTool];
-      if (!config) return;
-
-      const starter = config.starterPrompt;
-      addMessage("user", starter);
-      showLoader();
-      fetchGPT(starter, config.systemPrompt, null);
-    });
+    if (tool?.welcomeMessage) {
+      addMessage("🤖", tool.welcomeMessage);
+    } else {
+      addMessage("🤖", "You selected a tool. Ask your first question!");
+    }
   });
+});
 
-  sendButton.addEventListener('click', () => {
-    const msg = userInput.value.trim();
-    if (msg === "") return;
+// Chat form submit
+chatForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const message = userInput.value.trim();
+  if (!message || !selectedTool) return;
 
-    addMessage("user", msg);
-    userInput.value = "";
-    showLoader();
+  addMessage("🧑‍💼", message);
+  userInput.value = "";
 
-    const config = promptConfig[currentTool];
-    const systemPrompt = config?.systemPrompt || "";
-    const step = toolMemory[currentTool]?.step || null;
+  addLoader();
 
-    fetchGPT(msg, systemPrompt, step);
-  });
-
-  resetButton.addEventListener('click', () => {
-    chat.innerHTML = "";
-    userInput.value = "";
-    conversationHistory = [];
-    stepIndex = 0;
-    toolMemory[currentTool] = { step: null };
-  });
-
-  function showLoader() {
-    loader.classList.remove("hidden");
-  }
-
-  function hideLoader() {
-    loader.classList.add("hidden");
-  }
-
-  function addMessage(role, content) {
-    const bubble = document.createElement("div");
-    bubble.className = `chat-bubble p-3 rounded-xl max-w-xl ${
-      role === "user" ? "bg-blue-100 self-end text-right" : "bg-gray-100 self-start text-left"
-    }`;
-    bubble.textContent = content;
-    chat.appendChild(bubble);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function fetchGPT(userMsg, systemPrompt, currentStep) {
-    conversationHistory.push({ role: "user", content: userMsg });
-
-    fetch("/.netlify/functions/gpt", {
+  try {
+    const response = await fetch("/.netlify/functions/gpt", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        messages: conversationHistory,
-        systemPrompt,
-        tool: currentTool,
-        step: currentStep,
+        message,
+        tool: selectedTool,
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const reply = data.reply?.trim() || "🤖 Sorry, I didn’t understand that.";
-        conversationHistory.push({ role: "assistant", content: reply });
-        addMessage("assistant", reply);
-        hideLoader();
+    });
 
-        // Step advancement
-        const config = promptConfig[currentTool];
-        const steps = config?.steps;
+    removeLoader();
 
-        if (steps && stepIndex < steps.length) {
-          const nextStep = steps[stepIndex];
-          toolMemory[currentTool] = { step: nextStep.id };
+    if (!response.ok) {
+      throw new Error("GPT Error");
+    }
 
-          setTimeout(() => {
-            addMessage("assistant", nextStep.prompt);
-          }, 800);
-
-          stepIndex++;
-        }
-      })
-      .catch((err) => {
-        console.error("GPT Error:", err);
-        hideLoader();
-        addMessage("assistant", "🤖 Something went wrong. Please try again.");
-      });
+    const data = await response.json();
+    if (data && data.reply) {
+      addMessage("🤖", data.reply);
+    } else {
+      handleFallback();
+    }
+  } catch (error) {
+    console.error(error);
+    removeLoader();
+    handleFallback();
   }
 });
+
+// Helper functions
+function addMessage(sender, text) {
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("p-2", "rounded", "shadow", "bg-gray-100");
+  messageDiv.innerHTML = `<strong>${sender}</strong><br>${formatText(text)}`;
+  messagesDiv.appendChild(messageDiv);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function addLoader() {
+  const loader = document.createElement("div");
+  loader.id = "loader";
+  loader.classList.add("p-2", "text-sm", "text-gray-500");
+  loader.textContent = "🤖 Thinking...";
+  messagesDiv.appendChild(loader);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function removeLoader() {
+  const loader = document.getElementById("loader");
+  if (loader) loader.remove();
+}
+
+function handleFallback() {
+  const fallback =
+    window.promptConfig?.[selectedTool]?.fallbackMessage ||
+    "⚠️ Something went wrong. Please try again.";
+  addMessage("🤖", fallback);
+}
+
+function formatText(text) {
+  return text
+    .replace(/\n/g, "<br>")
+    .replace(/•/g, "•&nbsp;")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+}
+
+// Load logo, background, and theming
+function importConfig() {
+  import("./clientConfig.js")
+    .then((module) => {
+      const { clients } = module;
+      const query = new URLSearchParams(window.location.search);
+      const clientKey = query.get("client") || "business_intuition";
+      const client = clients[clientKey];
+
+      if (client) {
+        document.getElementById("client-logo").src = client.logo;
+        document.getElementById("client-logo").alt = client.altText;
+        document.getElementById("client-heading").textContent = client.heading;
+
+        if (client.background) {
+          document.getElementById("body").style.backgroundImage = `url('${client.background}')`;
+        }
+
+        if (client.brandColor) {
+          document.querySelector("meta[name='theme-color']").setAttribute("content", client.brandColor);
+        }
+
+        if (client.preloadImage) {
+          const preload = document.createElement("link");
+          preload.rel = "preload";
+          preload.as = "image";
+          preload.href = client.background;
+          document.head.appendChild(preload);
+        }
+      }
+    })
+    .catch((err) => console.error("Client config error:", err));
+}
