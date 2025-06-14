@@ -8,7 +8,8 @@ export const clients = {
     altText: "Alder Construction Logo",
     preloadImage: true,
     brandColor: "#445777",
-    website: "https://alderconstruction.com"
+    website: "https://alderconstruction.com",
+    overlayOpacity: 0.75
   },
   business_intuition: {
     heading: "Business Intuition's",
@@ -17,7 +18,8 @@ export const clients = {
     altText: "Business Intuition Logo",
     preloadImage: true,
     brandColor: "#F04E23",
-    website: "https://businessintuition.com"
+    website: "https://businessintuition.com",
+    overlayOpacity: 0.6
   },
   cop: {
     heading: "COP Construction's",
@@ -26,6 +28,7 @@ export const clients = {
     altText: "COP Construction Logo",
     preloadImage: true,
     brandColor: "#6C7C90",
-    website: "https://copconstruction.com"
+    website: "https://copconstruction.com",
+    overlayOpacity: 0.8
   }
 };

@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ClarityBots® | AI + EOS® Tools</title>
+  <title>Select Your ClarityBot</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Motion One -->
   <script src="https://unpkg.com/@motionone/dom"></script>
-  <!-- Fonts & Favicon -->
-  <link rel="icon" href="images/favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="images/favicon.png" />
 
   <style>
     body {
@@ -33,9 +31,9 @@
 </head>
 <body class="relative bg-gray-100 text-gray-900 flex flex-col items-center justify-start min-h-screen">
 
-  <!-- Background Image -->
+  <!-- Background Layers -->
   <div id="backgroundImage" class="absolute inset-0 bg-cover bg-center opacity-20 z-0"></div>
-  <div class="absolute inset-0 bg-white/70 z-0"></div>
+  <div id="overlayLayer" class="absolute inset-0 bg-white z-0"></div>
 
   <!-- Sticky Header -->
   <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/90 backdrop-blur-md rounded-b-lg shadow-md">
@@ -68,7 +66,7 @@
     &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
   </footer>
 
-  <!-- Client Loader Script -->
+  <!-- Dynamic Client Setup -->
   <script type="module">
     import { clients } from './clientConfig.js';
 
@@ -78,6 +76,7 @@
 
     if (client) {
       document.getElementById("backgroundImage").style.backgroundImage = `url(${client.background})`;
+      document.getElementById("overlayLayer").style.opacity = client.overlayOpacity ?? 0.7;
       document.getElementById("clientLogo").src = client.logo;
       document.getElementById("clientLogo").alt = client.altText;
       document.getElementById("clientHeading").textContent = `${client.heading} ClarityBot`;
@@ -116,7 +115,7 @@
     }
   </script>
 
-  <!-- App Scripts -->
+  <!-- Supporting Scripts -->
   <script src="promptConfig.js"></script>
   <script src="script.js"></script>
 </body>
