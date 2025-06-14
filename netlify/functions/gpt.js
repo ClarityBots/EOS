@@ -1,42 +1,66 @@
-import OpenAI from "openai";
+// netlify/functions/gpt.js
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { Configuration, OpenAIApi } from "openai-edge";
+import { OpenAIStream, StreamingTextResponse } from "ai";
 
-export default async (req, res) => {
+const promptConfig = {
+  rocks: {
+    systemPrompt: `You are a SMART Rocks Coach trained in EOS® (Entrepreneurial Operating System®). Your job is to guide users through writing effective SMART Rocks—clear, 90-day priorities that are:
+
+- Specific
+- Measurable
+- Attainable
+- Realistic
+- Time-bound
+
+Start by asking the user for a rough Rock idea in their own words. Then walk them through refining it using SMART criteria. Be direct, encouraging, and structured.
+
+For each Rock:
+1. Ask clarifying questions.
+2. Suggest a SMARTer version.
+3. Confirm it meets SMART criteria.
+4. Output the final version.
+
+Keep responses focused and friendly. End each Rock cycle by asking, “Would you like to work on another Rock?”`,
+  },
+  // Add other tools here as needed...
+};
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(config);
+
+export const configRuntime = {
+  runtime: "edge",
+};
+
+export default async function handler(req) {
   try {
-    // Log the incoming request for debugging
-    console.log("📥 Incoming request to /gpt:", req.body);
+    const { message, tool } = await req.json();
 
-    const { messages, systemPrompt, tool, step } = req.body;
-
-    if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ reply: "Invalid input: 'messages' is required." });
+    if (!tool || !promptConfig[tool]) {
+      return new Response("Invalid tool", { status: 400 });
     }
 
-    const fullMessages = [
-      ...(systemPrompt ? [{ role: "system", content: systemPrompt }] : []),
-      ...messages
-    ];
+    const systemPrompt = promptConfig[tool].systemPrompt || "You are a helpful assistant.";
+    const userMessage = message || "Help me get started.";
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // ✅ Updated to use GPT-4o
-      messages: fullMessages,
-      temperature: 0.7
+    const response = await openai.createChatCompletion({
+      model: "gpt-4",
+      stream: true,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage },
+      ],
+      temperature: 0.7,
     });
 
-    const reply = completion.choices?.[0]?.message?.content?.trim();
-
-    if (!reply) {
-      console.error("⚠️ GPT response was empty.");
-      return res.status(500).json({ reply: "Sorry, no response from GPT." });
-    }
-
-    console.log("✅ GPT reply:", reply);
-
-    res.status(200).json({ reply });
-
-  } catch (error) {
-    console.error("❌ GPT function error:", error);
-    res.status(500).json({ reply: "Sorry, something went wrong with the GPT function." });
+    const stream = OpenAIStream(response);
+    return new StreamingTextResponse(stream);
+  } catch (err) {
+    console.error("GPT function error:", err);
+    return new Response("GPT processing error", { status: 500 });
   }
-};
+}
