@@ -1,13 +1,6 @@
 [build]
-  publish = "dist"
+  publish = "."            # <-- Use root folder where index.html lives
   functions = "netlify/functions"
 
 [functions]
-  directory = "netlify/functions"
   node_bundler = "esbuild"
-
-[dev]
-  command = "npm run dev"
-  targetPort = 8888
-  port = 8888
-  publish = "public"
