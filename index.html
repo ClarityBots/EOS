@@ -66,57 +66,7 @@
     &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
   </footer>
 
-  <!-- Dynamic Client Loader -->
-  <script type="module">
-    import { clients } from './clientConfig.js';
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const clientId = urlParams.get("client") || "business_intuition";
-    const client = clients[clientId];
-
-    if (client) {
-      document.getElementById("backgroundImage").style.backgroundImage = `url(${client.background})`;
-      document.getElementById("overlayLayer").style.opacity = client.overlayOpacity ?? 0.7;
-      document.getElementById("clientLogo").src = client.logo;
-      document.getElementById("clientLogo").alt = client.altText;
-      document.getElementById("clientHeading").textContent = `${client.heading} ClarityBot`;
-      document.getElementById("clientWebsite").href = client.website;
-
-      const buttonClasses = `hover:brightness-110 text-white font-semibold px-4 py-2 rounded-2xl shadow text-sm sm:text-base`;
-      const tools = [
-        "rocks", "ids", "scorecard", "core_values", "available",
-        "vision", "people", "vto", "lma", "quarterly"
-      ];
-      const labels = {
-        rocks: "SMART Rocks",
-        ids: "IDS",
-        scorecard: "Scorecard",
-        core_values: "Core Values",
-        available: "Available",
-        vision: "Vision Builder",
-        people: "People Analyzer",
-        vto: "V/TO Summary",
-        lma: "LMA® Coach",
-        quarterly: "Quarterly Planning"
-      };
-
-      const toolContainer = document.getElementById("toolContainer");
-      tools.forEach(tool => {
-        const btn = document.createElement("button");
-        btn.className = buttonClasses;
-        btn.style.backgroundColor = client.brandColor;
-        btn.setAttribute("data-tool", tool);
-        btn.textContent = labels[tool];
-        btn.classList.add("tool-button");
-        toolContainer.appendChild(btn);
-      });
-
-      document.getElementById("sendButton").style.backgroundColor = client.brandColor;
-    }
-  </script>
-
-  <!-- App Scripts -->
-  <script src="clientConfig.js" type="module"></script>
+  <!-- Scripts -->
   <script src="promptConfig.js" type="module"></script>
   <script src="script.js" type="module"></script>
 </body>

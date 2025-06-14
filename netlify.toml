@@ -1,6 +1,13 @@
-[functions]
-  node_bundler = "esbuild"
-  external_node_modules = ["openai", "node-fetch"]
-
 [build]
-  publish = "."
+  publish = "dist"
+  functions = "netlify/functions"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[dev]
+  command = "npm run dev"
+  targetPort = 8888
+  port = 8888
+  publish = "public"

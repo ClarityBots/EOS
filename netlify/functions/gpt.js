@@ -1,47 +1,49 @@
-import OpenAI from "openai";
+import { Configuration, OpenAIApi } from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Pull API key from environment variables
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export default async (req, res) => {
+const openai = new OpenAIApi(configuration);
+
+export const handler = async (event) => {
   try {
-    console.log("🟡 gpt.js function running...");
-
-    if (!process.env.OPENAI_API_KEY) {
-      console.error("❌ Missing OpenAI API Key");
-      return res.status(500).json({ reply: "Missing OpenAI key." });
-    }
-
-    const { messages, systemPrompt, tool, step } = req.body || {};
+    const body = JSON.parse(event.body);
+    const { messages, systemPrompt } = body;
 
     if (!messages || !Array.isArray(messages)) {
-      console.error("❌ Invalid or missing messages");
-      return res.status(400).json({ reply: "Invalid input format." });
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Invalid messages array." }),
+      };
     }
 
-    const fullMessages = [
-      ...(systemPrompt ? [{ role: "system", content: systemPrompt }] : []),
+    const chatMessages = [
+      { role: "system", content: systemPrompt },
       ...messages,
     ];
 
-    console.log("📨 Calling GPT with messages:", fullMessages);
-
-    const completion = await openai.chat.completions.create({
+    const completion = await openai.createChatCompletion({
       model: "gpt-4o",
-      messages: fullMessages,
-      temperature: 0.7,
+      messages: chatMessages,
     });
 
-    const reply = completion.choices?.[0]?.message?.content?.trim();
+    const reply = completion.data.choices[0]?.message?.content?.trim();
 
     if (!reply) {
-      console.error("⚠️ GPT returned empty content");
-      return res.status(500).json({ reply: "No reply from GPT." });
+      throw new Error("No reply returned from OpenAI.");
     }
 
-    console.log("✅ GPT replied:", reply);
-    res.status(200).json({ reply });
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ reply }),
+    };
   } catch (err) {
-    console.error("❌ GPT Error:", err);
-    res.status(500).json({ reply: "GPT function failed." });
+    console.error("🔥 GPT Error:", err.message);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Server error", details: err.message }),
+    };
   }
 };
