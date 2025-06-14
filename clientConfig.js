@@ -2,7 +2,7 @@
 
 export const clients = {
   alder: {
-    heading: "Alder Construction's",
+    heading: "Alder Construction",
     background: "images/alder_background.jpg",
     logo: "images/alder_logo.png",
     altText: "Alder Construction Logo",
@@ -12,7 +12,7 @@ export const clients = {
     overlayOpacity: 0.5
   },
   business_intuition: {
-    heading: "Business Intuition's",
+    heading: "Business Intuition",
     background: "images/business_intuition_background.jpg",
     logo: "images/business_intuition_logo.svg",
     altText: "Business Intuition Logo",
@@ -22,7 +22,7 @@ export const clients = {
     overlayOpacity: 0.5
   },
   cop: {
-    heading: "COP Construction's",
+    heading: "COP Construction",
     background: "images/cop_background.jpg",
     logo: "images/cop_logo.png",
     altText: "COP Construction Logo",
