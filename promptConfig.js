@@ -1,76 +1,74 @@
-// promptConfig.js
+import prompts from './promptConfig.js';
 
-export const promptConfig = {
-  rocks: {
-    systemPrompt: `You are a SMART Rock Coach helping EOS® teams write clear, actionable quarterly Rocks. Guide the user step-by-step or respond to their questions directly. Help them build Specific, Measurable, Achievable, Relevant, and Time-bound Rocks that align with their company's vision.`,
-    starterPrompt: "Let's build a SMART Rock together. What's your most important outcome this quarter?",
-    steps: [
-      {
-        id: "specific",
-        prompt: "What exactly will be accomplished? Be as specific and clear as possible."
-      },
-      {
-        id: "measurable",
-        prompt: "How will success be measured? What evidence will show the Rock is complete?"
-      },
-      {
-        id: "achievable",
-        prompt: "Is this Rock realistically achievable within this quarter? Briefly explain how."
-      },
-      {
-        id: "relevant",
-        prompt: "Why is this Rock important right now? How does it align with your business priorities?"
-      },
-      {
-        id: "timebound",
-        prompt: "When will this Rock be complete? If it's by quarter-end, what’s the specific date?"
-      },
-      {
-        id: "owner",
-        prompt: "Who is accountable for this Rock? Type the person's name."
-      },
-      {
-        id: "finalize",
-        prompt: "Would you like me to combine everything into a finished SMART Rock?"
-      }
-    ]
-  },
-  vision: {
-    systemPrompt: `You are a Vision Builder™ Guide helping EOS® teams clarify and document their company vision using the 8 Questions of the Vision/Traction Organizer™. Coach the user step-by-step or answer their questions directly, always aligning with EOS® principles.`,
-    starterPrompt: "Let's clarify your vision. What's your core focus, mission, or long-term goal?",
-    steps: [
-      {
-        id: "core_values",
-        prompt: "What are your company's Core Values? List 3–5 values that define your culture."
-      },
-      {
-        id: "core_focus",
-        prompt: "What is your Core Focus? This includes your Purpose/Cause/Passion and your Niche."
-      },
-      {
-        id: "10_year_target",
-        prompt: "What is your 10-Year Target™? Describe a single, measurable goal you'd like to hit in 10 years."
-      },
-      {
-        id: "marketing_strategy",
-        prompt: "What is your Marketing Strategy? Define your target market, 3 uniques, proven process, and guarantee."
-      },
-      {
-        id: "3_year_picture",
-        prompt: "Describe your 3-Year Picture™: revenue, profit, key measurables, and what the business looks like."
-      },
-      {
-        id: "1_year_plan",
-        prompt: "What is your 1-Year Plan? List 3–7 goals with revenue, profit, and clear priorities."
-      },
-      {
-        id: "rocks",
-        prompt: "What are your current Quarterly Rocks? List 3–7 key priorities for the next 90 days."
-      },
-      {
-        id: "issues",
-        prompt: "What are your Issues? List the obstacles or ideas that need to be discussed or solved."
-      }
-    ]
+const chat = document.getElementById("chat");
+const userInput = document.getElementById("userInput");
+const sendButton = document.getElementById("sendButton");
+const resetButton = document.getElementById("resetButton");
+const loader = document.getElementById("loader");
+let selectedTool = null;
+
+const toolButtons = document.querySelectorAll(".tool-button");
+toolButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    selectedTool = button.getAttribute("data-tool");
+    chat.innerHTML = "";
+    appendMessage("🤖", prompts[selectedTool]?.[0] || "How can I help?");
+  });
+});
+
+sendButton.addEventListener("click", sendMessage);
+resetButton.addEventListener("click", () => {
+  chat.innerHTML = "";
+  userInput.value = "";
+});
+
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
   }
-};
+});
+
+async function sendMessage() {
+  const input = userInput.value.trim();
+  if (!input || !selectedTool) return;
+
+  appendMessage("🧑‍💼", input);
+  userInput.value = "";
+  loader.classList.remove("hidden");
+
+  const messages = Array.from(chat.children).map((node) => {
+    const role = node.querySelector("strong").textContent.includes("🤖")
+      ? "assistant"
+      : "user";
+    const content = node.textContent.replace(/^🤖 |^🧑‍💼 /, "");
+    return { role, content };
+  });
+
+  try {
+    const response = await fetch("/.netlify/functions/gpt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages,
+        systemPrompt: prompts[selectedTool]?.[0] || "You are a helpful assistant."
+      }),
+    });
+
+    const data = await response.json();
+    appendMessage("🤖", data.reply || "(No response received)");
+  } catch (error) {
+    console.error("Error:", error);
+    appendMessage("🤖", "Sorry, something went wrong.");
+  } finally {
+    loader.classList.add("hidden");
+  }
+}
+
+function appendMessage(sender, text) {
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble bg-gray-100 rounded-xl p-3 shadow-sm";
+  bubble.innerHTML = `<strong>${sender}</strong> ${text}`;
+  chat.appendChild(bubble);
+  chat.scrollTop = chat.scrollHeight;
+}
