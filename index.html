@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Select Your ClarityBot</title>
+  <title>ClarityBots® | AI + EOS® Tools</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -37,14 +37,14 @@
 
   <!-- Sticky Header -->
   <header class="sticky top-0 z-10 w-full max-w-4xl flex items-center justify-between p-4 bg-white/90 backdrop-blur-md rounded-b-lg shadow-md">
-    <a id="clientWebsite" href="#" target="_blank">
-      <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-12 w-auto" />
+    <a id="clientWebsite" href="#" target="_blank" class="shrink-0">
+      <img id="clientLogo" src="images/default_logo.png" alt="Client Logo" class="h-10 sm:h-12 w-auto" />
     </a>
-    <h1 id="clientHeading" class="text-2xl font-bold text-center flex-grow pl-4">ClarityBots®</h1>
+    <h1 id="clientHeading" class="text-lg sm:text-2xl font-bold text-center flex-grow pl-4">ClarityBots®</h1>
   </header>
 
   <!-- Tool Buttons -->
-  <div id="toolContainer" class="z-10 mt-6 flex flex-wrap justify-center gap-3 px-4"></div>
+  <div id="toolContainer" class="z-10 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 px-4 w-full max-w-4xl"></div>
 
   <!-- Chat Container -->
   <div class="z-10 mt-6 w-full max-w-3xl bg-white rounded-2xl shadow-md p-4 mx-4 flex flex-col space-y-4">
@@ -62,11 +62,11 @@
   </div>
 
   <!-- Footer -->
-  <footer class="z-10 mt-10 mb-4 text-center text-sm text-gray-500">
+  <footer class="z-10 mt-10 mb-6 text-center text-sm text-gray-500 px-4">
     &copy; 2025 ClarityBots® | Built with ❤️ for EOS® Implementers
   </footer>
 
-  <!-- Dynamic Client Setup -->
+  <!-- Dynamic Client Loader -->
   <script type="module">
     import { clients } from './clientConfig.js';
 
@@ -82,7 +82,7 @@
       document.getElementById("clientHeading").textContent = `${client.heading} ClarityBot`;
       document.getElementById("clientWebsite").href = client.website;
 
-      const buttonClasses = `hover:brightness-110 text-white font-semibold px-6 py-2 rounded-2xl shadow`;
+      const buttonClasses = `hover:brightness-110 text-white font-semibold px-4 py-2 rounded-2xl shadow text-sm sm:text-base`;
       const tools = [
         "rocks", "ids", "scorecard", "core_values", "available",
         "vision", "people", "vto", "lma", "quarterly"
@@ -115,7 +115,7 @@
     }
   </script>
 
-  <!-- Supporting Scripts -->
+  <!-- App Scripts -->
   <script src="promptConfig.js"></script>
   <script src="script.js"></script>
 </body>
