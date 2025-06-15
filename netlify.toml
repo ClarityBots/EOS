@@ -1,0 +1,9 @@
+[build]
+  publish = "."                           # Serve static assets from root
+  functions = "netlify/functions"        # Location of serverless functions
+
+[functions]
+  node_bundler = "esbuild"               # Use esbuild for faster bundling
+
+[dev]
+  autoLaunch = true
