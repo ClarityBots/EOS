@@ -1,0 +1,49 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  background-color: #142233;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.background {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, #FF7900 10%, #F04E23 40%, #142233 70%);
+  animation: rotateBackground 20s linear infinite;
+  z-index: -1;
+}
+
+@keyframes rotateBackground {
+  0% {
+    transform: rotate(0deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.2);
+  }
+}
+
+.content {
+  text-align: center;
+  backdrop-filter: blur(8px);
+  background: rgba(20, 34, 51, 0.6);
+  padding: 2rem 3rem;
+  border-radius: 2rem;
+  box-shadow: 0 0 60px #F04E23;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px #FF7900;
+}
+
+p {
+  font-size: 1.5rem;
+}
